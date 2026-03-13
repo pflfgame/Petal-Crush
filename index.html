@@ -1,0 +1,3922 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0">
+	<title>Play Petal Crush!</title>
+	<link id="cute6361omg" rel="icon" href="data:image/svg+xml,
+		<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>
+			<path d='M0 0L100 0L100 100L0 100Z' style='stroke: none; fill: %23ffff7f'/>
+			<path d='M18 66A40 40 0 0 0 82 66M30 18L30 50M70 18L70 50' style='stroke: %23000000; stroke-width: 5px; fill: none'/>
+		</svg>
+	">
+	<style>
+		body {
+			touch-action: manipulation;
+			-webkit-user-select: none;
+			user-select: none;
+			overflow: hidden;
+		}
+		input {
+			width: 30px;
+		}
+		g,path {
+			transform-origin: center;
+		}
+		#version1 {
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			background-color: #bf7fbf;
+			height: 100%;
+			width: 100%;
+			pointer-events: none;
+			z-index: 7000;
+		}
+		#version2 {
+			display: flex;
+			flex-direction: column;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			background-color: #7fbf7f;
+			width: 50%;
+			transform: translate(-50%,-50%);
+			border: 2px solid;
+			padding-bottom: 50px;
+			overflow-x: hidden;
+			overflow-y: auto;
+			align-items: center;
+			z-index: 7744;
+		}
+		#version3 {
+			border: 1.5px solid;
+			outline: none;
+			background-color: #7f9fbf;
+			height: 30px;
+			width: 200px;
+		}
+		#version4 {
+			border: 1.5px solid;
+			outline: none;
+			background-color: #bf9f7f;
+			height: 30px;
+			width: 200px;
+		}
+		#endgame1 {
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			background-color: #7f7fbf;
+			height: 100%;
+			width: 100%;
+			pointer-events: none;
+			z-index: 7000;
+		}
+		#endgame2 {
+			display: flex;
+			flex-direction: column;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			background-color: #7fbf7f;
+			width: 50%;
+			transform: translate(-50%,-50%);
+			border: 2px solid;
+			padding-bottom: 50px;
+			overflow-x: hidden;
+			overflow-y: auto;
+			align-items: center;
+			z-index: 7744;
+		}
+		#endgame3 {
+			border: 1.5px solid;
+			outline: none;
+			background-color: #7fffff;
+			height: 30px;
+			width: 200px;
+		}
+		#end1 {
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			background-color: #000000;
+			height: 100%;
+			width: 100%;
+			opacity: 1;
+			pointer-events: none;
+			z-index: 7976;
+		}
+		#end2 {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%,-50%);
+			font-size: 32px;
+			color: #ffffff;
+			opacity: 0;
+			pointer-events: none;
+			z-index: 7979;
+		}
+		.tl {
+			position: absolute;
+			top: 20px;
+			left: 20px;
+		}
+		.tr {
+			position: absolute;
+			top: 20px;
+			right: 20px;
+		}
+		.bl {
+			position: absolute;
+			bottom: 20px;
+			left: 20px;
+		}
+		.br {
+			position: absolute;
+			bottom: 20px;
+			right: 20px;
+		}
+		.mid {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%,-50%) var(--transform2,translate(0px,0px));
+		}
+		.cmid {
+			position: absolute;
+			top: 50%;
+			transform: translate(0px,-50%) var(--transform2,translate(0px,0px));
+		}
+		.rmid {
+			position: absolute;
+			left: 50%;
+			transform: translate(-50%,0px) var(--transform2,translate(0px,0px));
+		}
+		.smid {
+			position: absolute;
+			transform: translate(-50%,-50%);
+		}
+		.bottom {
+			position: absolute;
+			top: 100%;
+			left: 50%;
+			transform: translate(-50%,-100px);
+		}
+		.lcmargin {
+			margin-top: 5px;
+			margin-bottom: 5px;
+		}
+		.cmargin {
+			margin-top: 20px;
+			margin-bottom: 20px;
+		}
+		.topmargin {
+			margin-top: 20px;
+		}
+		.bottommargin {
+			margin-bottom: 20px;
+		}
+		.hcmargin {
+			margin-top: 50px;
+			margin-bottom: 50px;
+		}
+		.llmargin {
+			margin-left: 5px;
+			margin-right: 5px;
+		}
+		.lmargin {
+			margin-left: 20px;
+			margin-right: 20px;
+		}
+		.hlmargin {
+			margin-left: 50px;
+			margin-right: 50px;
+		}
+		.diag {
+			transform: rotate(45deg);
+		}
+		.rot72 {
+			transform: rotate(72deg);
+		}
+		.rot144 {
+			transform: rotate(144deg);
+		}
+		.rot216 {
+			transform: rotate(216deg);
+		}
+		.rot288 {
+			transform: rotate(288deg);
+		}
+		.nowrap {
+			white-space: nowrap;
+		}
+		.sqrbtn {
+			background: none;
+			border: none;
+			outline: none;
+			height: 50px;
+			width: 50px;
+			padding: 0px;
+		}
+		.sqrbtn:hover {
+			background: #dfffdf;
+		}
+		.recbtn {
+			border: 1.5px solid;
+			outline: none;
+			height: 30px;
+			min-width: 50px;
+			padding: 5px;
+			white-space: nowrap;
+		}
+		.srecbtn {
+			border: 1px solid;
+			outline: none;
+			height: 20px;
+			min-width: 30px;
+			padding: 3px;
+			font-size: 12px;
+			white-space: nowrap;
+		}
+		.circbtn {
+			background: none;
+			border: none;
+			outline: none;
+			height: 50px;
+			width: 50px;
+			border-radius: 50%;
+			padding: 0px;
+			overflow: hidden;
+		}
+		.circbtn:hover {
+			background: #dfffdf;
+		}
+		.dice {
+			background: none;
+			border: none;
+			outline: none;
+			height: 60px;
+			width: 60px;
+			padding: 0px;
+		}
+		.mingrid {
+			background: none;
+			position: relative;
+			border: none;
+			outline: none;
+			height: 20px;
+			width: 20px;
+			padding: 0px;
+		}
+		.sgrid {
+			background: none;
+			position: relative;
+			border: none;
+			outline: none;
+			height: 40px;
+			width: 40px;
+			padding: 0px;
+		}
+		.grid {
+			background: none;
+			position: relative;
+			border: 2px solid;
+			outline: none;
+			height: 60px;
+			width: 60px;
+			padding: 0px;
+		}
+		.lbgrid {
+			background: none;
+			position: relative;
+			border: none;
+			border-radius: 8%;
+			outline: none;
+			height: 70px;
+			width: 70px;
+			padding: 0px;
+		}
+		.bgrid {
+			background: none;
+			position: relative;
+			border: none;
+			border-radius: 8%;
+			outline: none;
+			height: 80px;
+			width: 80px;
+			padding: 0px;
+		}
+		.bar-container {
+			background-color: #7f7f7f;
+			position: relative;
+			height: 30px;
+			width: 250px;
+			border-radius: 15px;
+		}
+		.bar {
+			background-color: #5fbf5f;
+			height: 100%;
+			width: 50%;
+			border-radius: 15px;
+		}
+		.bar-text {
+			display: flex;
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			height: 100%;
+			width: 100%;
+			justify-content: center;
+			align-items: center;
+		}
+		.side-bar-container {
+			background-color: #7f7f7f;
+			position: relative;
+			height: 500px;
+			width: 30px;
+			border-radius: 15px;
+		}
+		.side-bar {
+			background-color: #5fbf5f;
+			position: absolute;
+			bottom: 0px;
+			height: 50%;
+			width: 100%;
+			border-radius: 15px;
+		}
+		.pointer {
+			cursor: pointer;
+		}
+		.drag {
+			cursor: grab;
+		}
+		.drag:active {
+			cursor: grabbing;
+		}
+		.forbidden {
+			cursor: not-allowed;
+		}
+		.in-svg {
+			height: 100%;
+			width: 100%;
+			stroke: #000000;
+			stroke-width: 5px;
+			fill: none;
+		}
+		.in-text {
+			font-size: 2px;
+			stroke: none;
+			fill: #000000;
+			text-anchor: middle;
+		}
+		.small-svg {
+			height: 15px;
+			min-width: 15px;
+			stroke: #000000;
+			stroke-width: 2px;
+			fill: none;
+		}
+		.black {
+			color: #000000;
+		}
+		.black-bg {
+			background-color: #000000;
+		}
+		.fblack-path {
+			stroke-width: 1px;
+			fill: #000000;
+		}
+		.black-path {
+			stroke: #000000;
+		}
+		.dgrey {
+			color: #3f3f3f;
+		}
+		.dgrey-bg {
+			background-color: #3f3f3f;
+		}
+		.fdgrey-path {
+			stroke-width: 1px;
+			fill: #3f3f3f;
+		}
+		.dgrey-path {
+			stroke: #3f3f3f;
+		}
+		.grey {
+			color: #7f7f7f;
+		}
+		.grey-bg {
+			background-color: #7f7f7f;
+		}
+		.fgrey-path {
+			stroke-width: 1px;
+			fill: #7f7f7f;
+		}
+		.grey-path {
+			stroke: #7f7f7f;
+		}
+		.lgrey {
+			color: #bfbfbf;
+		}
+		.lgrey-bg {
+			background-color: #bfbfbf;
+		}
+		.flgrey-path {
+			stroke-width: 1px;
+			fill: #bfbfbf;
+		}
+		.lgrey-path {
+			stroke: #bfbfbf;
+		}
+		.white {
+			color: #ffffff;
+		}
+		.white-bg {
+			background-color: #ffffff;
+		}
+		.fwhite-path {
+			stroke-width: 1px;
+			fill: #ffffff;
+		}
+		.white-path {
+			stroke: #ffffff;
+		}
+		.red {
+			color: #ff7f7f;
+		}
+		.red-bg {
+			background-color: #ff7f7f;
+		}
+		.fred-path {
+			stroke-width: 1px;
+			fill: #ff7f7f;
+		}
+		.red-path {
+			stroke: #ff7f7f;
+		}
+		.lred {
+			color: #ffbfbf;
+		}
+		.lred-bg {
+			background-color: #ffbfbf;
+		}
+		.flred-path {
+			stroke-width: 1px;
+			fill: #ffbfbf;
+		}
+		.lred-path {
+			stroke: #ffbfbf;
+		}
+		.llred {
+			color: #ffdfdf;
+		}
+		.llred-bg {
+			background-color: #ffdfdf;
+		}
+		.fllred-path {
+			stroke-width: 1px;
+			fill: #ffdfdf;
+		}
+		.llred-path {
+			stroke: #ffdfdf;
+		}
+		.green {
+			color: #7fff7f;
+		}
+		.green-bg {
+			background-color: #7fff7f;
+		}
+		.fgreen-path {
+			stroke-width: 1px;
+			fill: #7fff7f;
+		}
+		.green-path {
+			stroke: #7fff7f;
+		}
+		.lgreen {
+			color: #bfffbf;
+		}
+		.lgreen-bg {
+			background-color: #bfffbf;
+		}
+		.flgreen-path {
+			stroke-width: 1px;
+			fill: #bfffbf;
+		}
+		.lgreen-path {
+			stroke: #bfffbf;
+		}
+		.llgreen {
+			color: #dfffdf;
+		}
+		.llgreen-bg {
+			background-color: #dfffdf;
+		}
+		.fllgreen-path {
+			stroke-width: 1px;
+			fill: #dfffdf;
+		}
+		.llgreen-path {
+			stroke: #dfffdf;
+		}
+		.blue {
+			color: #7f7fff;
+		}
+		.blue-bg {
+			background-color: #7f7fff;
+		}
+		.fblue-path {
+			stroke-width: 1px;
+			fill: #7f7fff;
+		}
+		.blue-path {
+			stroke: #7f7fff;
+		}
+		.lblue {
+			color: #bfbfff;
+		}
+		.lblue-bg {
+			background-color: #bfbfff;
+		}
+		.flblue-path {
+			stroke-width: 1px;
+			fill: #bfbfff;
+		}
+		.lblue-path {
+			stroke: #bfbfff;
+		}
+		.llblue {
+			color: #dfdfff;
+		}
+		.llblue-bg {
+			background-color: #dfdfff;
+		}
+		.fllblue-path {
+			stroke-width: 1px;
+			fill: #dfdfff;
+		}
+		.llblue-path {
+			stroke: #dfdfff;
+		}
+		.cyan {
+			color: #7fffff;
+		}
+		.cyan-bg {
+			background-color: #7fffff;
+		}
+		.fcyan-path {
+			stroke-width: 1px;
+			fill: #7fffff;
+		}
+		.cyan-path {
+			stroke: #7fffff;
+		}
+		.lcyan {
+			color: #bfffff;
+		}
+		.lcyan-bg {
+			background-color: #bfffff;
+		}
+		.llcyan {
+			color: #dfffff;
+		}
+		.llcyan-bg {
+			background-color: #dfffff;
+		}
+		.purple {
+			color: #ff7fff;
+		}
+		.purple-bg {
+			background-color: #ff7fff;
+		}
+		.fpurple-path {
+			stroke-width: 1px;
+			fill: #ff7fff;
+		}
+		.purple-path {
+			stroke: #ff7fff;
+		}
+		.lpurple {
+			color: #ffbfff;
+		}
+		.lpurple-bg {
+			background-color: #ffbfff;
+		}
+		.llpurple {
+			color: #ffdfff;
+		}
+		.llpurple-bg {
+			background-color: #ffdfff;
+		}
+		.yellow {
+			color: #ffff7f;
+		}
+		.yellow-bg {
+			background-color: #ffff7f;
+		}
+		.fyellow-path {
+			stroke-width: 1px;
+			fill: #ffff7f;
+		}
+		.yellow-path {
+			stroke: #ffff7f;
+		}
+		.lyellow {
+			color: #ffffbf;
+		}
+		.lyellow-bg {
+			background-color: #ffffbf;
+		}
+		.flyellow-path {
+			stroke-width: 1px;
+			fill: #ffffbf;
+		}
+		.lyellow-path {
+			stroke: #ffffbf;
+		}
+		.llyellow {
+			color: #ffffdf;
+		}
+		.llyellow-bg {
+			background-color: #ffffdf;
+		}
+		.fllyellow-path {
+			stroke-width: 1px;
+			fill: #ffffdf;
+		}
+		.llyellow-path {
+			stroke: #ffffdf;
+		}
+		.dbrown {
+			color: #bf3f3f;
+		}
+		.dbrown-bg {
+			background-color: #bf3f3f;
+		}
+		.fdbrown-path {
+			stroke-width: 1px;
+			fill: #bf3f3f;
+		}
+		.dbrown-path {
+			stroke: #bf3f3f;
+		}
+		.dgreen {
+			color: #3fbf3f;
+		}
+		.dgreen-bg {
+			background-color: #3fbf3f;
+		}
+		.fdgreen-path {
+			stroke-width: 1px;
+			fill: #3fbf3f;
+		}
+		.dgreen-path {
+			stroke: #3fbf3f;
+		}
+		.dblue {
+			color: #3f3fbf;
+		}
+		.dblue-bg {
+			background-color: #3f3fbf;
+		}
+		.fdblue-path {
+			stroke-width: 1px;
+			fill: #3f3fbf;
+		}
+		.dblue-path {
+			stroke: #3f3fbf;
+		}
+		.dyellow {
+			color: #bfbf3f;
+		}
+		.dyellow-bg {
+			background-color: #bfbf3f;
+		}
+		.fdyellow-path {
+			stroke-width: 1px;
+			fill: #bfbf3f;
+		}
+		.dyellow-path {
+			stroke: #bfbf3f;
+		}
+		.cpink {
+			color: #ff7fbf;
+		}
+		.cpink-bg {
+			background-color: #ff7fbf;
+		}
+		.fcpink-path {
+			stroke-width: 1px;
+			fill: #ff7fbf;
+		}
+		.cpink-path {
+			stroke: #ff7fbf;
+		}
+		.sel-path {
+			stroke-width: 1px;
+			stroke: #ffff7f;
+			fill: #ffff7f;
+		}
+		.simgrid {
+			display: grid;
+			background: none;
+			border: 2px solid;
+		}
+		.square36 {
+			display: grid;
+			grid-template-columns: repeat(6,1fr);
+			grid-template-rows: repeat(6,1fr);
+			background: none;
+			border: none;
+			height: 380px;
+			width: 380px;
+			align-items: center;
+		}
+		.square48 {
+			display: grid;
+			grid-template-columns: repeat(8,1fr);
+			grid-template-rows: repeat(3,1fr) 10px repeat(3,1fr);
+			background: none;
+			border: 2px solid;
+			height: 490px;
+			width: 640px;
+			align-items: center;
+		}
+		.col5 {
+			display: grid;
+			grid-template-columns: repeat(auto-fill,minmax(90px,1fr));
+			width: 80%;
+			margin: 0 auto;
+			row-gap: 10px;
+			justify-items: center;
+		}
+		.box {
+			display: flex;
+			flex-direction: column;
+			border: 2px solid;
+			padding-inline: 20px;
+			overflow-x: hidden;
+			overflow-y: auto;
+			text-align: center;
+		}
+		.inner-box {
+			display: flex;
+			flex-direction: column;
+			font-family: Consolas;
+			width: max-content;
+			border: 1.5px solid;
+			padding: 10px;
+			align-items: flex-start;
+			align-self: center;
+		}
+		.inner-box * {
+			font-family: Consolas;
+		}
+		.infobox {
+			display: flex;
+			flex-direction: column;
+			border: 1px solid;
+			font-size: 12px;
+			width: 300px;
+			padding: 10px;
+			padding-top: 5px;
+			text-align: center;
+			opacity: 0.75;
+		}
+		.itembox {
+			background-color: rgba(191,191,191,0.8);
+			display: flex;
+			height: 90px;
+			width: 400px;
+			padding: 10px;
+			gap: 20px;
+			overflow-x: scroll;
+			overflow-y: hidden;
+			scrollbar-width: thin;
+		}
+		.itembox>* {
+			flex-shrink: 0;
+		}
+		.inner-input {
+			background: #5fbf5f;
+			border: none;
+			outline: none;
+			width: 90%;
+			justify-items: center;
+			align-self: center;
+		}
+		.side-log {
+			position: absolute;
+			background-color: rgba(191,191,191,0.8);
+			border: 1px solid;
+			top: 25%;
+			right: 20px;
+			height: 50%;
+			width: 300px;
+			padding: 5px;
+			box-sizing: border-box;
+			overflow-x: hidden;
+			overflow-y: auto;
+			scrollbar-width: none;
+			font-size: 12px;
+			word-wrap: break-word;
+		}
+		.side-command {
+			position: absolute;
+			background-color: rgba(159,159,159,0.8);
+			border: 1px solid;
+			top: 75%;
+			right: 20px;
+			height: 20px;
+			width: 300px;
+			padding-inline: 5px;
+			box-sizing: border-box;
+		}
+		.side-input {
+			background: none;
+			border: none;
+			outline: none;
+			height: 100%;
+			width: 100%;
+			padding: 0px;
+		}
+		.text1 {
+			font-size: 32px;
+		}
+		.text1-c {
+			display: flex;
+			font-size: 32px;
+			justify-content: center;
+			align-items: center;
+		}
+		.text2 {
+			font-size: 24px;
+		}
+		.text2-c {
+			display: flex;
+			font-size: 24px;
+			justify-content: center;
+			align-items: center;
+		}
+		.text3 {
+			font-size: 16px;
+		}
+		.text3-c {
+			display: flex;
+			font-size: 16px;
+			justify-content: center;
+			align-items: center;
+		}
+		.text4 {
+			font-size: 12px;
+		}
+		.text4-c {
+			display: flex;
+			font-size: 12px;
+			justify-content: center;
+			align-items: center;
+		}
+		.text5 {
+			font-size: 8px;
+		}
+		.text5-c {
+			display: flex;
+			font-size: 8px;
+			justify-content: center;
+			align-items: center;
+		}
+		.consolas {
+			font-family: Consolas;
+		}
+		.highz {
+			z-index: 6361;
+		}
+		.higherz {
+			z-index: 6400;
+		}
+		.highestz {
+			z-index: 8000;
+		}
+		.wider {
+			stroke-width: 8px;
+		}
+		.wide {
+			stroke-width: 3px;
+		}
+		.mwidth {
+			stroke-width: 1.5px;
+		}
+		.fwidth {
+			stroke-width: 1px;
+		}
+		.narrow {
+			stroke-width: 0.5px;
+		}
+		.narrowp {
+			stroke-width: 0.1px;
+		}
+		.shsize {
+			height: 30%;
+			width: 30%;
+		}
+		.shwidth {
+			width: 30%;
+		}
+		.hsize {
+			height: 50%;
+			width: 50%;
+		}
+		.hwidth {
+			width: 50%;
+		}
+		.lhsize {
+			height: 70%;
+			width: 70%;
+		}
+		.lhwidth {
+			width: 70%;
+		}
+		.apos {
+			position: absolute;
+		}
+		.rflex {
+			display: flex;
+			flex-direction: row;
+		}
+		.cflex {
+			display: flex;
+			flex-direction: column;
+		}
+		.nd {
+			display: none;
+		}
+		.mcont {
+			width: max-content;
+		}
+		.nlh {
+			line-height: 0;
+		}
+		.cself {
+			align-self: center;
+		}
+		.border {
+			border: 3px solid;
+		}
+		.circ {
+			border-radius: 50%;
+		}
+		.ns {
+			stroke: none;
+		}
+		.rcap {
+			stroke-linecap: round;
+		}
+		.bold {
+			font-weight: bold;
+		}
+		.npe {
+			pointer-events: none;
+		}
+	</style>
+	<script>
+		const PetalNameList=["Basic","Stinger","Air","Rose","Leaf","Shell","Cotton","Coin","Jelly","Web"]
+		const PetalDefaultAttributeList=[{damage:10,knockback:"Default"},{damage:30,knockback:"Default",blast:"Destroy"},{craft:"Disabled"},{heal:10,blast:"Destroy"},{heal:3,duration:3,knockback:"Default",blast:"Destroy"},{shield:10,decay:0.05,blast:"Destroy"},{cotton:20,duration:1,blast:"Destroy"},{damage:8,knockback:"Default"},{damage:8,knockback:250,limit:-200},{damage:5,strength:70,knockback:"Default",blast:"Destroy"}]
+		let PetalAttributeList=structuredClone(PetalDefaultAttributeList)
+		const PetalDescriptionList=["The most basic.","Really hurts but fragile.","Literally nothing.","Amazing healing.","photosynthesis for constant heal.","Applies decaying shield.","Absorbs damage temporarily.","The valuable one.","Deals higher knockback.","Traps enemies."]
+		const PetalSVGArray=new Object()
+		PetalSVGArray.Basic="<svg viewBox='0 0 100 100' class='in-svg'><path class='fwhite-path ns' d='M50 25A25 25 0 0 0 50 75A25 25 0 0 0 50 25'/><path class='white-path' d='M50 25A25 25 0 0 0 50 75A25 25 0 0 0 50 25' style='filter:brightness(90%)'/></svg>"
+		PetalSVGArray.Stinger="<svg viewBox='0 0 100 100' class='in-svg'><path class='fdgrey-path ns' d='M39 31L72 50L39 69Z'/><path class='dgrey-path' d='M39 31L72 50L39 69Z' style='filter:brightness(90%)'/></svg>"
+		PetalSVGArray.Air="<svg viewBox='0 0 100 100' class='in-svg'><path class='fwhite-path ns' fill-opacity='0.3' d='M20 20L80 20L80 80L20 80Z'/></svg>"
+		PetalSVGArray.Rose="<svg viewBox='0 0 100 100' class='in-svg'><path class='fcpink-path ns' d='M50 25A25 25 0 0 0 50 75A25 25 0 0 0 50 25'/><path class='cpink-path' d='M50 25A25 25 0 0 0 50 75A25 25 0 0 0 50 25' style='filter:brightness(90%)'/></svg>"
+		PetalSVGArray.Leaf="<svg viewBox='0 0 100 100' class='in-svg'><path class='fdgreen-path ns' d='M50 20L70 50L50 80L30 50Z'/><path class='dgreen-path' d='M50 20L70 50L50 80L30 50Z' style='filter:brightness(90%)'/></svg>"
+		PetalSVGArray.Shell=PetalSVGArray.Basic
+		PetalSVGArray.Cotton=PetalSVGArray.Basic
+		PetalSVGArray.Coin=PetalSVGArray.Basic
+		PetalSVGArray.Jelly=PetalSVGArray.Basic
+		PetalSVGArray.Web=PetalSVGArray.Basic
+		const MobNameList=["!Rock","!Hornet","!Missile","!Spider"]
+		const MobDefaultAttributeList=[{action:"None",drop:"Disabled",move:"Disabled"},{action:"Default",connect:1,cost:50,damage:10,increment:1,speed:50,shoot:20,summon:"10%",drop:"Disabled",move:"Disabled"},{action:"None",connect:1,reflect:"50%",drop:"Disabled",move:"Disabled"},{action:"Default",cost:"Default",damage:20,increment:0,duration:5,speed:50,strength:30,drop:"Disabled",move:"Disabled"}]
+		let MobAttributeList=structuredClone(MobDefaultAttributeList)
+		const MobDescriptionList=["It does nothing.","Shoots missiles.","Summoned by Hornet.","Weaves webs."]
+		const MobSVGArray=new Object()
+		MobSVGArray["!Rock"]="<svg viewBox='0 0 100 100' class='in-svg'><path class='fblack-path ns' fill-opacity='0.2' d='M8 100A8 8 0 0 1 0 92L0 8A8 8 0 0 1 8 0L92 0A8 8 0 0 1 100 8L100 92A8 8 0 0 1 92 100L92 8L8 8ZM8 92L92 92L92 100L8 100Z'/><path class='fgrey-path ns' d='M32 38L54 30L64 38L70 54L56 68L40 68L32 52Z'/><path class='grey-path' d='M32 38L54 30L64 38L70 54L56 68L40 68L32 52Z' style='filter:brightness(90%)'/></svg>"
+		MobSVGArray["!Hornet"]=MobSVGArray["!Rock"]
+		MobSVGArray["!Missile"]=MobSVGArray["!Rock"]
+		MobSVGArray["!Spider"]=MobSVGArray["!Rock"]
+		const ItemNameList=["?Void","?Trader"]
+		const ItemDefaultAttributeList=[{drop:"Disabled",move:"Disabled"},{convert:"Coin",drop:"Disabled",move:"Disabled"}]
+		let ItemAttributeList=structuredClone(ItemDefaultAttributeList)
+		const ItemDescriptionList=["Truly nothing.","If you have wares."]
+		const ItemSVGArray=new Object()
+		ItemSVGArray["?Void"]="<svg viewBox='0 0 100 100' class='in-svg'></svg>"
+		ItemSVGArray["?Trader"]=ItemSVGArray["?Void"]
+		const DefaultValue={knockback:50,cost:200,maxhealth:200,upperlimit:200,lowerlimit:0,maxrarity:7,damagemult:[0,1,2,4,8,16,32,64],healmult:[0,1,2,3,5,8,13,21]}
+		let NewValue=structuredClone(DefaultValue)
+		function resetDefault() {
+			PetalAttributeList=structuredClone(PetalDefaultAttributeList)
+			MobAttributeList=structuredClone(MobDefaultAttributeList)
+			ItemAttributeList=structuredClone(ItemDefaultAttributeList)
+			NewValue=structuredClone(DefaultValue)
+			return
+		}
+		function Petal(id=0,rarity=1,other) {
+			this.proto="Petal"
+			this.id=id,this.rarity=rarity
+			if(typeof(this.id)==="string") this.id=PetalNameList.indexOf(this.id)
+			this.name=PetalNameList[this.id]
+			this.attribute=structuredClone(PetalAttributeList[this.id])
+			Object.assign(this.attribute,other)
+			if(this.attribute.hasOwnProperty("knockback") && this.attribute.knockback==="Default") {
+				this.attribute.knockback=NewValue.knockback
+			}
+			if(this.attribute.hasOwnProperty("damage") && typeof(this.attribute.damage)==="number") {
+				this.attribute.damage*=NewValue.damagemult[this.rarity]
+			}
+			if(this.attribute.hasOwnProperty("heal") && typeof(this.attribute.heal)==="number") {
+				this.attribute.heal*=NewValue.healmult[this.rarity]
+			}
+			if(this.attribute.hasOwnProperty("shield") && typeof(this.attribute.shield)==="number") {
+				this.attribute.shield*=NewValue.healmult[this.rarity]
+			}
+			if(this.attribute.hasOwnProperty("cotton") && typeof(this.attribute.cotton)==="number") {
+				this.attribute.cotton*=NewValue.healmult[this.rarity]
+			}
+		}
+		function isPetal(potentialPetal) {
+			return Petal.prototype.isPrototypeOf(potentialPetal)
+		}
+		Petal.prototype.clone=function() {
+			return Object.assign(new Petal(),structuredClone(this))
+		}
+		Petal.prototype.print=function(gridX,gridY,type) {
+			let baseGrid=createGrid(0,gridX,gridY,"Petal_"+this.name,1,this.rarity)
+			if(type==="Row") {
+				baseGrid.innerHTML+="<svg viewBox='0 0 100 100' class='apos in-svg' style='top: 0px; left: 0px; opacity: 0.5'><path class='fgrey-path ns' d='M30 30L10 50L30 70L30 55L70 55L70 70L90 50L70 30L70 45L30 45Z'/></svg>"
+			}
+			if(type==="Column") {
+				baseGrid.innerHTML+="<svg viewBox='0 0 100 100' class='apos in-svg' style='top: 0px; left: 0px; opacity: 0.5'><path class='fgrey-path ns' d='M30 30L50 10L70 30L55 30L55 70L70 70L50 90L30 70L45 70L45 30Z'/></svg>"
+			}
+			if(type==="Bomb") {
+				baseGrid.innerHTML+="<svg viewBox='0 0 100 100' class='apos in-svg' style='top: 0px; left: 0px; opacity: 0.5'><path class='fgrey-path ns' d='M10 10L35 10L26 19L50 43L74 19L65 10L90 10L90 35L81 26L57 50L81 74L90 65L90 90L65 90L74 81L50 57L26 81L35 90L10 90L10 65L19 74L43 50L19 26L10 35Z'/></svg>"
+			}
+			if(type==="Kaleidoscope") {
+				baseGrid.innerHTML+="<svg viewBox='0 0 100 100' class='apos in-svg' style='top: 0px; left: 0px; opacity: 0.5'><path class='fgrey-path ns' d='M50 10A8 8 0 0 0 50 26A8 8 0 0 0 50 10M80 32A8 8 0 0 0 80 48A8 8 0 0 0 80 32M69 68A8 8 0 0 0 69 84A8 8 0 0 0 69 68M31 68A8 8 0 0 0 31 84A8 8 0 0 0 31 68M20 32A8 8 0 0 0 20 48A8 8 0 0 0 20 32'></path><path class='grey-path' d='M50 18L80 40L69 76L31 76L20 40Z'></path></svg>"
+			}
+			return baseGrid
+		}
+		function Mob(id=0,rarity=1,other) {
+			this.proto="Mob"
+			this.id=id,this.rarity=rarity
+			if(typeof(this.id)==="string") this.id=MobNameList.indexOf(this.id)
+			this.name=MobNameList[this.id]
+			this.attribute=structuredClone(MobAttributeList[this.id])
+			if(typeof(other)==="number") other={maxhealth:other}
+			Object.assign(this.attribute,other)
+			if(this.attribute.hasOwnProperty("cost") && this.attribute.cost==="Default") {
+				this.attribute.cost=NewValue.cost
+			}
+			if(this.attribute.hasOwnProperty("summon")) {
+				if(isPercentage(this.attribute.summon)) this.attribute.summon=Math.max(betterFloor(getPercentage(this.attribute.summon)/100*this.attribute.maxhealth),1)
+			}
+			if(this.attribute.hasOwnProperty("maxhealth") && !this.attribute.hasOwnProperty("health")) {
+				this.attribute.health=this.attribute.maxhealth
+			}
+			if(!this.attribute.hasOwnProperty("actionbar")) this.actionbar=0
+		}
+		function isMob(potentialMob) {
+			return Mob.prototype.isPrototypeOf(potentialMob)
+		}
+		Mob.prototype.clone=function() {
+			return Object.assign(new Mob(),structuredClone(this))
+		}
+		Mob.prototype.print=function(gridX,gridY) {
+			return createGrid(0,gridX,gridY,"Mob_"+this.name,1,this.rarity)
+		}
+		Mob.prototype.injure=function(petal) {
+			if(this.attribute.health===0) return
+			let pendingDamage=petal.attribute.damage
+			if(pendingDamage>this.attribute.health) pendingDamage=this.attribute.health
+			this.attribute.health-=pendingDamage
+			if(this.name==="!Rock") {
+				game.score+=pendingDamage
+				updateFlowerState()
+			}
+		}
+		Mob.prototype.repulse=function(petal) {
+			console.log("Repulse: "+petal.attribute.knockback)
+		}
+		function Item(id=0,rarity=1,other) {
+			this.proto="Item"
+			this.id=id,this.rarity=rarity
+			if(typeof(this.id)==="string") this.id=ItemNameList.indexOf(this.id)
+			this.name=ItemNameList[this.id]
+			this.attribute=ItemAttributeList[this.id]
+			Object.assign(this.attribute,other)
+		}
+		function isItem(potentialItem) {
+			return Item.prototype.isPrototypeOf(potentialItem)
+		}
+		Item.prototype.clone=function() {
+			return Object.assign(new Item(),structuredClone(this))
+		}
+		Item.prototype.print=function(gridX,gridY) {
+			return createGrid(0,gridX,gridY,"Item_"+this.name,1,this.rarity)
+		}
+		function repair(brokenObject) {
+			if(!brokenObject.hasOwnProperty("proto")) return
+			if(brokenObject.proto==="Petal") {
+				Object.setPrototypeOf(brokenObject,Petal.prototype)
+			}
+			if(brokenObject.proto==="Mob") {
+				Object.setPrototypeOf(brokenObject,Mob.prototype)
+			}
+			if(brokenObject.proto==="Item") {
+				Object.setPrototypeOf(brokenObject,Item.prototype)
+			}
+			if(brokenObject.proto==="Grid") {
+				Object.setPrototypeOf(brokenObject,Grid.prototype)
+				if(typeof(brokenObject.content)==="object") repair(brokenObject.content)
+			}
+		}
+	</script>
+	<script>
+		function Grid(x,y,content,state="Empty",type) {
+			this.proto="Grid"
+			this.x=x
+			this.y=y
+			if(content) this.content=content
+			this.state=state
+			this.type=type
+			if(!this.type) this.type="Normal"
+			this.crush="None"
+			this.newspawn=false
+		}
+		function isGrid(potentialGrid) {
+			return Grid.prototype.isPrototypeOf(potentialGrid)
+		}
+		Grid.prototype.contentClone=function() {
+			if(isPetal(this.content)) return this.content.clone()
+			if(isMob(this.content)) return this.content.clone()
+			return this.content
+		}
+		Grid.prototype.clone=function(x=this.x,y=this.y) {
+			return Object.assign(new Grid(),{x,y,content:this.contentClone(),state:this.state,type:this.type,crush:this.crush,newspawn:this.newspawn})
+		}
+		Grid.prototype.print=function() {
+			let editingGrid
+			if(this.state==="Empty" || this.content===undefined) {
+				editingGrid=createGrid(0,this.x,this.y,"Empty",1)
+			} else {
+				editingGrid=this.content.print(this.x,this.y,this.type)
+			}
+			if(levelList[player.biomename][game.level].hasOwnProperty("spawnset")) {
+				for(let i=0;i<levelList[player.biomename][game.level].spawnset.length;i++) if(levelList[player.biomename][game.level].spawnset[i].x===this.x && levelList[player.biomename][game.level].spawnset[i].y===this.y) {
+					editingGrid.innerHTML+="<svg viewBox='0 0 100 100' class='apos in-svg' style='top: 0px; left: 0px; opacity: 0.5'><path class='black-path' d='M10 5L50 20L90 5'/></svg><span class='apos smid text4-c consolas' style='top: 6%; left: 50%; opacity: 0.5'>="+levelList[player.biomename][game.level].spawnset[i].set+"=</span>"
+				}
+			}
+			if(levelList[player.biomename][game.level].hasOwnProperty("transportset")) {
+				for(let i=0;i<levelList[player.biomename][game.level].transportset.length;i++) if(levelList[player.biomename][game.level].transportset[i].end.x===this.x && levelList[player.biomename][game.level].transportset[i].end.y===this.y) {
+					editingGrid.innerHTML+="<svg viewBox='0 0 100 100' class='apos in-svg' style='top: 0px; left: 0px; opacity: 0.5'><path class='black-path' d='M10 5L50 20L90 5'/></svg><span class='apos smid text4-c consolas' style='top: 6%; left: 50%; opacity: 0.5'>"+levelList[player.biomename][game.level].transportset[i].start.x+","+levelList[player.biomename][game.level].transportset[i].start.y+"</span>"
+				}
+			}
+			getGrid(0,this.x,this.y).replaceWith(editingGrid)
+		}
+		Grid.prototype.wallprint=function() {
+			let wallFlag=false
+			for(let i=1;i<=4;i++) if(game.wall[this.x][this.y][i]>0) wallFlag=true
+			if(!wallFlag) {
+				if(getGrid(1,this.x,this.y)!==null) getGrid(1,this.x,this.y).remove()
+				return
+			}
+			let wallGrid=createGrid(1,this.x,this.y,"",1),wallHTML="<svg viewBox='0 0 100 100' class='in-svg' style='opacity: 0.5'>",wallTextHTML="</svg>"
+			wallGrid.classList.add("apos","npe")
+			if(game.wall[this.x][this.y][1]>0) {
+				if(game.wall[this.x][this.y][1]===6361) {
+					wallHTML+="<path class='black-path mwidth' style='fill: "+rarityColor[0]+"' d='M10 3L90 3L90 9L10 9Z'/>"
+				} else {
+					wallHTML+="<path class='black-path mwidth' style='fill: "+rarityColor[betterFloor((game.wall[this.x][this.y][1]+2)/3)]+"' d='M10 3L90 3L90 8L10 8Z'/>"
+					wallTextHTML+="<span class='apos smid text4-c consolas' style='top: 6%; left: 50%'>"+game.wall[this.x][this.y][1]%10+"</span>"
+				}
+			}
+			if(game.wall[this.x][this.y][2]>0) {
+				if(game.wall[this.x][this.y][2]===6361) {
+					wallHTML+="<path class='black-path mwidth' style='fill: "+rarityColor[0]+"' d='M91 10L97 10L97 90L91 90Z'/>"
+				} else {
+					wallHTML+="<path class='black-path mwidth' style='fill: "+rarityColor[betterFloor((game.wall[this.x][this.y][2]+2)/3)]+"' d='M91 10L97 10L97 90L91 90Z'/>"
+					if(game.wall[this.x][this.y][2]>=10) wallTextHTML+="<span class='apos smid text4-c consolas' style='top: 50%; left: 94%'>"+betterFloor(game.wall[this.x][this.y][2]/10)+"</span>"
+				}
+			}
+			if(game.wall[this.x][this.y][3]>0) {
+				if(game.wall[this.x][this.y][3]===6361) {
+					wallHTML+="<path class='black-path mwidth' style='fill: "+rarityColor[0]+"' d='M10 91L90 91L90 97L10 97Z'/>"
+				} else {
+					wallHTML+="<path class='black-path mwidth' style='fill: "+rarityColor[betterFloor((game.wall[this.x][this.y][3]+2)/3)]+"' d='M10 91L90 91L90 97L10 97Z'/>"
+					if(game.wall[this.x][this.y][3]>=10) wallTextHTML+="<span class='apos smid text4-c consolas' style='top: 94%; left: 50%'>"+betterFloor(game.wall[this.x][this.y][3]/10)+"</span>"
+				}
+			}
+			if(game.wall[this.x][this.y][4]>0) {
+				if(game.wall[this.x][this.y][4]===6361) {
+					wallHTML+="<path class='black-path mwidth' style='fill: "+rarityColor[0]+"' d='M3 10L9 10L9 90L3 90Z'/>"
+				} else {
+					wallHTML+="<path class='black-path mwidth' style='fill: "+rarityColor[betterFloor((game.wall[this.x][this.y][4]+2)/3)]+"' d='M3 10L9 10L9 90L3 90Z'/>"
+					wallTextHTML+="<span class='apos smid text4-c consolas' style='top: 50%; left: 6%'>"+game.wall[this.x][this.y][4]%10+"</span>"
+				}
+			}
+			wallGrid.innerHTML=wallHTML+wallTextHTML
+			wallGrid.style.top=getGrid(0,this.x,this.y).getBoundingClientRect().top-document.getElementById("game-container").getBoundingClientRect().top-2+"px"
+			wallGrid.style.left=getGrid(0,this.x,this.y).getBoundingClientRect().left-document.getElementById("game-container").getBoundingClientRect().left-2+"px"
+			if(getGrid(1,this.x,this.y)!==null) {
+				getGrid(1,this.x,this.y).replaceWith(wallGrid)
+				return
+			}
+			document.getElementById("game-container").appendChild(wallGrid)
+		}
+		Grid.prototype.empty=function() {
+			delete this.content
+			this.state="Empty"
+			this.type="Normal"
+		}
+		Grid.prototype.destroy=function(targetMob) {
+			if(this.crush==="Crushed") return
+			if(this.state==="Existing") {
+				for(let i=1;i<=4;i++) if(game.wall[this.x][this.y][i]>0 && game.wall[this.x][this.y][i]!==6361) {
+					game.wall[this.x][this.y][i]--
+					game.wall[this.x+dx[i]][this.y+dy[i]][(i+1)%4+1]--
+					this.wallprint()
+					game.board[this.x+dx[i]][this.y+dy[i]].wallprint()
+				}
+			}
+			if(this.state==="Existing" && this.crush==="Blasted" && this.content.attribute.blast==="Destroy") this.content.attribute=new Object()
+			if(targetMob && this.state==="Existing" && this.content.attribute.damage>0) {
+				targetMob.content.injure(this.content)
+				addTempMovingGrid(createGrid(79,0,0,"Petal_"+this.content.name,1,this.content.rarity),this.x,this.y,targetMob.x,targetMob.y)
+			}
+			if(this.state==="Existing" && this.content.attribute.damage>0) {
+				for(let i=1;i<=4;i++) if(this.x+dx[i]>=1 && this.x+dx[i]<=game.width && this.y+dy[i]>=1 && this.y+dy[i]<=game.height && isMob(game.board[this.x+dx[i]][this.y+dy[i]].content)) {
+					game.board[this.x+dx[i]][this.y+dy[i]].content.injure(this.content)
+				}
+			}
+			if(this.state==="Existing" && this.content.attribute.knockback>0) {
+				for(let i=1;i<=4;i++) if(this.x+dx[i]>=1 && this.x+dx[i]<=game.width && this.y+dy[i]>=1 && this.y+dy[i]<=game.height && isMob(game.board[this.x+dx[i]][this.y+dy[i]].content)) {
+					game.board[this.x+dx[i]][this.y+dy[i]].content.repulse(this.content)
+				}
+			}
+			if(this.state==="Existing" && this.content.attribute.heal>0) {
+				flowerHeal(this.content)
+			}
+			if(this.state==="Existing" && this.type==="Row") {
+				for(let i=1;i<=game.width;i++) if(game.board[i][this.y].state!=="Empty" && game.board[i][this.y].crush==="None") {
+					if(isMob(game.board[i][this.y].content) && this.content.attribute.damage>0 && this.content.attribute.blast!=="Destroy") game.board[i][this.y].content.injure(this.content)
+					if(isMob(game.board[i][this.y].content) && this.content.attribute.knockback>0 && this.content.attribute.blast!=="Destroy") game.board[i][this.y].content.repulse(this.content)
+					if(isPetal(game.board[i][this.y].content)) blastGrid.push(game.board[i][this.y])
+				}
+			}
+			if(this.state==="Existing" && this.type==="Column") {
+				for(let i=1;i<=game.height;i++) if(game.board[this.x][i].state!=="Empty" && game.board[this.x][i].crush==="None") {
+					if(isMob(game.board[this.x][i].content) && this.content.attribute.damage>0 && this.content.attribute.blast!=="Destroy") game.board[this.x][i].content.injure(this.content)
+					if(isMob(game.board[this.x][i].content) && this.content.attribute.knockback>0 && this.content.attribute.blast!=="Destroy") game.board[this.x][i].content.repulse(this.content)
+					if(isPetal(game.board[this.x][i].content)) blastGrid.push(game.board[this.x][i])
+				}
+			}
+			if(this.state==="Existing" && this.type==="Bomb") {
+				for(let i=1;i<=game.width;i++) for(let j=1;j<=game.height;j++) if(((i-this.x)**2+(j-this.y)**2)<=5 && game.board[i][j].state!=="Empty" && game.board[i][j].crush==="None") {
+					if(isMob(game.board[i][j].content) && this.content.attribute.damage>0 && this.content.attribute.blast!=="Destroy") game.board[i][j].content.injure(this.content)
+					if(isMob(game.board[i][j].content) && this.content.attribute.knockback>0 && this.content.attribute.blast!=="Destroy") game.board[i][j].content.repulse(this.content)
+					if(isPetal(game.board[i][j].content)) blastGrid.push(game.board[i][j])
+				}
+			}
+			if(this.state==="Existing" && this.type==="Kaleidoscope") {
+				for(let i=1;i<=game.width;i++) for(let j=1;j<=game.height;j++) if(game.board[i][j].crush==="None" && isPetal(game.board[i][j].content) && game.board[i][j].content.id===this.content.id) {
+					game.board[i][j].crush="Collected"
+					game.board[i][j].destroy()
+				}
+			}
+			this.crush="Crushed"
+			if(this.state==="Existing" && isPetal(this.content)) this.empty()
+			this.print()
+		}
+		Grid.prototype.drop=function(dir=0) {
+			dropFlag=true
+			dropTime+=dropTimeIncrement
+			game.board[this.x+dir][this.y+1]=this.clone(this.x+dir,this.y+1)
+			game.board[this.x+dir][this.y+1].print()
+			this.empty()
+			this.print()
+		}
+		let levelList=new Object()
+		levelList["Training Ground"]=new Array()
+//		levelList["Training Ground"][0]={x:81,y:27,precondition:[1],height:6,width:6,coefficient:10,exponent:2,goal:354233654641216,initialmap:() => [,[,new Grid(1,1,"Uninitialized"),new Grid(1,2,"Uninitialized"),new Grid(1,3,"Uninitialized"),new Grid(1,4,"Uninitialized"),new Grid(1,5,"Uninitialized"),new Grid(1,6,new Mob("!Rock",1,10000),"Existing")],[,new Grid(2,1,"Uninitialized"),new Grid(2,2,"Uninitialized"),new Grid(2,3,new Petal("Basic",1),"Existing"),new Grid(2,4,new Petal("Leaf",1),"Existing"),new Grid(2,5,"Uninitialized"),new Grid(2,6,"Uninitialized")],[,new Grid(3,1,"Uninitialized"),new Grid(3,2,"Uninitialized"),new Grid(3,3,new Petal("Basic",1),"Existing"),new Grid(3,4,new Petal("Leaf",1),"Existing"),new Grid(3,5,"Uninitialized"),new Grid(3,6,"Uninitialized")],[,new Grid(4,1,"Uninitialized"),new Grid(4,2,"Uninitialized"),new Grid(4,3,new Petal("Leaf",1),"Existing"),new Grid(4,4,new Petal("Basic",1),"Existing","Column"),new Grid(4,5,"Uninitialized"),new Grid(4,6,"Uninitialized")],[,new Grid(5,1,"Uninitialized"),new Grid(5,2,"Uninitialized"),new Grid(5,3,new Petal("Basic",1),"Existing"),new Grid(5,4,new Petal("Leaf",1),"Existing"),new Grid(5,5,"Uninitialized"),new Grid(5,6,"Uninitialized")],[,new Grid(6,1,"Uninitialized"),new Grid(6,2,"Uninitialized"),new Grid(6,3,new Petal("Stinger",1),"Existing"),new Grid(6,4,new Petal("Stinger",1),"Existing"),new Grid(6,5,"Uninitialized"),new Grid(6,6,"Uninitialized")]],spawner:[[{weight:20,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")}]],spawnset:[{x:1,y:1,set:0},{x:2,y:1,set:0},{x:3,y:1,set:0},{x:4,y:1,set:0},{x:5,y:1,set:0},{x:6,y:1,set:0}]}
+		levelList["Training Ground"][1]={x:50,y:50,precondition:[],height:2,width:4,coefficient:100,exponent:2,goal:132651,initialmap:() => [,[,new Grid(1,1),new Grid(1,2,new Mob("!Rock",1,10),"Existing")],[,new Grid(2,1),new Grid(2,2,new Petal("Basic",1),"Existing")],[,new Grid(3,1,new Petal("Basic",1),"Existing"),new Grid(3,2,new Petal("Stinger",1),"Existing")],[,new Grid(4,1),new Grid(4,2,new Petal("Basic",1),"Existing")]]}
+		levelList["Training Ground"][2]={x:30,y:50,precondition:[1],height:5,width:6,coefficient:100,exponent:2,goal:262144,initialmap:() => [,[,new Grid(1,1,new Petal("Basic",1),"Existing"),new Grid(1,2,new Petal("Basic",1),"Existing"),new Grid(1,3,new Petal("Stinger",1),"Existing"),new Grid(1,4,new Petal("Basic",1),"Existing"),new Grid(1,5,new Mob("!Rock",2,100),"Existing")],[,new Grid(2,1,new Mob("!Rock",2,100),"Existing"),new Grid(2,2,new Item("?Void",9),"Existing"),new Grid(2,3,new Petal("Basic",1),"Existing"),new Grid(2,4,new Item("?Void",9),"Existing"),new Grid(2,5,new Petal("Basic",2),"Existing")],[,new Grid(3,1,new Item("?Void",9),"Existing"),new Grid(3,2,new Item("?Void",9),"Existing"),new Grid(3,3,new Petal("Basic",4),"Existing"),new Grid(3,4,new Item("?Void",9),"Existing"),new Grid(3,5,new Petal("Basic",2),"Existing")],[,new Grid(4,1,new Item("?Void",9),"Existing"),new Grid(4,2,new Item("?Void",9),"Existing"),new Grid(4,3,new Item("?Void",9),"Existing"),new Grid(4,4,new Petal("Basic",5),"Existing"),new Grid(4,5,new Petal("Stinger",2),"Existing")],[,new Grid(5,1,new Item("?Void",9),"Existing"),new Grid(5,2,new Petal("Basic",4),"Existing"),new Grid(5,3,new Mob("!Rock",2,100),"Existing"),new Grid(5,4,new Item("?Void",9),"Existing"),new Grid(5,5,new Petal("Basic",2),"Existing")],[,new Grid(6,1,new Petal("Basic",2),"Existing"),new Grid(6,2,new Petal("Stinger",3),"Existing"),new Grid(6,3,new Petal("Basic",2),"Existing"),new Grid(6,4,new Petal("Basic",2),"Existing"),new Grid(6,5,new Item("?Void",9),"Existing")]]}
+		levelList["Training Ground"][3]={x:30,y:70,precondition:[2],height:4,width:5,coefficient:100,exponent:2,goal:314432,initialmap:() => [,[,new Grid(1,1),new Grid(1,2,new Item("?Void",9),"Existing"),new Grid(1,3,new Mob("!Rock",1,10),"Existing"),new Grid(1,4,new Item("?Void",9),"Existing")],[,new Grid(2,1),new Grid(2,2,new Petal("Basic",2),"Existing"),new Grid(2,3,new Item("?Void",9),"Existing"),new Grid(2,4,new Petal("Basic",1),"Existing","Bomb")],[,new Grid(3,1),new Grid(3,2,new Petal("Basic",2),"Existing"),new Grid(3,3,new Item("?Void",9),"Existing"),new Grid(3,4,new Petal("Stinger",1),"Existing")],[,new Grid(4,1,new Petal("Basic",2),"Existing","Row"),new Grid(4,2,new Petal("Stinger",7),"Existing"),new Grid(4,3,new Item("?Void",9),"Existing"),new Grid(4,4,new Petal("Basic",1),"Existing")],[,new Grid(5,1,new Mob("!Rock",2,100),"Existing"),new Grid(5,2,new Petal("Basic",2),"Existing"),new Grid(5,3,new Item("?Void",9),"Existing"),new Grid(5,4,new Petal("Basic",1),"Existing")]]}
+		levelList["Training Ground"][4]={x:10,y:70,precondition:[3],height:5,width:5,coefficient:100,exponent:2,goal:456533,initialmap:() => [,[,new Grid(1,1),new Grid(1,2,new Petal("Basic",3),"Existing"),new Grid(1,3,new Item("?Void",9),"Existing"),new Grid(1,4),new Grid(1,5,new Mob("!Rock",3,10),"Existing")],[,new Grid(2,1),new Grid(2,2,new Petal("Basic",2),"Existing"),new Grid(2,3,new Item("?Void",9),"Existing"),new Grid(2,4,new Petal("Stinger",1),"Existing"),new Grid(2,5,new Petal("Basic",1),"Existing")],[,new Grid(3,1,new Petal("Basic",1),"Existing","Kaleidoscope"),new Grid(3,2,new Petal("Stinger",1),"Existing","Kaleidoscope"),new Grid(3,3,new Item("?Void",9),"Existing"),new Grid(3,4,new Petal("Basic",1),"Existing"),new Grid(3,5,new Petal("Stinger",1),"Existing")],[,new Grid(4,1),new Grid(4,2,new Petal("Basic",1),"Existing"),new Grid(4,3,new Item("?Void",9),"Existing"),new Grid(4,4,new Petal("Stinger",1),"Existing"),new Grid(4,5,new Petal("Basic",1),"Existing")],[,new Grid(5,1),new Grid(5,2,new Petal("Basic",1),"Existing"),new Grid(5,3,new Item("?Void",9),"Existing"),new Grid(5,4),new Grid(5,5,new Mob("!Rock",3,100),"Existing")]]}
+		levelList["Training Ground"][5]={x:10,y:90,precondition:[4],height:5,width:5,coefficient:10,exponent:2,goal:531441,initialmap:() => [,[,new Grid(1,1,"Uninitialized"),new Grid(1,2,"Uninitialized"),new Grid(1,3,"Uninitialized"),new Grid(1,4,"Uninitialized"),new Grid(1,5,"Uninitialized")],[,new Grid(2,1,"Uninitialized"),new Grid(2,2,"Uninitialized"),new Grid(2,3,"Uninitialized"),new Grid(2,4,"Uninitialized"),new Grid(2,5,"Uninitialized")],[,new Grid(3,1,"Uninitialized"),new Grid(3,2,"Uninitialized"),new Grid(3,3,new Mob("!Rock",1,500),"Existing"),new Grid(3,4,"Uninitialized"),new Grid(3,5,"Uninitialized")],[,new Grid(4,1,"Uninitialized"),new Grid(4,2,"Uninitialized"),new Grid(4,3,"Uninitialized"),new Grid(4,4,"Uninitialized"),new Grid(4,5,"Uninitialized")],[,new Grid(5,1,"Uninitialized"),new Grid(5,2,"Uninitialized"),new Grid(5,3,"Uninitialized"),new Grid(5,4,"Uninitialized"),new Grid(5,5,"Uninitialized")]],spawner:[[{weight:20,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:10,result:(x,y) => new Grid(x,y,new Petal("Basic",2),"Existing","Column"),noinitial:true},{weight:10,result:(x,y) => new Grid(x,y,new Petal("Stinger",2),"Existing","Bomb"),noinitial:true}]],spawnset:[{x:1,y:1,set:0},{x:2,y:1,set:0},{x:3,y:1,set:0},{x:4,y:1,set:0},{x:5,y:1,set:0}]}
+		levelList["Training Ground"][6]={x:30,y:90,precondition:[5],height:5,width:5,coefficient:10,exponent:2,goal:614125,initialmap:() => [,[,new Grid(1,1,new Petal("Basic",1),"Existing"),new Grid(1,2,"Uninitialized"),new Grid(1,3,"Uninitialized"),new Grid(1,4,"Uninitialized"),new Grid(1,5,new Mob("!Rock",1,343),"Existing")],[,new Grid(2,1,"Uninitialized"),new Grid(2,2,"Uninitialized"),new Grid(2,3,"Uninitialized"),new Grid(2,4,"Uninitialized"),new Grid(2,5,"Uninitialized")],[,new Grid(3,1,"Uninitialized"),new Grid(3,2,"Uninitialized"),new Grid(3,3,"Uninitialized"),new Grid(3,4,"Uninitialized"),new Grid(3,5,"Uninitialized")],[,new Grid(4,1,"Uninitialized"),new Grid(4,2,"Uninitialized"),new Grid(4,3,"Uninitialized"),new Grid(4,4,"Uninitialized"),new Grid(4,5,"Uninitialized")],[,new Grid(5,1,"Uninitialized"),new Grid(5,2,"Uninitialized"),new Grid(5,3,"Uninitialized"),new Grid(5,4,"Uninitialized"),new Grid(5,5,"Uninitialized")]],spawner:[[{weight:20,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:10,result:(x,y) => new Grid(x,y,new Petal("Basic",2),"Existing")},{weight:10,result:(x,y) => new Grid(x,y,new Petal("Stinger",2),"Existing")}]],spawnset:[{x:1,y:1,set:0},{x:2,y:1,set:0},{x:3,y:1,set:0},{x:4,y:1,set:0},{x:5,y:1,set:0}],wall:[{x:4,y:2,dir:2,stack:1},{x:3,y:3,dir:2,stack:3},{x:4,y:3,dir:2,stack:1},{x:1,y:4,dir:2,stack:9},{x:2,y:4,dir:2,stack:6},{x:3,y:4,dir:2,stack:3},{x:4,y:4,dir:2,stack:1},{x:2,y:5,dir:2,stack:6},{x:3,y:5,dir:2,stack:3},{x:4,y:5,dir:2,stack:1},{x:1,y:1,dir:3,stack:1},{x:2,y:1,dir:3,stack:1},{x:3,y:1,dir:3,stack:1},{x:4,y:1,dir:3,stack:1},{x:1,y:2,dir:3,stack:3},{x:2,y:2,dir:3,stack:3},{x:3,y:2,dir:3,stack:3},{x:1,y:3,dir:3,stack:6},{x:2,y:3,dir:3,stack:6},{x:2,y:4,dir:3,stack:9}]}
+		levelList["Training Ground"][7]={x:50,y:90,precondition:[6],height:5,width:5,coefficient:10,exponent:2,goal:354233654641216,initialmap:() => [,[,new Grid(1,1,new Mob("!Rock",1,100),"Existing"),new Grid(1,2,new Item("?Void",9),"Existing"),new Grid(1,3,"Uninitialized"),new Grid(1,4,"Uninitialized"),new Grid(1,5,"Uninitialized")],[,new Grid(2,1,"Uninitialized"),new Grid(2,2,new Item("?Void",9),"Existing"),new Grid(2,3,"Uninitialized"),new Grid(2,4,"Uninitialized"),new Grid(2,5,"Uninitialized")],[,new Grid(3,1,"Uninitialized"),new Grid(3,2,new Item("?Void",9),"Existing"),new Grid(3,3,"Uninitialized"),new Grid(3,4,"Uninitialized"),new Grid(3,5,"Uninitialized")],[,new Grid(4,1,"Uninitialized"),new Grid(4,2,new Item("?Void",9),"Existing"),new Grid(4,3,"Uninitialized"),new Grid(4,4,"Uninitialized"),new Grid(4,5,"Uninitialized")],[,new Grid(5,1,"Uninitialized"),new Grid(5,2,new Item("?Void",9),"Existing"),new Grid(5,3,new Item("?Void",9),"Existing"),new Grid(5,4,new Item("?Void",9),"Existing"),new Grid(5,5,new Item("?Void",9),"Existing")]],spawner:[[{weight:20,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")}]],spawnset:[{x:2,y:1,set:0},{x:3,y:1,set:0},{x:4,y:1,set:0},{x:5,y:1,set:0}],transportset:[{start:{x:2,y:1},end:{x:1,y:3}},{start:{x:3,y:1},end:{x:2,y:3}},{start:{x:4,y:1},end:{x:3,y:3}},{start:{x:5,y:1},end:{x:4,y:3}}]}
+		let mapList=new Array()
+		mapList[0]={name:"Training Ground",x:50,y:50,color:"#bfbfbf",precondition:[],cost:79}
+	</script>
+	<script>
+		let mouseX,mouseY
+		document.addEventListener('mousemove',(mouse) => {
+			mouseX=mouse.clientX
+			mouseY=mouse.clientY
+		} )
+		const version=20260313,acceptedVersion=20260101
+		const svgNS="http://www.w3.org/2000/svg"
+		const dx=[0,0,1,0,-1],dy=[0,-1,0,1,0],dx5=[0,1,2,2,1,-1,-2,-2,-1],dy5=[0,-2,-1,1,2,2,1,-1,-2]
+		let rarityColor=["#000000","#7eef6d","#ffe65d","#4d52e3","#861fde","#de1f1f","#1fdbde","#ff2b75","#2bffa3","#555555"]
+		let rarityColorEP=["#000000","#7eef6d","#ffe65d; filter: brightness(90%)","#4d52e3","#861fde","#de1f1f","#1fdbde","#ff2b75","#2bffa3; filter: brightness(90%)","#555555"]
+		let rarityName=["None","Common","Unusual","Rare","Epic","Legendary","Mythic","Ultra","Super","Unique"]
+		let userVersion=JSON.parse(localStorage.getItem("PETALCRUSHuserVersion"))
+		function setVersion() {
+			localStorage.setItem("PETALCRUSHuserVersion",JSON.stringify(userVersion))
+		}
+		if(!userVersion) userVersion=version
+		setVersion()
+		let player=JSON.parse(localStorage.getItem("PETALCRUSHplayer"))
+		let game=JSON.parse(localStorage.getItem("PETALCRUSHgame"))
+		function setPlayer() {
+			localStorage.setItem("PETALCRUSHplayer",JSON.stringify(player))
+		}
+		function setGame() {
+			localStorage.setItem("PETALCRUSHgame",JSON.stringify(game))
+		}
+		if(!player) player=new Object()
+		if(!game) game=new Object()
+		if(!player.hasOwnProperty("settings")) player.settings=new Object()
+		if(!player.hasOwnProperty("book")) player.book=["Flower Game Guide"]
+		if(!player.hasOwnProperty("bookreading")) player.bookreading=0
+		if(!player.hasOwnProperty("dialog")) player.dialog=new Object()
+		if(!player.hasOwnProperty("world")) player.world=new Object()
+		if(!player.hasOwnProperty("currencydisplay")) player.currencydisplay="Remain"
+		if(!player.hasOwnProperty("explore")) player.explore=new Object()
+		if(!game.hasOwnProperty("active")) game.active=false
+		if(game.active===true) {
+			for(let i=1;i<=game.width;i++) {
+				for(let j=1;j<=game.height;j++) repair(game.board[i][j])
+			}
+		}
+		setPlayer()
+		setGame()
+		let animation=false
+		function safeReload() {
+			requestAnimationFrame(() => {
+				location.reload()
+			} )
+		}
+		function delay(time) {
+			if(player.settings.skipanimation===true) {
+				time/=20
+			}
+			return new Promise(resolve => setTimeout(resolve,time))
+		}
+		function waitAnimation() {
+			return new Promise(resolve => {const checkAnimation=() => animation? setTimeout(checkAnimation,20):resolve(); checkAnimation()})
+		}
+		async function copyToClipboard(text) {
+			await navigator.clipboard.writeText(text)
+		}
+		function betterFloor(num) {
+			return Math.floor(num+1e-10)
+		}
+		function approx(num) {
+			return betterFloor(num+0.5)
+		}
+		function isPFLF(num) {
+			return (betterFloor(num**0.5)**2===num || betterFloor(num**(1/3))**3===num)
+		}
+		function numLength(num) {
+			if(num===0) return 0
+			return num.toString().length
+		}
+		function isPercentage(potentialPercentage) {
+			if(typeof(potentialPercentage)!=="string") return false
+			if(potentialPercentage.match(/^\d+(?=%$)/)===null) return false
+			return true
+		}
+		function getPercentage(potentialPercentage) {
+			if(!isPercentage(potentialPercentage)) return potentialPercentage
+			return parseInt(potentialPercentage)
+		}
+		function toCord(originCord,modulo=8) {
+			return (originCord%modulo+modulo-1)%modulo+1
+		}
+		function discalc(cord1,cord2,modulo=8) {
+			let differ=Math.abs(cord1-cord2)
+			if(modulo===0) return differ
+			differ%=modulo
+			if(modulo-differ<differ) differ=modulo-differ
+			return differ
+		}
+		function compareVectorCloser(v1,v2) {
+			if(v1.x**2+v1.y**2<v2.x**2+v2.y**2) return true
+			if(v1.x**2+v1.y**2>v2.x**2+v2.y**2) return false
+			let dir1=0,dir2=0
+			if(v1.x===0&&v1.y<0) dir1=1
+			if(v1.x>0) dir1=2
+			if(v1.x===0&&v1.y>0) dir1=3
+			if(v1.x<0) dir1=4
+			if(v2.x===0&&v2.y<0) dir2=1
+			if(v2.x>0) dir2=2
+			if(v2.x===0&&v2.y>0) dir2=3
+			if(v2.x<0) dir2=4
+			if(dir1<dir2) return true
+			if(dir1>dir2) return false
+			return (v1.y/v1.x<v2.y/v2.x)
+		}
+		function roll(lowerLimit,upperLimit) {
+			return Math.floor(Math.random()*(upperLimit-lowerLimit+1)+lowerLimit)
+		}
+		function roll2(lowerLimit,upperLimit) {
+			return approx(Math.random()*(upperLimit-lowerLimit)+lowerLimit)
+		}
+		function dice() {
+			return roll(1,6)
+		}
+		function isButton(element) {
+			return (element.tagName==="BUTTON")
+		}
+		function isVisible(element) {
+			return (window.getComputedStyle(element).display!=="none" && window.getComputedStyle(element).visibility!=="hidden")
+		}
+		function determine(chance,log,logText="") {
+			if(chance<0) chance=0
+			if(chance>100) chance=100
+			let result=false
+			if(100*Math.random()<=chance) result=true
+			if(log) {
+				if(result) {
+					addLog("[Determine] True ("+betterFloor(chance)+"%)"+logText,"#3f3f3f")
+				} else {
+					addLog("[Determine] False ("+(100-betterFloor(chance))+"%)"+logText,"#3f3f3f")
+				}
+			}
+			return result
+		}
+		function createDice(value,point) {
+			let newDice=document.createElement("button")
+			newDice.type="button"
+			newDice.tabIndex=-1
+			newDice.setAttribute("class","dice")
+			newDice.setAttribute("onclick","clickDice(this)")
+			newDice.value=value
+			switch(point) {
+				case 1:
+				newDice.innerHTML="<svg viewBox='0 0 100 100' class='in-svg'><path d='M20 10L80 10A10 10 0 0 1 90 20L90 80A10 10 0 0 1 80 90L20 90A10 10 0 0 1 10 80L10 20A10 10 0 0 1 20 10'/><path class='fblack-path' d='M50 45A5 5 0 0 0 50 55A5 5 0 0 0 50 45'/></svg>1"
+				break
+				case 2:
+				newDice.innerHTML="<svg viewBox='0 0 100 100' class='in-svg'><path d='M20 10L80 10A10 10 0 0 1 90 20L90 80A10 10 0 0 1 80 90L20 90A10 10 0 0 1 10 80L10 20A10 10 0 0 1 20 10'/><path class='fblack-path' d='M50 30A5 5 0 0 0 50 40A5 5 0 0 0 50 30M50 60A5 5 0 0 0 50 70A5 5 0 0 0 50 60'/></svg>2"
+				break
+				case 3:
+				newDice.innerHTML="<svg viewBox='0 0 100 100' class='in-svg'><path d='M20 10L80 10A10 10 0 0 1 90 20L90 80A10 10 0 0 1 80 90L20 90A10 10 0 0 1 10 80L10 20A10 10 0 0 1 20 10'/><path class='fblack-path' d='M33 62A5 5 0 0 0 33 72A5 5 0 0 0 33 62M50 45A5 5 0 0 0 50 55A5 5 0 0 0 50 45M67 28A5 5 0 0 0 67 38A5 5 0 0 0 67 28'/></svg>3"
+				break
+				case 4:
+				newDice.innerHTML="<svg viewBox='0 0 100 100' class='in-svg'><path d='M20 10L80 10A10 10 0 0 1 90 20L90 80A10 10 0 0 1 80 90L20 90A10 10 0 0 1 10 80L10 20A10 10 0 0 1 20 10'/><path class='fblack-path' d='M35 30A5 5 0 0 0 35 40A5 5 0 0 0 35 30M65 30A5 5 0 0 0 65 40A5 5 0 0 0 65 30M35 60A5 5 0 0 0 35 70A5 5 0 0 0 35 60M65 60A5 5 0 0 0 65 70A5 5 0 0 0 65 60'/></svg>4"
+				break
+				case 5:
+				newDice.innerHTML="<svg viewBox='0 0 100 100' class='in-svg'><path d='M20 10L80 10A10 10 0 0 1 90 20L90 80A10 10 0 0 1 80 90L20 90A10 10 0 0 1 10 80L10 20A10 10 0 0 1 20 10'/><path class='fblack-path' d='M35 30A5 5 0 0 0 35 40A5 5 0 0 0 35 30M65 30A5 5 0 0 0 65 40A5 5 0 0 0 65 30M35 60A5 5 0 0 0 35 70A5 5 0 0 0 35 60M65 60A5 5 0 0 0 65 70A5 5 0 0 0 65 60M50 45A5 5 0 0 0 50 55A5 5 0 0 0 50 45'/></svg>5"
+				break
+				case 6:
+				newDice.innerHTML="<svg viewBox='0 0 100 100' class='in-svg'><path d='M20 10L80 10A10 10 0 0 1 90 20L90 80A10 10 0 0 1 80 90L20 90A10 10 0 0 1 10 80L10 20A10 10 0 0 1 20 10'/><path class='fblack-path' d='M35 28A5 5 0 0 0 35 38A5 5 0 0 0 35 28M65 28A5 5 0 0 0 65 38A5 5 0 0 0 65 28M35 45A5 5 0 0 0 35 55A5 5 0 0 0 35 45M65 45A5 5 0 0 0 65 55A5 5 0 0 0 65 45M35 62A5 5 0 0 0 35 72A5 5 0 0 0 35 62M65 62A5 5 0 0 0 65 72A5 5 0 0 0 65 62'/></svg>6"
+				break
+				default:
+				newDice.innerHTML="<svg viewBox='0 0 100 100' class='in-svg'><path d='M20 10L80 10A10 10 0 0 1 90 20L90 80A10 10 0 0 1 80 90L20 90A10 10 0 0 1 10 80L10 20A10 10 0 0 1 20 10'/></svg>?"
+			}
+			return newDice
+		}
+		function getDice(value) {
+			return document.querySelector("[value='"+value+"']")
+		}
+		function clickDice(button) {
+			if(animation) return
+			let buttonValue=parseInt(button.value)
+			return
+		}
+		function createGrid(value,x,y,text,size=0,rarity=0) {
+			let newGrid=document.createElement("button")
+			newGrid.type="button"
+			newGrid.tabIndex=-1
+			newGrid.setAttribute("class","grid")
+			if(size===-2) newGrid.setAttribute("class","mingrid")
+			if(size===-1) newGrid.setAttribute("class","sgrid")
+			if(size===179) newGrid.setAttribute("class","sgrid llmargin")
+			if(size===1) newGrid.setAttribute("class","lbgrid")
+			if(size===2) newGrid.setAttribute("class","bgrid")
+			if(rarity>=1 && rarity<=9) newGrid.style["background-color"]=rarityColor[rarity]
+			newGrid.setAttribute("onclick","clickGrid(this)")
+			newGrid.value=value
+			newGrid.dataset.x=x
+			newGrid.dataset.y=y
+			newGrid.innerHTML="·"
+			if(text==="Diamond") newGrid.innerHTML="<svg viewBox='0 0 100 100' class='in-svg'><path d='M50 10A40 40 0 0 0 50 90A40 40 0 0 0 50 10'/><path class='fgreen-path' d='M26 46L50 75L74 46L66 32L34 32ZL42 46L50 75L58 46L74 46M50 32L42 46L58 46Z'/></svg><span style='display: none'>Diamond</span>"
+			if(text==="Cross") newGrid.innerHTML="<svg viewBox='0 0 100 100' class='in-svg'><path d='M20 20L80 80M80 20L20 80'/></svg><span style='display: none'>Cross</span>"
+			if(text==="Line") newGrid.innerHTML="<svg viewBox='0 0 100 100' class='in-svg'><path d='M0 50L100 50'/></svg><span style='display: none'>Line</span>"
+			if(text==="Border") {
+				newGrid.style["border-radius"]=0
+				newGrid.style.border="5px solid"
+				newGrid.innerHTML=""
+			}
+			if(text==="Empty") newGrid.innerHTML="<span class='mid lgrey text3'>Empty</span>"
+			if(text==="Space") newGrid.innerHTML="<svg viewBox='0 0 100 100' class='in-svg'><path d='M0 20L0 0L20 0M80 0L100 0L100 20M100 80L100 100L80 100M20 100L0 100L0 80'/></svg><span class='mid lgrey text3'>Space</span>"
+			if(typeof(text)==="number" && text!==0) newGrid.innerHTML="<svg viewBox='0 0 100 100' class='in-svg'><path d='M50 10L90 50L50 90L10 50Z'/></svg><span class='mid'>"+text+"</span>"
+			if(typeof(text)==="string" && text.startsWith("Text")) newGrid.innerHTML="<span class='mid'>"+text.slice(5)+"</span>"
+			if(typeof(text)==="string" && text.startsWith("Petal")) newGrid.innerHTML=PetalSVGArray[text.slice(6)]
+			if(typeof(text)==="string" && text.startsWith("Mob")) newGrid.innerHTML=MobSVGArray[text.slice(4)]
+			if(typeof(text)==="string" && text.startsWith("Item")) newGrid.innerHTML=ItemSVGArray[text.slice(5)]
+			newGrid.addEventListener("mouseenter",() => gridInfo(newGrid))
+			newGrid.addEventListener("mouseleave",() => closeGridInfo())
+			newGrid.addEventListener("mousedown",() => dragGridStart(newGrid))
+			return newGrid
+		}
+		let selectedGrid=new Object()
+		selectedGrid.select=false
+		let draggingGrid=new Object()
+		draggingGrid.drag=false
+		function getGrid(value,x,y) {
+			return document.querySelector("[value='"+value+"'][data-x='"+x+"'][data-y='"+y+"']")
+		}
+		function mouseGridInfo() {
+			let topLeft=getGrid(0,1,1).getBoundingClientRect()
+			let mouseRow=betterFloor((mouseX-topLeft.left)/70)+1,mouseColumn=betterFloor((mouseY-topLeft.top)/70)+1
+			if(mouseRow<1 || mouseRow>game.width || mouseColumn<1 || mouseColumn>game.height) {
+				return
+			}
+			gridInfo(getGrid(0,mouseRow,mouseColumn))
+		}
+		function clickGrid(button) {
+			if(animation) return
+			if(!isVisible(document.getElementById("gridinfo")) && selectedGrid.select===false) return
+			let buttonValue=parseInt(button.value),buttonX=parseInt(button.getAttribute("data-x")),buttonY=parseInt(button.getAttribute("data-y"))
+			if(buttonValue===0) {
+				if(selectedGrid.select===true && selectedGrid.value===0) {
+					getGrid(0,selectedGrid.x,selectedGrid.y).style.opacity=1
+					selectedGrid.select=false
+					for(let i=1;i<=4;i++) if(selectedGrid.x+dx[i]===buttonX && selectedGrid.y+dy[i]===buttonY && validSwapCheck(selectedGrid.x,selectedGrid.y,i)) {
+						exchange(selectedGrid.x,selectedGrid.y,i)
+						return
+					}
+					gridInfo(button)
+					return
+				}
+				closeGridInfo()
+				selectedGrid.select=true
+				selectedGrid.value=buttonValue
+				selectedGrid.x=buttonX
+				selectedGrid.y=buttonY
+				button.style.opacity=0.5
+			}
+		}
+		function dragGridStart(button) {
+			if(animation) return
+			if(!isVisible(document.getElementById("gridinfo"))) return
+			if(selectedGrid.select===true) return
+			let buttonValue=parseInt(button.value),buttonX=parseInt(button.getAttribute("data-x")),buttonY=parseInt(button.getAttribute("data-y"))
+			if(buttonValue===0) {
+				closeGridInfo()
+				draggingGrid.drag=true
+				draggingGrid.value=buttonValue
+				draggingGrid.x=buttonX
+				draggingGrid.y=buttonY
+				document.addEventListener("mouseup",dragGridEnd)
+			}
+		}
+		function dragGridEnd(mouseCord) {
+			draggingGrid.drag=false
+			document.removeEventListener("mouseup",dragGridEnd)
+			let topLeft=getGrid(0,1,1).getBoundingClientRect()
+			let mouseRow=betterFloor((mouseX-topLeft.left)/70)+1,mouseColumn=betterFloor((mouseY-topLeft.top)/70)+1
+			if(mouseRow<1 || mouseRow>game.width || mouseColumn<1 || mouseColumn>game.height) {
+				return
+			}
+			for(let i=1;i<=4;i++) if(draggingGrid.x+dx[i]===mouseRow && draggingGrid.y+dy[i]===mouseColumn && validSwapCheck(draggingGrid.x,draggingGrid.y,i)) {
+				exchange(draggingGrid.x,draggingGrid.y,i)
+				return
+			}
+			mouseGridInfo()
+		}
+		async function addTempMovingGrid(grid,startX,startY,endX,endY,period=200) {
+			if(player.settings.skipanimation===true) return
+			let startRect=getGrid(0,startX,startY).getBoundingClientRect()
+			let endRect=getGrid(0,endX,endY).getBoundingClientRect()
+			grid.style.position="absolute"
+			grid.style.left=startRect.left+"px"
+			grid.style.top=startRect.top+"px"
+			grid.style.transform="translate(0px, 0px) scale(1)"
+			grid.style.opacity=0.8
+			grid.style.transition="transform "+(0.9*period)+"ms linear, opacity "+(0.9*period)+"ms linear"
+			document.body.appendChild(grid)
+			await delay(period/10)
+			grid.style.transform="translate("+(endRect.left-startRect.left)+"px, "+(endRect.top-startRect.top)+"px) scale(0.5)"
+			grid.style.opacity=0.5
+			setTimeout(()=>{grid.remove()},0.9*period)
+		}
+	</script>
+	<script>
+		const bookHTML=new Object()
+		bookHTML["Advanced Crafter Guide"]="<h2>Advanced Crafter Guide</h2><span>Are you confused about these special entities? This is a guide for them!</span><br><span>As you see, to fight against endless mobs, limited petals would not be enough. There are spawners which create new petals constantly. They have a mark on the top of specified grid. The symbol is \"=x=\". You can view the level info (in bottom right corner, <span class='bold'>also used to leave a biome</span>) to know what will they spawn.</span><br><span>As you see again, for a board with more void grid, you need transporters to transport petal. They also have a mark on the top of specified grid, with a symbol of \"x,y\". This is the coordinate of grid where it transport petals from.</span><br><span>There are also walls which prevents you exchange petals. Petals crushed nearby will deal a static 1 damage to the wall. If both side of the wall are petals and crushed together, <span class='bold'>the damage stacks</span>.</span>"
+		bookHTML["Flower Game Guide"]="<h2>Flower Game Guide</h2><div class='white-bg inner-box'><span style='color: #008000'>#include&lt;PFLFtools.h&gt;</span><span><span style='font-weight: bold'>using namespace</span> std<span style='color: #ff0000; font-weight: bold'>;</span></span><span><span style='font-weight: bold'>int</span> main<span style='color: #ff0000; font-weight: bold'>()</span></span><span style='color: #ff0000; font-weight: bold'>{</span><span style='margin-left: 2em'>system<span style='color: #ff0000; font-weight: bold'>(</span><span style='color: #0000ff; font-weight: bold'>\"cls\"</span><span style='color: #ff0000; font-weight: bold'>);</span></span><span style='margin-left: 2em'>slowprint<span style='color: #ff0000; font-weight: bold'>(</span><span style='color: #0000ff; font-weight: bold'>\"↓MORE GAME (CLICK!)↓\"</span><span style='color: #ff0000; font-weight: bold'>,</span><span style='color: #800080'>50</span><span style='color: #ff0000; font-weight: bold'>);</span></span><span style='margin-left: 2em'>slowprint<span style='color: #ff0000; font-weight: bold'>(</span><a href='https://6triple6single.github.io/Florroom' target='_blank' style='color: #0000ff; font-weight: bold; text-decoration: none'>\"FLORROOM\"</a><span style='color: #ff0000; font-weight: bold'>,</span><span style='color: #800080'>50</span><span style='color: #ff0000; font-weight: bold'>);</span></span><span style='margin-left: 2em'>slowprint<span style='color: #ff0000; font-weight: bold'>(</span><a href='https://6triple6single.github.io/PFLF' target='_blank' style='color: #0000ff; font-weight: bold; text-decoration: none'>\"PFLF\"</a><span style='color: #ff0000; font-weight: bold'>,</span><span style='color: #800080'>50</span><span style='color: #ff0000; font-weight: bold'>);</span></span><span style='margin-left: 2em'>slowprint<span style='color: #ff0000; font-weight: bold'>(</span><a href='https://6triple6single.github.io/Virus1' target='_blank' style='color: #0000ff; font-weight: bold; text-decoration: none'>\"VIRUS 1\"</a><span style='color: #ff0000; font-weight: bold'>,</span><span style='color: #800080'>50</span><span style='color: #ff0000; font-weight: bold'>);</span></span><span style='margin-left: 2em'><span style='font-weight: bold'>return</span> <span style='color: #800080'>0</span><span style='color: #ff0000; font-weight: bold'>;</span></span><span style='color: #ff0000; font-weight: bold'>}</span></div>"
+		bookHTML["Petal Crafter Tutorial"]="<h2>Petal Crafter Tutorial</h2><span>You combined 3 petals into a line, then they crushed and crafted a new one! You have already seen how powerful it is. The Rock is instantly destroyed.</span><span>Maybe you will need to try something new. For example, crafting 4 or more petals, combining petals with different rarity... Anyway, this is a great starting, go on!</span><br><span>Oh, you are confused about how does damage work? Well, when you combine damaging petals together, all of them will do damage to a certain mob nearby (if exist). Then, each petal does damage to mobs around it. So actually <span class='bold'>you have dealt 30+10 damage to the Rock</span>! That's so powerful!</span><br><span>Oh, you also want to ask what is score? Score drops over turn. It determines how good your work is. Remember try to get as much score as you can.</span><br><span>Don't turn the [Resource] Log Display off in settings, you will be notified when you have new things to learn!</span>"
+		bookHTML["Various Petal Collection"]="<h2>Various Petal Collection</h2><span>Craft a special petal with special type by your own!</span><br><span>The Row Type: It has an icon consisting of a horizontal line and two outward pointing arrows. It releases a blast when crushed. The blast will destroy all petals in the same row and also damage mobs.</span><span>The Column Type: It has an icon consisting of a vertical line and two outward pointing arrows. It also releases a blast when crushed. The blast affects things in the same column instead.</span><span>The Bomb Type: It has an icon with two diagonal lines and four outward pointing arrows on the corners. It also releases a blast when crushed. The blast affects things within <span class='bold'>sqrt(5)</span> distance instead.</span><span>The Kaleidoscope Type: It has a regular pentagon icon. When crushed, it collects petals of the same type instead of releasing blast. <span class='bold'>This will not destroy petals which destroys by blast</span>.</span><h3>How to get</h3><span>The Row Type: Combine 4 petals in a column. Only created if Bomb or Kaleidoscope type can't be created.</span><span>The Column Type: Combine 4 petals in a row. Same condition as above.</span><span>The Bomb Type: Creates whenever there is a cross (which means a petal is both crushed in row and column) but Kaleidoscope can not be created.</span><span>The Kaleidoscope Type: Combine 5 petals in a row or a column. Has the highest priority.</span><br><span>An area can only create one special type of petal. If there is only one rarity in an area, all petals will be combined into a higher rarity one, but it has the lowest priority. If there is no place to create, nothing will happen, AND this has nothing to do with energy loss.</span>"
+		function book(modify) {
+			if(modify===-1 && player.bookreading>0) player.bookreading--
+			if(modify===1 && player.bookreading<player.book.length-1) player.bookreading++
+			document.getElementById("book-content").innerHTML=bookHTML[player.book[player.bookreading]]
+			setPlayer()
+		}
+		let logDisplay=true,cleanerDegree=0
+		function cleanerRotate(force=false) {
+			if(cleanerDegree===0 && force===false) return
+			cleanerDegree=(cleanerDegree+3)%270
+			document.getElementById("cleaner").style.transform="rotate("+cleanerDegree+"deg)"
+		}
+		function addLog(text,color="#000000") {
+			if(text.startsWith("[Help]") && player.settings.closehelplog===true) return
+			if(text.startsWith("[Command]") && player.settings.closecommandlog===true) return
+			if(text.startsWith("[Chat]") && player.settings.closechatlog===true) return
+			if(text.startsWith("[bot#7976]") && player.settings.closebotlog===true) return
+			if(text.startsWith("[Petal]") && player.settings.closepetallog===true) return
+			if(text.startsWith("[Mob]") && player.settings.closemoblog===true) return
+			if(text.startsWith("[Flower]") && player.settings.closeflowerlog===true) return
+			if(text.startsWith("[Determine]") && player.settings.closedeterminelog===true) return
+			if(text.startsWith("[Resource]") && player.settings.closeresourcelog===true) return
+			let logElement=document.createElement("div")
+			logElement.setAttribute("class","lcmargin")
+			if(color) logElement.style.color=color
+			logElement.innerHTML=text
+			document.getElementById("log").appendChild(logElement)
+			document.getElementById("log").scrollTop=document.getElementById("log").scrollHeight
+		}
+		async function cleanLog() {
+			if(cleanerDegree>0) return
+			document.getElementById("log").innerHTML=""
+			cleanerRotate(true)
+		}
+		function expandLog() {
+			if(logDisplay) {
+				logDisplay=false
+				document.getElementById("log").style.display="none"
+				document.getElementById("command-call").style.display="none"
+				document.getElementById("cleaner").style.display="none"
+				document.getElementById("command").style.width="unset"
+				document.getElementById("expander").children[1].style.display="unset"
+			} else {
+				logDisplay=true
+				document.getElementById("log").style.display=""
+				document.getElementById("command-call").style.display=""
+				document.getElementById("cleaner").style.display=""
+				document.getElementById("command").style.width=""
+				document.getElementById("expander").children[1].style.display=""
+			}
+		}
+		function command(key) {
+			if(key!=="Enter") return
+			if(logDisplay===false) return
+			let commandInput=document.getElementById("command-call").value
+			document.getElementById("command-call").value=""
+			if(commandInput.startsWith(".")) {
+			} else {
+				addLog("[Chat] Traveler: "+commandInput.replaceAll("<","&lt;"))
+			}
+		}
+		let dialogRemain="",dialogPrint=false
+		async function dialog(title,maintext,speed,bgColor="#ffffff",textColor="#000000") {
+			document.getElementById("end1").style["pointer-events"]="unset"
+			if(title==="Skip") {
+				if(dialogRemain.length) {
+					dialogPrint=false
+					document.getElementById("dialog-maintext").innerHTML+=dialogRemain
+					dialogRemain=""
+					return
+				}
+				if(player.dialog.startdialog===0 && player.settings.dialog==="Skip") player.dialog.startdialog=7
+				if(player.dialog.startdialog===0) {
+					await dialog("Traveler (You)","This familiar place... Where am I now exactly?","Unset","#dfdfff")
+					player.dialog.startdialog=1
+					return
+				}
+				if(player.dialog.startdialog===1) {
+					await dialog("Garden Watcher","Hello, Traveler! You can also actually proficiently use these petals! Do you see the tower in the distance? If you can pass my test, we will invite you to work inside the tower.","Unset","#dfffdf")
+					player.dialog.startdialog=2
+					return
+				}
+				if(player.dialog.startdialog===2) {
+					await dialog("Traveler (You)","Am I using these petals... Proficiently?","Unset","#dfdfff")
+					player.dialog.startdialog=3
+					return
+				}
+				if(player.dialog.startdialog===3) {
+					await dialog("Garden Watcher","Don't act like you don't know what you are doing.","Unset","#dfffdf")
+					player.dialog.startdialog=4
+					return
+				}
+				if(player.dialog.startdialog===4) {
+					await dialog("Traveler (You)","(What am I doing? What I did?)","Unset","#dfdfff")
+					player.dialog.startdialog=5
+					return
+				}
+				if(player.dialog.startdialog===5) {
+					await dialog("(Azalea)","Suddenly, Traveler remembered something.","Unset","#dfdfdf")
+					player.dialog.startdialog=6
+					return
+				}
+				if(player.dialog.startdialog===6) {
+					await dialog("(Azalea)","(Hint: Press the button in the top right corner.)","Unset","#dfdfdf")
+					player.dialog.startdialog=7
+					return
+				}
+				if(player.dialog.startdialog===7) {
+					player.dialog.startdialog="Completed"
+					document.getElementById("dialog").style.display="none"
+					player.book.push("Petal Crafter Tutorial")
+					addLog("[Resource] You received Petal Crafter Tutorial.","#7fff7f")
+					setPlayer()
+					animation=false
+					document.getElementById("end1").style["pointer-events"]="none"
+					return
+				}
+				if(player.dialog.petaltypedialog===0 && player.settings.dialog==="Skip") player.dialog.petaltypedialog=7
+				if(player.dialog.petaltypedialog===0) {
+					await dialog("Traveler (You)","The \"Kaleidoscope\" type is so powerful. It collects petals even without explosion.","Unset","#dfdfff")
+					player.dialog.petaltypedialog=1
+					return
+				}
+				if(player.dialog.petaltypedialog===1) {
+					await dialog("Garden Watcher","You are learning so fast! Do you have any questions?","Unset","#dfffdf")
+					player.dialog.petaltypedialog=2
+					return
+				}
+				if(player.dialog.petaltypedialog===2) {
+					dialog("Traveler (You)","<button type='button' tabindex='-1' onclick='event.stopPropagation();player.dialog.petaltypedialog=3;dialog(\"Skip\")' class='llmargin white-bg srecbtn pointer'>How to craft with different rarities?</button><button type='button' tabindex='-1' onclick='event.stopPropagation();player.dialog.petaltypedialog=4;dialog(\"Skip\")' class='llmargin white-bg srecbtn pointer'>What will be next?</button><button type='button' tabindex='-1' onclick='event.stopPropagation();player.dialog.petaltypedialog=5;dialog(\"Skip\")' class='llmargin white-bg srecbtn pointer'>I still need a guide.</button><button type='button' tabindex='-1' onclick='event.stopPropagation();player.dialog.petaltypedialog=6;dialog(\"Skip\")' class='llmargin white-bg srecbtn pointer'>Why is the goal unreasonably high?</button><button type='button' tabindex='-1' onclick='event.stopPropagation();player.dialog.petaltypedialog=7;dialog(\"Skip\")' class='llmargin white-bg srecbtn pointer'>This is just easy for me.</button>","Instant","#dfdfff")
+					if(!player.dialog.hasOwnProperty("petaltype")) player.dialog.petaltype=[0,0,0,0]
+					return
+				}
+				if(player.dialog.petaltypedialog===3) {
+					player.dialog.petaltype[0]++
+					if(player.dialog.petaltype[0]===1) {
+						await dialog("Garden Watcher","There is no way to do that, but you can combine them into special types.","Unset","#dfffdf")
+						player.dialog.petaltypedialog=2
+						return
+					}
+					if(player.dialog.petaltype[0]===2) {
+						await dialog("Garden Watcher","No, the energy is not missing. We have a large power room inside the tower, which utilizes the energy released by disappearing petals. It is quite efficient.","Unset","#dfffdf")
+						player.dialog.petaltypedialog=2
+						return
+					}
+					if(player.dialog.petaltype[0]===3) {
+						await dialog("Garden Watcher","There's no pollution! That's all you need to know!","Unset","#dfffdf")
+						player.dialog.petaltypedialog=7
+						return
+					}
+				}
+				if(player.dialog.petaltypedialog===4) {
+					player.dialog.petaltype[1]++
+					if(player.dialog.petaltype[1]===1) {
+						await dialog("Garden Watcher","Only a few easy mechanics. If we bring out dangerous mobs and they are out of control, we can't afford it. You will see them in the tower.","Unset","#dfffdf")
+						player.dialog.petaltypedialog=2
+						return
+					}
+					if(player.dialog.petaltype[1]===2) {
+						await dialog("Garden Watcher","If there are no other questions, you can just continue forward.","Unset","#dfffdf")
+						player.dialog.petaltypedialog=2
+						return
+					}
+					if(player.dialog.petaltype[1]===3) {
+						await dialog("Garden Watcher","You better test them out by yourself.","Unset","#dfffdf")
+						player.dialog.petaltypedialog=7
+						return
+					}
+				}
+				if(player.dialog.petaltypedialog===5) {
+					player.dialog.petaltype[2]++
+					if(player.dialog.petaltype[2]===1) {
+						await dialog("Garden Watcher","Fine. I have one available.","Unset","#dfffdf")
+						player.book.push("Various Petal Collection")
+						addLog("[Resource] You received Various Petal Collection.","#7fff7f")
+						player.dialog.petaltypedialog=2
+						return
+					}
+					if(player.dialog.petaltype[2]===2) {
+						await dialog("Garden Watcher","This book is enough for you.","Unset","#dfffdf")
+						player.dialog.petaltypedialog=2
+						return
+					}
+					if(player.dialog.petaltype[2]===3) {
+						await dialog("Garden Watcher","I'm not going to waste time on this.","Unset","#dfffdf")
+						player.dialog.petaltypedialog=7
+						return
+					}
+				}
+				if(player.dialog.petaltypedialog===6) {
+					player.dialog.petaltype[3]++
+					if(player.dialog.petaltype[3]===1) {
+						await dialog("Garden Watcher","Because... Well, your work is bad. You should find a better way to complete the goal.","Unset","#dfffdf")
+						player.dialog.petaltypedialog=2
+						return
+					}
+					if(player.dialog.petaltype[3]===2) {
+						await dialog("Garden Watcher","Haha, I'm just kidding. I'm not even qualified to review your work. The flowers in tower will give you feedback.","Unset","#dfffdf")
+						player.dialog.petaltypedialog=2
+						return
+					}
+					if(player.dialog.petaltype[3]===3) {
+						await dialog("Garden Watcher","It is just a joke, isn't that obvious?","Unset","#dfffdf")
+						player.dialog.petaltypedialog=7
+						return
+					}
+				}
+				if(player.dialog.petaltypedialog===7) {
+					player.dialog.petaltypedialog="Completed"
+					document.getElementById("dialog").style.display="none"
+					setPlayer()
+					animation=false
+					document.getElementById("end1").style["pointer-events"]="none"
+					return
+				}
+				if(player.dialog.tutorialfinishdialog===0 && player.settings.dialog==="Skip") player.dialog.tutorialfinishdialog=7
+				if(player.dialog.tutorialfinishdialog===0) {
+					await dialog("Traveler (You)","Finally I hit this stone. The remote control is so difficult.","Unset","#dfdfff")
+					player.dialog.tutorialfinishdialog=1
+					return
+				}
+				if(player.dialog.tutorialfinishdialog===1) {
+					await dialog("Garden Watcher","Well done! I'm taking you to the tower. Good luck with that.","Unset","#dfffdf")
+					if(player.book.indexOf("Various Petal Collection")!==-1) {
+						player.dialog.tutorialfinishdialog=2
+					} else {
+						player.dialog.tutorialfinishdialog=6
+					}
+					return
+				}
+				if(player.dialog.tutorialfinishdialog===2) {
+					await dialog("Garden Watcher","And... I have something to give you.","Unset","#dfffdf")
+					player.dialog.tutorialfinishdialog=3
+					return
+				}
+				if(player.dialog.tutorialfinishdialog===3) {
+					await dialog("Traveler (You)","What is it?","Unset","#dfdfff")
+					player.dialog.tutorialfinishdialog=4
+					return
+				}
+				if(player.dialog.tutorialfinishdialog===4) {
+					await dialog("Garden Watcher","Just another guide. If you are still not sure how does these work, it should be helpful.","Unset","#dfffdf")
+					player.book.push("Advanced Crafter Guide")
+					addLog("[Resource] You received Advanced Crafter Guide.","#7fff7f")
+					player.dialog.tutorialfinishdialog=5
+					return
+				}
+				if(player.dialog.tutorialfinishdialog===5) {
+					await dialog("Traveler (You)","Thanks. I really need it.","Unset","#dfdfff")
+					player.dialog.tutorialfinishdialog=6
+					return
+				}
+				if(player.dialog.tutorialfinishdialog===6) {
+					await dialog("Garden Watcher","Remember, the mobs inside tower could be dangerous. Take care of your health.","Unset","#dfffdf")
+					player.dialog.tutorialfinishdialog=7
+					return
+				}
+				if(player.dialog.tutorialfinishdialog===7) {
+					player.dialog.tutorialfinishdialog="Completed"
+					document.getElementById("dialog").style.display="none"
+					setPlayer()
+					for(let i=1;i<=7;i++) levelList["Training Ground"][i].goal=5156
+					updateFlowerState()
+					printBiome()
+					animation=false
+					document.getElementById("end1").style["pointer-events"]="none"
+					return
+				}
+				return
+			}
+			document.getElementById("dialog").style["background-color"]=bgColor
+			document.getElementById("dialog-title").innerHTML=title
+			document.getElementById("dialog-title").style.color=textColor
+			document.getElementById("dialog-maintext").innerHTML=""
+			document.getElementById("dialog-maintext").style.color=textColor
+			document.getElementById("dialog").style.display="flex"
+			dialogRemain=maintext
+			if(speed==="Unset") speed=player.settings.dialog
+			if(!speed) speed="Middle"
+			if(speed==="Instant") {
+				document.getElementById("dialog-maintext").innerHTML=maintext
+				dialogRemain=""
+				return
+			}
+			animation=true
+			dialogPrint=true
+			while(dialogPrint) {
+				document.getElementById("dialog-maintext").innerHTML+=dialogRemain.slice(0,1)
+				dialogRemain=dialogRemain.slice(1)
+				if(!dialogRemain.length) dialogPrint=false
+				if(speed==="Fast" && document.getElementById("dialog-maintext").innerHTML.match(/[A-Za-z]$/)) await delay(30)
+				if(speed==="Middle" && document.getElementById("dialog-maintext").innerHTML.match(/[A-Za-z]$/)) await delay(50)
+				if(speed==="Slow" && document.getElementById("dialog-maintext").innerHTML.match(/[A-Za-z]$/)) await delay(80)
+			}
+		}
+	</script>
+	<script>
+		let cogDegree=0
+		function cogRotate() {
+			if(isVisible(document.getElementById("settings"))) {
+				cogDegree=(cogDegree+1)%360
+				document.getElementById("cog-icon").style.transform="rotate("+cogDegree+"deg)"
+			}
+		}
+		function closeAll() {
+			if(isVisible(document.getElementById("mapinfo"))) closeMapInfo()
+			if(isVisible(document.getElementById("settings"))) settings(false)
+			if(isVisible(document.getElementById("help"))) howToPlay(false)
+			if(isVisible(document.getElementById("pause"))) pauseGame(false)
+			if(isVisible(document.getElementById("level"))) showLevel(false)
+		}
+		function cornerDisplay() {
+			if(isVisible(document.getElementById("settings"))) return true
+			if(isVisible(document.getElementById("help"))) return true
+			if(isVisible(document.getElementById("pause"))) return true
+			if(isVisible(document.getElementById("level"))) return true
+			return false
+		}
+		function settings(open=true) {
+			if(animation) return
+			if(isVisible(document.getElementById("dialog"))) return
+			if(open && isVisible(document.getElementById("settings"))) {
+				settings(false)
+				return
+			}
+			if(!open) {
+				document.getElementById("settings").style.display="none"
+				return
+			}
+			closeAll()
+			selectedGrid.select=false
+			closeGridInfo()
+			document.getElementById("settings").innerHTML="<h2>Settings</h2><span class='nowrap'>🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲</span><br><span>REC means recommended</span>"
+			let logDisplayTitle=document.createElement("h3")
+			logDisplayTitle.innerHTML="Log Display"
+			document.getElementById("settings").appendChild(logDisplayTitle)
+			let logDisplay=document.createElement("div")
+			if(!player.settings.hasOwnProperty("closehelplog")) {
+				let addButton=settingButton(1,1,"On")
+				logDisplay.appendChild(addButton)
+			} else {
+				let addButton=settingButton(1,1,"Off")
+				logDisplay.appendChild(addButton)
+			}
+			if(!player.settings.hasOwnProperty("closecommandlog")) {
+				let addButton=settingButton(2,1,"On")
+				logDisplay.appendChild(addButton)
+			} else {
+				let addButton=settingButton(2,1,"Off")
+				logDisplay.appendChild(addButton)
+			}
+			if(!player.settings.hasOwnProperty("closechatlog")) {
+				let addButton=settingButton(3,1,"On")
+				logDisplay.appendChild(addButton)
+			} else {
+				let addButton=settingButton(3,1,"Off")
+				logDisplay.appendChild(addButton)
+			}
+			if(!player.settings.hasOwnProperty("closebotlog")) {
+				let addButton=settingButton(4,1,"On")
+				logDisplay.appendChild(addButton)
+			} else {
+				let addButton=settingButton(4,1,"Off")
+				logDisplay.appendChild(addButton)
+			}
+			if(!player.settings.hasOwnProperty("closepetallog")) {
+				let addButton=settingButton(5,1,"On")
+				logDisplay.appendChild(addButton)
+			} else {
+				let addButton=settingButton(5,1,"Off")
+				logDisplay.appendChild(addButton)
+			}
+			if(!player.settings.hasOwnProperty("closemoblog")) {
+				let addButton=settingButton(6,1,"On")
+				logDisplay.appendChild(addButton)
+			} else {
+				let addButton=settingButton(6,1,"Off")
+				logDisplay.appendChild(addButton)
+			}
+			if(!player.settings.hasOwnProperty("closeflowerlog")) {
+				let addButton=settingButton(7,1,"On")
+				logDisplay.appendChild(addButton)
+			} else {
+				let addButton=settingButton(7,1,"Off")
+				logDisplay.appendChild(addButton)
+			}
+			if(!player.settings.hasOwnProperty("closedeterminelog")) {
+				let addButton=settingButton(8,1,"On")
+				logDisplay.appendChild(addButton)
+			} else {
+				let addButton=settingButton(8,1,"Off")
+				logDisplay.appendChild(addButton)
+			}
+			if(!player.settings.hasOwnProperty("closeresourcelog")) {
+				let addButton=settingButton(9,1,"On")
+				logDisplay.appendChild(addButton)
+			} else {
+				let addButton=settingButton(9,1,"Off")
+				logDisplay.appendChild(addButton)
+			}
+			document.getElementById("settings").appendChild(logDisplay)
+			let dialogDisplayTitle=document.createElement("h3")
+			dialogDisplayTitle.innerHTML="Dialog Display"
+			document.getElementById("settings").appendChild(dialogDisplayTitle)
+			let dialogDisplay=document.createElement("div")
+			if(player.settings.dialog==="Slow") {
+				let addButton=settingButton(1,2,"Slow")
+				dialogDisplay.appendChild(addButton)
+			} else if(player.settings.dialog==="Fast") {
+				let addButton=settingButton(1,2,"Fast")
+				dialogDisplay.appendChild(addButton)
+			} else if(player.settings.dialog==="Skip") {
+				let addButton=settingButton(1,2,"Skip")
+				dialogDisplay.appendChild(addButton)
+			} else {
+				let addButton=settingButton(1,2,"Middle")
+				dialogDisplay.appendChild(addButton)
+			}
+			document.getElementById("settings").appendChild(dialogDisplay)
+			let qolTitle=document.createElement("h3")
+			qolTitle.innerHTML="Quality of Life"
+			document.getElementById("settings").appendChild(qolTitle)
+			let qolDisplay=document.createElement("div")
+			if(!player.settings.hasOwnProperty("alwaysscroll")) {
+				let addButton=settingButton(1,3,"Off")
+				qolDisplay.appendChild(addButton)
+			} else {
+				let addButton=settingButton(1,3,"On")
+				qolDisplay.appendChild(addButton)
+			}
+			if(!player.settings.hasOwnProperty("enablemenu")) {
+				let addButton=settingButton(2,3,"Off")
+				qolDisplay.appendChild(addButton)
+			} else {
+				let addButton=settingButton(2,3,"On")
+				qolDisplay.appendChild(addButton)
+			}
+			if(!player.settings.hasOwnProperty("transparentinfo")) {
+				let addButton=settingButton(3,3,"Off")
+				qolDisplay.appendChild(addButton)
+			} else {
+				let addButton=settingButton(3,3,"On")
+				qolDisplay.appendChild(addButton)
+			}
+			if(!player.settings.hasOwnProperty("skipanimation")) {
+				let addButton=settingButton(4,3,"Off")
+				qolDisplay.appendChild(addButton)
+			} else {
+				let addButton=settingButton(4,3,"On")
+				qolDisplay.appendChild(addButton)
+			}
+			document.getElementById("settings").appendChild(qolDisplay)
+			document.getElementById("settings").appendChild(document.createElement("br"))
+			document.getElementById("settings").style.display="flex"
+			if(player.settings.alwaysscroll===true) document.getElementById("settings").scrollTop=0
+		}
+		function settingButton(setX,setY,state) {
+			let addButton
+			if(setX===1 && setY===1 && state==="On") {
+				addButton=createGrid(5,setX,setY,"Text_Help",2)
+				addButton.classList.add("green-bg")
+			}
+			if(setX===1 && setY===1 && state==="Off") {
+				addButton=createGrid(5,setX,setY,"Text_Help<br><span class='text5'>REC=On</span>",2)
+				addButton.classList.add("red-bg")
+			}
+			if(setX===2 && setY===1 && state==="On") {
+				addButton=createGrid(5,setX,setY,"Text_Command",2)
+				addButton.classList.add("green-bg")
+			}
+			if(setX===2 && setY===1 && state==="Off") {
+				addButton=createGrid(5,setX,setY,"Text_Command",2)
+				addButton.classList.add("red-bg")
+			}
+			if(setX===3 && setY===1 && state==="On") {
+				addButton=createGrid(5,setX,setY,"Text_Chat",2)
+				addButton.classList.add("green-bg")
+			}
+			if(setX===3 && setY===1 && state==="Off") {
+				addButton=createGrid(5,setX,setY,"Text_Chat",2)
+				addButton.classList.add("red-bg")
+			}
+			if(setX===4 && setY===1 && state==="On") {
+				addButton=createGrid(5,setX,setY,"Text_Bot",2)
+				addButton.classList.add("green-bg")
+			}
+			if(setX==4 && setY===1 && state==="Off") {
+				addButton=createGrid(5,setX,setY,"Text_Bot",2)
+				addButton.classList.add("red-bg")
+			}
+			if(setX===5 && setY===1 && state==="On") {
+				addButton=createGrid(5,setX,setY,"Text_Petal<br><span class='text5'>REC=Off</span>",2)
+				addButton.classList.add("green-bg")
+			}
+			if(setX===5 && setY===1 && state==="Off") {
+				addButton=createGrid(5,setX,setY,"Text_Petal",2)
+				addButton.classList.add("red-bg")
+			}
+			if(setX===6 && setY===1 && state==="On") {
+				addButton=createGrid(5,setX,setY,"Text_Mob",2)
+				addButton.classList.add("green-bg")
+			}
+			if(setX===6 && setY===1 && state==="Off") {
+				addButton=createGrid(5,setX,setY,"Text_Mob<br><span class='text5'>REC=On</span>",2)
+				addButton.classList.add("red-bg")
+			}
+			if(setX===7 && setY===1 && state==="On") {
+				addButton=createGrid(5,setX,setY,"Text_Flower",2)
+				addButton.classList.add("green-bg")
+			}
+			if(setX===7 && setY===1 && state==="Off") {
+				addButton=createGrid(5,setX,setY,"Text_Flower",2)
+				addButton.classList.add("red-bg")
+			}
+			if(setX===8 && setY===1 && state==="On") {
+				addButton=createGrid(5,setX,setY,"Text_Determine<br><span class='text5'>REC=Off</span>",2)
+				addButton.classList.add("green-bg")
+			}
+			if(setX===8 && setY===1 && state==="Off") {
+				addButton=createGrid(5,setX,setY,"Text_Determine",2)
+				addButton.classList.add("red-bg")
+			}
+			if(setX===9 && setY===1 && state==="On") {
+				addButton=createGrid(5,setX,setY,"Text_Resource",2)
+				addButton.classList.add("green-bg")
+			}
+			if(setX===9 && setY===1 && state==="Off") {
+				addButton=createGrid(5,setX,setY,"Text_Resource",2)
+				addButton.classList.add("red-bg")
+			}
+			if(setX===1 && setY===2 && state==="Slow") {
+				addButton=createGrid(5,setX,setY,"Text_Speed<br><br>Slow<br><span class='text5'>REC=Skip</span>",2)
+				addButton.classList.add("blue-bg")
+			}
+			if(setX===1 && setY===2 && state==="Middle") {
+				addButton=createGrid(5,setX,setY,"Text_Speed<br><br>Middle<br><span class='text5'>REC=Skip</span>",2)
+				addButton.classList.add("green-bg")
+			}
+			if(setX===1 && setY===2 && state==="Fast") {
+				addButton=createGrid(5,setX,setY,"Text_Speed<br><br>Fast<br><span class='text5'>REC=Skip</span>",2)
+				addButton.classList.add("yellow-bg")
+			}
+			if(setX===1 && setY===2 && state==="Skip") {
+				addButton=createGrid(5,setX,setY,"Text_Speed<br><br>Skip",2)
+				addButton.classList.add("red-bg")
+			}
+			if(setX===1 && setY===3 && state==="On") {
+				addButton=createGrid(5,setX,setY,"Text_Always<br>scroll<br>before<br>display",2)
+				addButton.classList.add("green-bg")
+			}
+			if(setX===1 && setY===3 && state==="Off") {
+				addButton=createGrid(5,setX,setY,"Text_Always<br>scroll<br>before<br>display",2)
+				addButton.classList.add("red-bg")
+			}
+			if(setX===2 && setY===3 && state==="On") {
+				addButton=createGrid(5,setX,setY,"Text_Enable<br>right<br>click<br>menu",2)
+				addButton.classList.add("green-bg")
+			}
+			if(setX===2 && setY===3 && state==="Off") {
+				addButton=createGrid(5,setX,setY,"Text_Enable<br>right<br>click<br>menu",2)
+				addButton.classList.add("red-bg")
+			}
+			if(setX===3 && setY===3 && state==="On") {
+				addButton=createGrid(5,setX,setY,"Text_Low<br>opacity<br>grid<br>info",2)
+				addButton.classList.add("green-bg")
+			}
+			if(setX===3 && setY===3 && state==="Off") {
+				addButton=createGrid(5,setX,setY,"Text_Low<br>opacity<br>grid<br>info",2)
+				addButton.classList.add("red-bg")
+			}
+			if(setX===4 && setY===3 && state==="On") {
+				addButton=createGrid(5,setX,setY,"Text_Skip<br>all<br>animation<br><span class='text5'>REC=Off</span>",2)
+				addButton.classList.add("green-bg")
+			}
+			if(setX===4 && setY===3 && state==="Off") {
+				addButton=createGrid(5,setX,setY,"Text_Skip<br>all<br>animation",2)
+				addButton.classList.add("red-bg")
+			}
+			addButton.classList.add("llmargin")
+			addButton.style.border="2px solid"
+			addButton.setAttribute("onclick","settingClick("+setX+","+setY+")")
+			return addButton
+		}
+		function settingClick(setX,setY) {
+			if(animation) return
+			if(setX===1 && setY===1) {
+				if(!player.settings.hasOwnProperty("closehelplog")) {
+					cleanLog()
+					player.settings.closehelplog=true
+					getGrid(5,setX,setY).replaceWith(settingButton(setX,setY,"Off"))
+				} else {
+					cleanLog()
+					delete player.settings.closehelplog
+					getGrid(5,setX,setY).replaceWith(settingButton(setX,setY,"On"))
+				}
+			}
+			if(setX===2 && setY===1) {
+				if(!player.settings.hasOwnProperty("closecommandlog")) {
+					cleanLog()
+					player.settings.closecommandlog=true
+					getGrid(5,setX,setY).replaceWith(settingButton(setX,setY,"Off"))
+				} else {
+					cleanLog()
+					delete player.settings.closecommandlog
+					getGrid(5,setX,setY).replaceWith(settingButton(setX,setY,"On"))
+				}
+			}
+			if(setX===3 && setY===1) {
+				if(!player.settings.hasOwnProperty("closechatlog")) {
+					cleanLog()
+					player.settings.closechatlog=true
+					getGrid(5,setX,setY).replaceWith(settingButton(setX,setY,"Off"))
+				} else {
+					cleanLog()
+					delete player.settings.closechatlog
+					getGrid(5,setX,setY).replaceWith(settingButton(setX,setY,"On"))
+				}
+			}
+			if(setX===4 && setY===1) {
+				if(!player.settings.hasOwnProperty("closebotlog")) {
+					cleanLog()
+					player.settings.closebotlog=true
+					getGrid(5,setX,setY).replaceWith(settingButton(setX,setY,"Off"))
+				} else {
+					cleanLog()
+					delete player.settings.closebotlog
+					getGrid(5,setX,setY).replaceWith(settingButton(setX,setY,"On"))
+				}
+			}
+			if(setX===5 && setY===1) {
+				if(!player.settings.hasOwnProperty("closepetallog")) {
+					cleanLog()
+					player.settings.closepetallog=true
+					getGrid(5,setX,setY).replaceWith(settingButton(setX,setY,"Off"))
+				} else {
+					cleanLog()
+					delete player.settings.closepetallog
+					getGrid(5,setX,setY).replaceWith(settingButton(setX,setY,"On"))
+				}
+			}
+			if(setX===6 && setY===1) {
+				if(!player.settings.hasOwnProperty("closemoblog")) {
+					cleanLog()
+					player.settings.closemoblog=true
+					getGrid(5,setX,setY).replaceWith(settingButton(setX,setY,"Off"))
+				} else {
+					cleanLog()
+					delete player.settings.closemoblog
+					getGrid(5,setX,setY).replaceWith(settingButton(setX,setY,"On"))
+				}
+			}
+			if(setX===7 && setY===1) {
+				if(!player.settings.hasOwnProperty("closeflowerlog")) {
+					cleanLog()
+					player.settings.closeflowerlog=true
+					getGrid(5,setX,setY).replaceWith(settingButton(setX,setY,"Off"))
+				} else {
+					cleanLog()
+					delete player.settings.closeflowerlog
+					getGrid(5,setX,setY).replaceWith(settingButton(setX,setY,"On"))
+				}
+			}
+			if(setX===8 && setY===1) {
+				if(!player.settings.hasOwnProperty("closedeterminelog")) {
+					cleanLog()
+					player.settings.closedeterminelog=true
+					getGrid(5,setX,setY).replaceWith(settingButton(setX,setY,"Off"))
+				} else {
+					cleanLog()
+					delete player.settings.closedeterminelog
+					getGrid(5,setX,setY).replaceWith(settingButton(setX,setY,"On"))
+				}
+			}
+			if(setX===9 && setY===1) {
+				if(!player.settings.hasOwnProperty("closeresourcelog")) {
+					cleanLog()
+					player.settings.closeresourcelog=true
+					getGrid(5,setX,setY).replaceWith(settingButton(setX,setY,"Off"))
+				} else {
+					cleanLog()
+					delete player.settings.closeresourcelog
+					getGrid(5,setX,setY).replaceWith(settingButton(setX,setY,"On"))
+				}
+			}
+			if(setX===1 && setY===2) {
+				if(!player.settings.hasOwnProperty("dialog")) player.settings.dialog="Middle"
+				if(player.settings.dialog==="Slow") {
+					player.settings.dialog="Middle"
+					getGrid(5,setX,setY).replaceWith(settingButton(setX,setY,"Middle"))
+				} else if(player.settings.dialog==="Middle") {
+					player.settings.dialog="Fast"
+					getGrid(5,setX,setY).replaceWith(settingButton(setX,setY,"Fast"))
+				} else if(player.settings.dialog==="Fast") {
+					player.settings.dialog="Skip"
+					getGrid(5,setX,setY).replaceWith(settingButton(setX,setY,"Skip"))
+				} else {
+					player.settings.dialog="Slow"
+					getGrid(5,setX,setY).replaceWith(settingButton(setX,setY,"Slow"))
+				}
+			}
+			if(setX===1 && setY===3) {
+				if(!player.settings.hasOwnProperty("alwaysscroll")) {
+					player.settings.alwaysscroll=true
+					getGrid(5,setX,setY).replaceWith(settingButton(setX,setY,"On"))
+				} else {
+					delete player.settings.alwaysscroll
+					getGrid(5,setX,setY).replaceWith(settingButton(setX,setY,"Off"))
+				}
+			}
+			if(setX===2 && setY===3) {
+				if(!player.settings.hasOwnProperty("enablemenu")) {
+					player.settings.enablemenu=true
+					getGrid(5,setX,setY).replaceWith(settingButton(setX,setY,"On"))
+				} else {
+					delete player.settings.enablemenu
+					getGrid(5,setX,setY).replaceWith(settingButton(setX,setY,"Off"))
+				}
+			}
+			if(setX===3 && setY===3) {
+				if(!player.settings.hasOwnProperty("transparentinfo")) {
+					player.settings.transparentinfo=true
+					document.getElementById("gridinfo").style.opacity=0.5
+					getGrid(5,setX,setY).replaceWith(settingButton(setX,setY,"On"))
+				} else {
+					delete player.settings.transparentinfo
+					document.getElementById("gridinfo").style.opacity=0.75
+					getGrid(5,setX,setY).replaceWith(settingButton(setX,setY,"Off"))
+				}
+			}
+			if(setX===4 && setY===3) {
+				if(!player.settings.hasOwnProperty("skipanimation")) {
+					player.settings.skipanimation=true
+					document.getElementById("gridinfo").style.opacity=0.5
+					getGrid(5,setX,setY).replaceWith(settingButton(setX,setY,"On"))
+				} else {
+					delete player.settings.skipanimation
+					document.getElementById("gridinfo").style.opacity=0.75
+					getGrid(5,setX,setY).replaceWith(settingButton(setX,setY,"Off"))
+				}
+			}
+			setPlayer()
+		}
+		function howToPlay(open=true) {
+			if(animation) return
+			if(isVisible(document.getElementById("dialog"))) return
+			if(open && isVisible(document.getElementById("help"))) {
+				howToPlay(false)
+				return
+			}
+			if(!open) {
+				document.getElementById("help").style.display="none"
+				document.getElementById("help-icon").setAttribute("d","M35 35A15 15 0 1 1 59 47A22.5 22.5 0 0 0 50 65")
+				return
+			}
+			closeAll()
+			selectedGrid.select=false
+			closeGridInfo()
+			book()
+			document.getElementById("help").style.display="flex"
+			document.getElementById("help-icon").setAttribute("d","M50 18L50 62")
+			if(player.settings.alwaysscroll===true) document.getElementById("help").scrollTop=0
+			document.getElementById("help").focus()
+		}
+		function pauseGame(open=true) {
+			if(animation) return
+			if(isVisible(document.getElementById("dialog"))) return
+			if(open && game.active===false) return
+			if(open && isVisible(document.getElementById("pause"))) {
+				pauseGame(false)
+				return
+			}
+			if(!open) {
+				game.saved=false
+				setGame()
+				document.getElementById("pause").style.display="none"
+				document.getElementById("pause-icon").setAttribute("d","M36 30L42 30L42 70L36 70ZM58 30L64 30L64 70L58 70Z")
+				document.getElementById("end1").style.opacity=0
+				document.getElementById("end1").style["pointer-events"]="none"
+				return
+			}
+			closeAll()
+			selectedGrid.select=false
+			closeGridInfo()
+			document.getElementById("pause").style.display="flex"
+			document.getElementById("pause-icon").setAttribute("d","M40 32L70 50L40 68Z")
+			document.getElementById("end1").style["pointer-events"]="unset"
+			document.getElementById("end1").style.opacity=0.8
+			if(player.settings.alwaysscroll===true) document.getElementById("pause").scrollTop=0
+			game.saved=true
+			setGame()
+		}
+		function showLevel(open=true) {
+			if(animation) return
+			if(isVisible(document.getElementById("dialog"))) return
+			if(open && game.active===false) {
+				if(!player.hasOwnProperty("biome")) return
+				delete player.biome
+				delete player.biomename
+				setPlayer()
+				home()
+				printWorld()
+				document.getElementById("level-btn").classList.add("llred-bg")
+				updateFlowerState()
+				return
+			}
+			if(open && isVisible(document.getElementById("level"))) {
+				showLevel(false)
+				return
+			}
+			if(!open) {
+				document.getElementById("level").style.display="none"
+				document.getElementById("map-icon").classList.replace("fblue-path","fred-path")
+				return
+			}
+			closeAll()
+			selectedGrid.select=false
+			closeGridInfo()
+			let editingLevelHTML="<h2>Level Summary</h2><span class='nowrap'>🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲</span>"
+			editingLevelHTML+="<h3>Score Subtractor</h3><span>It is equivalent to floor(coefficient*(turn^exponent)) in total.</span><br>"
+			editingLevelHTML+="<span>This level has a coefficient of <span class='purple bold'>"+levelList[player.biomename][game.level].coefficient+"</span> and an exponent of <span class='cyan bold'>"+levelList[player.biomename][game.level].exponent+"</span>.</span><br>"
+			let scoreSubtractor=betterFloor(levelList[player.biomename][game.level].coefficient*((game.turn+1)**levelList[player.biomename][game.level].exponent))-betterFloor(levelList[player.biomename][game.level].coefficient*(game.turn**levelList[player.biomename][game.level].exponent))
+			editingLevelHTML+="<span>You have used <span class='grey bold'>"+game.turn+"</span> turn. The next move will get your score subtracted by <span class='dbrown bold'>"+scoreSubtractor+"</span>.</span><br>"
+			if(levelList[player.biomename][game.level].hasOwnProperty("spawner")) {
+				editingLevelHTML+="<h3>Spawner</h3>"
+				for(let i=0;i<levelList[player.biomename][game.level].spawner.length;i++) {
+					if(i===0) {
+						editingLevelHTML+="<span>The Default Spawner: It spawns petal to grid with \"=0=\" symbol and generates initial map.</span><br>"
+					} else {
+						editingLevelHTML+="<span>Spawner "+i+": It spawns petal to grid with \"="+i+"=\" symbol.</span><br>"
+					}
+					let editingSpawner=levelList[player.biomename][game.level].spawner[i]
+					for(let j=0;j<editingSpawner.length;j++) {
+						let testResult=editingSpawner[j].result(0,0)
+						editingLevelHTML+="<span>Weight "+editingSpawner[j].weight+":"
+						editingLevelHTML+="<span style='color: "+rarityColorEP[testResult.content.rarity]+"'>"+testResult.content.name+"</span>"
+						if(testResult.type!=="Normal") editingLevelHTML+=", with a special type of <span class='bold'>"+testResult.type+"</span>"
+						if(editingSpawner[j].noinitial===true) editingLevelHTML+=", but can not generate in initial map"
+						editingLevelHTML+="</span>"
+					}
+					editingLevelHTML+="<br>"
+				}
+			}
+			document.getElementById("level").innerHTML=editingLevelHTML
+			document.getElementById("level").style.display="flex"
+			document.getElementById("map-icon").classList.replace("fred-path","fblue-path")
+			if(player.settings.alwaysscroll===true) document.getElementById("level").scrollTop=0
+		}
+		function retreat() {
+			endGame()
+			pauseGame(false)
+		}
+		function encodeFile(savestr) {
+			if(savestr.length%2>0) savestr+="79.76"
+			let encodedstr=""
+			for(let i=0;i<savestr.length/2;i++) {
+				let encodeValue=(savestr[2*i].charCodeAt()-20)*130+(savestr[2*i+1].charCodeAt()-20)
+				encodedstr+=String.fromCharCode(65+betterFloor(encodeValue/676))
+				encodedstr+=String.fromCharCode(65+betterFloor(encodeValue/26)%26)
+				encodedstr+=String.fromCharCode(65+encodeValue%26)
+			}
+			for(let i=0;i<encodedstr.length;i++) {
+				encodedstr[i]=String.fromCharCode(65+(encodedstr[i].charCodeAt()-65+betterFloor((i+1)/(encodedstr.length+1)*354233654))%26)
+			}
+			return encodedstr
+		}
+		function decodeFile(encodedstr) {
+			let savestr=""
+			for(let i=0;i<encodedstr.length;i++) {
+				encodedstr[i]=String.fromCharCode(65+(encodedstr[i].charCodeAt()-65-betterFloor((i+1)/(encodedstr.length+1)*354233654))%26)
+			}
+			for(let i=0;i<encodedstr.length/3;i++) {
+				let encodeValue=(encodedstr[3*i].charCodeAt()-65)*676+(encodedstr[3*i+1].charCodeAt()-65)*26+(encodedstr[3*i+2].charCodeAt()-65)
+				savestr+=String.fromCharCode(20+betterFloor(encodeValue/130))
+				savestr+=String.fromCharCode(20+encodeValue%130)
+			}
+			if(savestr[savestr.length-1]==="6") savestr=savestr.slice(0,-5)
+			return savestr
+		}
+		function importSave() {
+			if(animation) return
+			document.querySelectorAll("input[type='file']").forEach(input => input.remove())
+			let fileInput=document.createElement("input")
+			fileInput.type="file"
+			fileInput.accept=".txt"
+			fileInput.style.display="none"
+			fileInput.addEventListener("change",function(e) {
+				let savefile=e.target.files[0]
+				if(!savefile) {
+					document.body.removeChild(fileInput)
+					return
+				}
+				let reader=new FileReader()
+				reader.onload=async function(event) {
+					try {
+						savefile=JSON.parse(decodeFile(event.target.result))
+						if(!savefile.player) throw new Error()
+						clearAllInterval()
+						player=savefile.player
+						setPlayer()
+						document.getElementById("end1").style["pointer-events"]="unset"
+						for(let i=0;i<=10;i++) {
+							document.getElementById("end1").style.opacity=i/10
+							await delay(100)
+						}
+						location.reload()
+					} catch {
+						document.body.removeChild(fileInput)
+						alert("Error: Memory incomplete")
+					}
+				}
+				reader.readAsText(savefile)
+			} )
+			document.body.appendChild(fileInput)
+			fileInput.click()
+		}
+		async function exportSave() {
+			if(animation) return
+			animation=true
+			let savefile={player:player}
+			let blob=new Blob([encodeFile(JSON.stringify(savefile))],{type:"text/plain"})
+			let downloadElement=document.createElement("a")
+			downloadElement.href=URL.createObjectURL(blob)
+			downloadElement.download="memory.txt"
+			downloadElement.click()
+			document.getElementById("export-btn").innerHTML="Memories Stored!"
+			await delay(1000)
+			document.getElementById("export-btn").innerHTML="Store Memories"
+			animation=false
+		}
+		async function hardReset() {
+			if(animation) return
+			let getResetSentence=prompt("Are you sure to reset the game and lost all process?\nType 'The game is perfect, there are no bugs' to confirm.")
+			if(getResetSentence!=="The game is perfect, there are no bugs") return
+			document.getElementById("end1").style["pointer-events"]="unset"
+			clearAllInterval()
+			for(let i=0;i<=50;i++) {
+				document.getElementById("end1").style.opacity=i/50
+				await delay(100)
+			}
+			let saveSettings=player.settings
+			player=new Object()
+			player.settings=saveSettings
+			setPlayer()
+			game=new Object()
+			setGame()
+			userVersion=version
+			setVersion()
+			document.getElementById("end2").innerText="The new planet is sprouting..."
+			for(let i=0;i<=20;i++) {
+				document.getElementById("end2").style.opacity=i/20
+				await delay(100)
+			}
+			await delay(1000)
+			for(let i=0;i<=20;i++) {
+				document.getElementById("end2").style.opacity=1-i/20
+				await delay(100)
+			}
+			await delay(2000)
+			location.reload()
+		}
+		function updateVersion(reset) {
+			if(reset===false) {
+				if(userVersion<acceptedVersion) {
+					document.getElementById("version3").innerHTML="Your version is too outdated..."
+					return
+				}
+				userVersion=version
+				setVersion()
+				location.reload()
+			}
+			if(reset===true) {
+				hardReset()
+			}
+		}
+		let letterArray=[" ","1","2","3","4","5","6","7","8","9","0","w","d","s","a","q","h","z","v"]
+		function tryInput(num) {
+			if(document.getElementById("end1").style["pointer-events"]==="unset") return
+			if(document.getElementById("dialog").style.display==="flex") {
+				if(num===0) {
+					dialog("Skip",6361)
+					return
+				}
+				if(num===79) {
+					dialog("Skip",6361)
+					return
+				}
+				return
+			}
+			if(animation) return
+		}
+		document.addEventListener("keydown",function(pressed) {
+			if(pressed.target.tagName==="INPUT") {
+				if(pressed.target.value==="" && pressed.key==="Backspace") {
+					if(document.getElementById("help").style.display==="flex") document.getElementById("help").focus()
+					pressed.target.blur()
+				}
+				return
+			}
+			if(letterArray.indexOf(pressed.key.toLowerCase())>=0) {
+				tryInput(letterArray.indexOf(pressed.key.toLowerCase()))
+				if(document.getElementById("help").style.display==="flex" && pressed.key===" ") pressed.preventDefault()
+				return
+			}
+			if(pressed.key.startsWith("Arrow")) {
+				if(pressed.key==="ArrowUp") tryInput(11)
+				if(pressed.key==="ArrowRight") tryInput(12)
+				if(pressed.key==="ArrowDown") tryInput(13)
+				if(pressed.key==="ArrowLeft") tryInput(14)
+				return
+			}
+			if(pressed.key==="Enter") {
+				tryInput(79)
+				return
+			}
+			if(pressed.key==="Backspace") {
+				tryInput(81)
+				return
+			}
+		} )
+		let intervalCleaner,intervalCog,intervalFlower,intervalMap
+		function clearAllInterval() {
+			clearInterval(intervalCleaner)
+			clearInterval(intervalCog)
+			clearInterval(intervalFlower)
+			clearInterval(intervalMap)
+		}
+		window.onload=async function() {
+			document.getElementById("end1").style["pointer-events"]="unset"
+			document.getElementById("version1").style.display="none"
+			document.getElementById("version2").style.display="none"
+			document.getElementById("endgame1").style.display="none"
+			document.getElementById("endgame2").style.display="none"
+			if(userVersion!==version) {
+				document.getElementById("version1").style.display="unset"
+				document.getElementById("version2").style.display="flex"
+				for(let i=0;i<=10;i++) {
+					document.getElementById("end1").style.opacity=1-i/10
+					await delay(100)
+				}
+				document.getElementById("end1").style["pointer-events"]="none"
+				return
+			}
+			intervalCleaner=setInterval(cleanerRotate,10)
+			intervalCog=setInterval(cogRotate,10)
+			setContainElement()
+			if(player.settings.transparentinfo===true) {
+				document.getElementById("gridinfo").style.opacity=0.5
+			}
+			if(player.explore.hasOwnProperty("Training Ground") && player.explore["Training Ground"].highscore.hasOwnProperty(7)) {
+				for(let i=1;i<=7;i++) levelList["Training Ground"][i].goal=5156
+			}
+			if(game.active===true) {
+				if(game.saved===false) {
+					endGame()
+				} else {
+					game.saved=false
+					setGame()
+					updateValue()
+					printGameBoard()
+					displayGame()
+					for(let i=1;i<=game.width;i++) for(let j=1;j<=game.height;j++) game.board[i][j].wallprint()
+				}
+			} else if(player.hasOwnProperty("biome")) {
+				printBiome()
+				displayWorld()
+			} else {
+				printWorld()
+				displayWorld()
+			}
+			document.addEventListener("keydown",(e) => {
+				if((e.key===" " || e.key==="Enter") && e.target.tagName==="BUTTON") {
+					e.preventDefault()
+					e.stopPropagation()
+				}
+			} )
+			document.addEventListener("contextmenu",(e) => {
+				 if(!player.settings.hasOwnProperty("enablemenu")) e.preventDefault()
+			} )
+			if(game.active===false) document.getElementById("pause-btn").classList.add("llred-bg")
+			if(game.active===false && !player.hasOwnProperty("biome")) document.getElementById("level-btn").classList.add("llred-bg")
+			animation=true
+			document.getElementById("end2").innerText="Welcome to Petal Crush!"
+			for(let i=0;i<=10;i++) {
+				document.getElementById("end2").style.opacity=i/10
+				await delay(100)
+			}
+			await delay(1000)
+			for(let i=0;i<=10;i++) {
+				document.getElementById("end2").style.opacity=1-i/10
+				await delay(100)	
+
+			}
+			for(let i=0;i<=10;i++) {
+				document.getElementById("end1").style.opacity=1-i/10
+				await delay(100)
+			}
+			document.getElementById("end1").style["pointer-events"]="none"
+			animation=false
+			updateFlowerState()
+			if(player.dialog.startdialog===0) dialog("Skip")
+			if(player.dialog.petaltypedialog===0) dialog("Skip")
+		}
+		let drag=false,dragX=0,dragY=0,worldcX=0,worldcY=0,scaleSize
+		function setContainElement() {
+			let containerStyle=window.getComputedStyle(document.getElementById("world-container"))
+			scaleSize=Math.min(parseFloat(containerStyle.height),parseFloat(containerStyle.width))
+			document.getElementById("world-container").addEventListener("mousedown",function(mouse) {
+				if(mouse.target.id!=="blank") return
+				closeMapInfo()
+				drag=true
+				dragX=mouseX
+				dragY=mouseY
+			} )
+			document.addEventListener("mousemove",function(mouse) {
+				if(drag!==true) return
+				scaleSize=Math.min(parseFloat(containerStyle.height),parseFloat(containerStyle.width))
+				worldcX+=(mouseX-dragX)*100/scaleSize,dragX=mouseX
+				worldcY+=(mouseY-dragY)*100/scaleSize,dragY=mouseY
+				document.getElementById("world-trans").style.transform="translate("+worldcX+"px, "+worldcY+"px)"
+				updateHome()
+			} )
+			document.addEventListener("mouseup",function() {
+				drag=false
+			} )
+		}
+		function updateHome() {
+			let scaledX=worldcX/parseFloat(window.getComputedStyle(document.getElementById("world-container")).width)
+			let scaledY=worldcY/parseFloat(window.getComputedStyle(document.getElementById("world-container")).height)
+			let scaleDistance=Math.max(Math.abs(scaledX),Math.abs(scaledY))
+			if(Math.abs(scaledX)*scaleSize<50 && Math.abs(scaledY)*scaleSize<50) {
+				document.getElementById("house").style.display="none"
+			} else {
+				document.getElementById("house").style.left=50+scaledX/scaleDistance*40+"%"
+				document.getElementById("house").style.top=50+scaledY/scaleDistance*40+"%"
+				document.getElementById("house").style.display="unset"
+			}
+		}
+		function home() {
+			worldcX=0
+			worldcY=0
+			document.getElementById("world-trans").style.transform=""
+			updateHome()
+		}
+		function printWorld() {
+			checkAvailableWorld()
+			let editingWorldHTML=""
+			for(let i in player.world) {
+				editingWorldHTML+="<path onclick='chooseWorld(this)' value='"+i+"' class='pointer ns' style='fill: "+mapList[i].color+"' d='M"+mapList[i].x+" "+(mapList[i].y-2.5)+"A2.5 2.5 0 0 0 "+mapList[i].x+" "+(mapList[i].y+2.5)+"A2.5 2.5 0 0 0 "+mapList[i].x+" "+(mapList[i].y-2.5)+"'/>"
+				if(player.world[i].purchased===true) {
+					editingWorldHTML+="<path class='green-path narrow rcap npe' d='M"+mapList[i].x+" "+(mapList[i].y-1.5)+"L"+mapList[i].x+" "+(mapList[i].y+1.5)+"M"+(mapList[i].x-1.2)+" "+(mapList[i].y+0.3)+"L"+mapList[i].x+" "+(mapList[i].y+1.5)+"M"+(mapList[i].x+1.2)+" "+(mapList[i].y+0.3)+"L"+mapList[i].x+" "+(mapList[i].y+1.5)+"'/>"
+				} else if(remainingStar()>=mapList[i].cost) {
+					editingWorldHTML+="<path class='yellow-path narrow npe' d='M"+mapList[i].x+" "+(mapList[i].y-1.6)+"L"+mapList[i].x+" "+(mapList[i].y+0.6)+"'/>"
+					editingWorldHTML+="<path class='fyellow-path ns npe' d='M"+mapList[i].x+" "+(mapList[i].y+1.2)+"A0.3 0.3 0 0 0 "+mapList[i].x+" "+(mapList[i].y+1.8)+"A0.3 0.3 0 0 0 "+mapList[i].x+" "+(mapList[i].y+1.2)+"'/>"
+				} else {
+					editingWorldHTML+="<path class='red-path narrow npe' d='M"+(mapList[i].x-1.5)+" "+mapList[i].y+"L"+(mapList[i].x+1.5)+" "+mapList[i].y+"'/>"
+				}
+			}
+			document.getElementById("world-trans").innerHTML=editingWorldHTML
+			document.getElementById("world-trans").querySelectorAll("path:not(.npe)").forEach(path => {
+				path.addEventListener("mouseenter",() => mapInfo(path))
+				path.addEventListener("mouseleave",closeMapInfo)
+			} )
+		}
+		function printBiome() {
+			checkAvailableBiome()
+			let editingBiomeHTML=""
+			for(let i of player.explore[player.biomename].available) {
+				for(let j of levelList[player.biomename][i].precondition) if(player.explore[player.biomename].available.indexOf(j)!==-1) {
+					editingBiomeHTML+="<path class='fwidth npe' style='stroke: "+mapList[player.biome].color+"' d='M"+levelList[player.biomename][j].x+" "+levelList[player.biomename][j].y+"L"+levelList[player.biomename][i].x+" "+levelList[player.biomename][i].y+"'/>"
+				}
+			}
+			for(let i of player.explore[player.biomename].available) {
+				let editingLevel=levelList[player.biomename][i]
+				editingBiomeHTML+="<path onclick='chooseLevel(this)' value='"+i+"' class='pointer ns' style='fill: "+mapList[player.biome].color+"' d='M"+editingLevel.x+" "+(editingLevel.y-2.5)+"A2.5 2.5 0 0 0 "+editingLevel.x+" "+(editingLevel.y+2.5)+"A2.5 2.5 0 0 0 "+editingLevel.x+" "+(editingLevel.y-2.5)+"'/>"
+				if(!player.explore[player.biomename].highscore.hasOwnProperty(i)) {
+					editingBiomeHTML+="<path class='yellow-path narrow npe' d='M"+editingLevel.x+" "+(editingLevel.y-1.6)+"L"+editingLevel.x+" "+(editingLevel.y+0.6)+"'/>"
+					editingBiomeHTML+="<path class='fyellow-path ns npe' d='M"+editingLevel.x+" "+(editingLevel.y+1.2)+"A0.3 0.3 0 0 0 "+editingLevel.x+" "+(editingLevel.y+1.8)+"A0.3 0.3 0 0 0 "+editingLevel.x+" "+(editingLevel.y+1.2)+"'/>"
+				} else if(player.explore[player.biomename].highscore[i]>=editingLevel.goal) {
+					editingBiomeHTML+="<path class='green-path narrow rcap npe' d='M"+(editingLevel.x-1.5)+" "+(editingLevel.y+0.2)+"L"+(editingLevel.x-0.5)+" "+(editingLevel.y+1.2)+"L"+(editingLevel.x+1.5)+" "+(editingLevel.y-0.8)+"'/>"
+				} else {
+					editingBiomeHTML+="<path class='cyan-path narrow npe' d='M"+editingLevel.x+" "+(editingLevel.y-1.2)+"A1.2 1.2 0 0 0 "+editingLevel.x+" "+(editingLevel.y+1.2)+"A1.2 1.2 0 0 0 "+editingLevel.x+" "+(editingLevel.y-1.2)+"'/>"
+				}
+			}
+			closeMapInfo()
+			home()
+			document.getElementById("world-trans").innerHTML=editingBiomeHTML
+			document.getElementById("world-trans").querySelectorAll("path:not(.npe)").forEach(path => {
+				path.addEventListener("mouseenter",() => levelInfo(path))
+				path.addEventListener("mouseleave",closeMapInfo)
+			} )
+		}
+		function mapInfo(spot) {
+			if(cornerDisplay()) return
+			let spotValue=parseInt(spot.getAttribute("value"))
+			document.getElementById("mapinfo").style.setProperty("--transform2","translate(0%,-50%)")
+			document.getElementById("mapinfo").style.top=spot.getBoundingClientRect().top-15+"px"
+			document.getElementById("mapinfo").style.left=spot.getBoundingClientRect().left+spot.getBoundingClientRect().width/2+"px"
+			let editingMapHTML="<h3 style='color: "+mapList[spotValue].color+"'>"+mapList[spotValue].name+"</h3>"
+			if(player.world[spotValue].purchased===true) {
+				editingMapHTML+="<span class='green'>You have purchased this world.</span><br><span class='green'>Click on the spot to enter.</span><br>"
+			} else if(remainingStar()>=mapList[spotValue].cost) {
+				editingMapHTML+="<span class='grey'>World cost: "+mapList[spotValue].cost+"</span><br><span class='green'>Your star: "+remainingStar()+"</span><br><span class='green'>Click on the spot to purchase this world.</span><br><span class='red'>The purchase is not refundable.</span><br>"
+			} else {
+				editingMapHTML+="<span class='grey'>World cost: "+mapList[spotValue].cost+"</span><br><span class='red'>Your star: "+remainingStar()+"</span><br>"
+			}
+			document.getElementById("mapinfo").innerHTML=editingMapHTML
+			document.getElementById("mapinfo").style.display="flex"
+		}
+		function levelInfo(spot) {
+			if(cornerDisplay()) return
+			let spotValue=parseInt(spot.getAttribute("value"))
+			document.getElementById("mapinfo").style.setProperty("--transform2","translate(0%,-50%)")
+			document.getElementById("mapinfo").style.top=spot.getBoundingClientRect().top-15+"px"
+			document.getElementById("mapinfo").style.left=spot.getBoundingClientRect().left+spot.getBoundingClientRect().width/2+"px"
+			let editingLevelHTML="<h3 style='color: "+mapList[player.biome].color+"'>Level "+spotValue+"</h3>"
+			editingLevelHTML+="<span class='green'>Goal: "+levelList[player.biomename][spotValue].goal+"</span><br>"
+			if(!player.explore[player.biomename].highscore.hasOwnProperty(spotValue)) {
+				editingLevelHTML+="<span class='red'>Not completed yet</span><br>"
+			} else if(player.explore[player.biomename].highscore[spotValue]>=levelList[player.biomename][spotValue].goal) {
+				editingLevelHTML+="<span class='green'>Highscore: "+player.explore[player.biomename].highscore[spotValue]+"</span><br>"
+			} else {
+				editingLevelHTML+="<span class='cyan'>Highscore: "+player.explore[player.biomename].highscore[spotValue]+"</span><br>"
+			}
+			document.getElementById("mapinfo").innerHTML=editingLevelHTML
+			document.getElementById("mapinfo").style.display="flex"
+		}
+		function closeMapInfo() {
+			document.getElementById("mapinfo").style.display="none"
+		}
+		function chooseWorld(spot) {
+			if(animation) return
+			if(!isVisible(document.getElementById("mapinfo"))) return
+			let spotValue=parseInt(spot.getAttribute("value"))
+			if(player.world[spotValue].purchased===true) {
+				player.biome=spotValue
+				player.biomename=mapList[spotValue].name
+				printBiome()
+				document.getElementById("level-btn").classList.remove("llred-bg")
+				updateFlowerState()
+				return
+			}
+			if(remainingStar()<mapList[spotValue].cost) return
+			player.world[spotValue].purchased=true
+			printWorld()
+			updateFlowerState()
+		}
+		function chooseLevel(spot) {
+			if(animation) return
+			if(!isVisible(document.getElementById("mapinfo"))) return
+			let spotValue=parseInt(spot.getAttribute("value"))
+			startGame(spotValue)
+			document.getElementById("pause-btn").classList.remove("llred-bg")
+		}
+		function petalAttributeText(attributeName,attributeValue) {
+			if(attributeName==="damage") {
+				let pendingText="<span style='color: #bf5f5f'>Deals <span class='bold'>"+attributeValue+"</span> damage to nearby mobs when crushed.</span>"
+				return pendingText
+			}
+			if(attributeName==="knockback") {
+				let pendingText="<span style='color: #9f9f5f'>Deals <span class='bold'>"+attributeValue+"</span> knockback to nearby mobs when crushed.</span>"
+				return pendingText
+			}
+			if(attributeName==="heal") {
+				let pendingText="<span style='color: #5fbf5f'>Heals flower for <span class='bold'>"+attributeValue+"</span> when crushed.</span>"
+				return pendingText
+			}
+			if(attributeName==="duration") {
+				let pendingText="<span style='color: #5fbfbf'>The effect lasts for <span class='bold'>"+attributeValue+"</span> turn.</span>"
+				return pendingText
+			}
+			if(attributeName==="craft" && attributeValue==="Disabled") {
+				let pendingText="<span style='color: #ff5f5f'>Can not be crafted.</span>"
+				return pendingText
+			}
+			if(attributeName==="blast" && attributeValue==="Destroy") {
+				let pendingText="<span style='color: #ff5f5f'>Has no effect when crushed by blast (row/column/bomb).</span>"
+				return pendingText
+			}
+			return ""
+		}
+		function mobAttributeText(attributeName,attributeValue) {
+			if(attributeName==="action" && attributeValue==="None") {
+				let pendingText="<span style='color: #7f7f7f'>Has no action.</span>"
+				return pendingText
+			}
+			if(attributeName==="health") {
+				let pendingText="<span style='color: #5fbf5f'>Has <span class='bold'>"+attributeValue+"</span> health currently.</span>"
+				return pendingText
+			}
+			if(attributeName==="maxhealth") {
+				let pendingText="<span style='color: #7fdf7f'>Has <span class='bold'>"+attributeValue+"</span> maximum health.</span>"
+				return pendingText
+			}
+			if(attributeName==="drop" && attributeValue==="Disabled") {
+				let pendingText="<span style='color: #ff5f5f'>Does not drop.</span>"
+				return pendingText
+			}
+			if(attributeName==="move" && attributeValue==="Disabled") {
+				let pendingText="<span style='color: #ff5f5f'>Can not be exchanged.</span>"
+				return pendingText
+			}
+			return ""
+		}
+		function itemAttributeText(attributeName,attributeValue) {
+			if(attributeName==="drop" && attributeValue==="Disabled") {
+				let pendingText="<span style='color: #ff5f5f'>Does not drop.</span>"
+				return pendingText
+			}
+			if(attributeName==="move" && attributeValue==="Disabled") {
+				let pendingText="<span style='color: #ff5f5f'>Can not be exchanged.</span>"
+				return pendingText
+			}
+			return ""
+		}
+		function gridInfo(grid) {
+			if(animation) return
+			if(selectedGrid.select===true) return
+			if(draggingGrid.drag===true) return
+			let gridValue=parseInt(grid.getAttribute("value")),gridX=parseInt(grid.dataset.x),gridY=parseInt(grid.dataset.y)
+			if(gridValue===0) {
+				if(game.board[gridX][gridY].state==="Empty" || game.board[gridX][gridY].content===undefined) return
+				document.getElementById("gridinfo").style.setProperty("--transform2","translate(0%,-50%)")
+				document.getElementById("gridinfo").style.top=grid.getBoundingClientRect().top-10+"px"
+				document.getElementById("gridinfo").style.left=grid.getBoundingClientRect().left+40+"px"
+				let editingGridHTML,gridContent=game.board[gridX][gridY].content
+				if(isPetal(gridContent)) {
+					editingGridHTML="<h3 style='color: "+rarityColorEP[gridContent.rarity]+"'>"+gridContent.name+"</h3>"
+					editingGridHTML+="<span>"+PetalDescriptionList[gridContent.id]+"</span><br>"
+					if(JSON.stringify(gridContent.attribute)!=="{}") {
+						let pendingText=""
+						for(let i in gridContent.attribute) pendingText+=petalAttributeText(i,gridContent.attribute[i])
+						editingGridHTML+=pendingText+"<br>"
+					}
+				}
+				if(isMob(gridContent)) {
+					editingGridHTML="<h3 style='color: "+rarityColorEP[gridContent.rarity]+"'>"+gridContent.name+"</h3>"
+					editingGridHTML+="<span>"+MobDescriptionList[gridContent.id]+"</span><br>"
+					if(JSON.stringify(gridContent.attribute)!=="{}") {
+						let pendingText=""
+						for(let i in gridContent.attribute) pendingText+=mobAttributeText(i,gridContent.attribute[i])
+						editingGridHTML+=pendingText+"<br>"
+					}
+				}
+				if(isItem(gridContent)) {
+					editingGridHTML="<h3 style='color: "+rarityColorEP[gridContent.rarity]+"'>"+gridContent.name+"</h3>"
+					editingGridHTML+="<span>"+ItemDescriptionList[gridContent.id]+"</span><br>"
+					if(JSON.stringify(gridContent.attribute)!=="{}") {
+						let pendingText=""
+						for(let i in gridContent.attribute) pendingText+=itemAttributeText(i,gridContent.attribute[i])
+						editingGridHTML+=pendingText+"<br>"
+					}
+				}
+				document.getElementById("gridinfo").innerHTML=editingGridHTML
+				document.getElementById("gridinfo").style.display="flex"
+			}
+		}
+		function closeGridInfo() {
+			document.getElementById("gridinfo").style.display="none"
+		}
+		function displayWorld() {
+			document.getElementById("game-container").style.display="none"
+			document.getElementById("world-container").style.display="unset"
+		}
+		function displayGame() {
+			document.getElementById("world-container").style.display="none"
+			document.getElementById("game-container").style.display="grid"
+		}
+		function printGameBoard() {
+			document.getElementById("game-container").style["grid-template-columns"]="repeat("+game.width+", 1fr)"
+			document.getElementById("game-container").style["grid-template-rows"]="repeat("+game.height+", 1fr)"
+			document.getElementById("game-container").innerHTML=""
+			for(let i=1;i<=game.height;i++) {
+				for(let j=1;j<=game.width;j++) {
+					document.getElementById("game-container").appendChild(createGrid(0,j,i,"Empty",1))
+				}
+			}
+			for(let i=1;i<=game.width;i++) {
+				for(let j=1;j<=game.height;j++) game.board[i][j].print()
+			}
+		}
+		function startGame(chosenLevel) {
+			selectedGrid.select=false
+			draggingGrid.drag=false
+			game.active=true
+			game.saved=false
+			game.level=chosenLevel
+			game.width=levelList[player.biomename][game.level].width
+			game.height=levelList[player.biomename][game.level].height
+			game.turn=0
+			game.score=6361
+			game.board=levelList[player.biomename][game.level].initialmap()
+			game.wall=new Array()
+			for(let i=1;i<=game.width;i++) {
+				game.wall[i]=new Array()
+				for(let j=1;j<=game.height;j++) game.wall[i][j]={1:0,2:0,3:0,4:0}
+			}
+			if(levelList[player.biomename][game.level].hasOwnProperty("wall")) {
+				let wallCreate=levelList[player.biomename][game.level].wall
+				for(let i=0;i<wallCreate.length;i++) {
+					if(wallCreate[i].dir===2) {
+						game.wall[wallCreate[i].x][wallCreate[i].y][2]=wallCreate[i].stack
+						game.wall[wallCreate[i].x+1][wallCreate[i].y][4]=wallCreate[i].stack
+					} else {
+						game.wall[wallCreate[i].x][wallCreate[i].y][3]=wallCreate[i].stack
+						game.wall[wallCreate[i].x][wallCreate[i].y+1][1]=wallCreate[i].stack
+					}
+				}
+			}
+			initialSpawn()
+			setGame()
+			updateValue()
+			game.flower=new Object()
+			game.flower.maxhealth=NewValue.maxhealth
+			if(!NewValue.hasOwnProperty("health")) {
+				game.flower.health=game.flower.maxhealth
+			} else {
+				game.flower.health=NewValue.health
+			}
+			printGameBoard()
+			displayGame()
+			updateFlowerState()
+			for(let i=1;i<=game.width;i++) for(let j=1;j<=game.height;j++) game.board[i][j].wallprint()
+		}
+		function endGame(win) {
+			if(animation) return
+			if(win===true) {
+				if(!player.explore[player.biomename].highscore.hasOwnProperty(game.level)) player.explore[player.biomename].highscore[game.level]=-1
+				if(player.biomename==="Training Ground" && game.level===1 && player.explore[player.biomename].highscore[game.level]===-1) {
+					player.dialog.startdialog=0
+					setPlayer()
+					dialog("Skip")
+				}
+				if(player.biomename==="Training Ground" && game.level===4 && player.explore[player.biomename].highscore[game.level]===-1) {
+					player.dialog.petaltypedialog=0
+					setPlayer()
+					dialog("Skip")
+				}
+				if(player.biomename==="Training Ground" && game.level===7 && player.explore[player.biomename].highscore[game.level]===-1) {
+					player.dialog.tutorialfinishdialog=0
+					setPlayer()
+					dialog("Skip")
+				}
+				if(game.score>player.explore[player.biomename].highscore[game.level]) player.explore[player.biomename].highscore[game.level]=game.score
+			}
+			game.active=false
+			setGame()
+			closeGridInfo()
+			printBiome()
+			displayWorld()
+			document.getElementById("pause-btn").classList.add("llred-bg")
+			updateFlowerState()
+		}
+		async function collapseGrid(grid) {
+			if(player.settings.skipanimation===true) {
+				if(parseInt(grid.getAttribute("value"))===0) {
+					grid.replaceWith(createGrid(0,parseInt(grid.dataset.x),parseInt(grid.dataset.y),"Empty",1))
+				}
+				return
+			}
+			selectedGrid.select=false
+			closeGridInfo(true)
+			let saveAnimation=animation
+			animation=true
+			let gridValue=parseInt(grid.getAttribute("value")),gridX=parseInt(grid.dataset.x),gridY=parseInt(grid.dataset.y)
+			for(let i=0;i<=20;i++) {
+				grid.style.scale=1-i/20
+				await delay(50)
+			}
+			await delay(200)
+			if(gridValue===0) {
+				grid.style.opacity=0
+				grid.style.scale=1
+				grid.replaceWith(createGrid(0,gridX,gridY,"Empty",1))
+				for(let i=0;i<=5;i++) {
+					grid.style.opacity=i/5
+					await delay(20)
+				}
+			}
+			animation=saveAnimation
+		}
+		function totalStar() {
+			let answer=79
+			for(let i in player.world) if(player.explore.hasOwnProperty(mapList[i].name)) {
+				for(let j in player.explore[mapList[i].name].highscore) {
+					if(player.explore[mapList[i].name].highscore[j]>=levelList[mapList[i].name][j].goal) {
+						answer+=5
+					} else {
+						answer+=3
+					}
+				}
+			}
+			return answer
+		}
+		function remainingStar() {
+			let answer=totalStar()
+			for(let i in player.world) if(player.world[i].purchased===true) answer-=mapList[i].cost
+			return answer
+		}
+		function checkAvailableWorld() {
+			if(!player.world.hasOwnProperty(0)) player.world[0]=new Object()
+			if(!player.world[0].hasOwnProperty("purchased")) player.world[0].purchased=false
+			setPlayer()
+		}
+		function checkAvailableBiome() {
+			if(!player.explore.hasOwnProperty(player.biomename)) player.explore[player.biomename]=new Object()
+			if(!player.explore[player.biomename].hasOwnProperty("highscore")) player.explore[player.biomename].highscore=new Object()
+			if(!player.explore[player.biomename].hasOwnProperty("available")) player.explore[player.biomename].available=new Array()
+			if(player.explore[player.biomename].available.indexOf(1)===-1) player.explore[player.biomename].available.push(1)
+			for(let i in levelList[player.biomename]) if(player.explore[player.biomename].available.indexOf(parseInt(i))===-1) {
+				for(let j of levelList[player.biomename][i].precondition) if(player.explore[player.biomename].highscore[j]>=0 && player.explore[player.biomename].available.indexOf(parseInt(i))===-1) player.explore[player.biomename].available.push(parseInt(i))
+			}
+			setPlayer()
+		}
+		function updateFlowerState() {
+			if(game.active===true) {
+				let barPercentage=game.flower.health/game.flower.maxhealth*100
+				if(barPercentage>=12) {
+					document.getElementById("bar-health").style.width=barPercentage+"%"
+					document.getElementById("bar-health").style.opacity=1
+				} else {
+					document.getElementById("bar-health").style.width="12%"
+					document.getElementById("bar-health").style.opacity=barPercentage/12
+				}
+				document.getElementById("flower-health").innerHTML="Health: "+game.flower.health+"/"+game.flower.maxhealth
+				document.getElementById("game-state").innerHTML="<span class='lmargin' style='color: "+mapList[player.biome].color+"'>"+player.biomename+"</span><span class='blue lmargin'>Level "+game.level+"</span><span id='score-tracker' class='cyan lmargin'>Score: "+game.score+"/"+levelList[player.biomename][game.level].goal+"</span>"
+				if(game.score>=levelList[player.biomename][game.level].goal) {
+					document.getElementById("score-tracker").classList.replace("cyan","green")
+				}
+				document.getElementById("flower-state-outside").style.display="none"
+				document.getElementById("flower-state-inside").style.display="flex"
+			} else {
+				if(!player.hasOwnProperty("biome")) {
+					document.getElementById("game-state").innerHTML="<span class='blue'>You are on the planet: Azalea</span>"
+				} else {
+					document.getElementById("game-state").innerHTML="<span class='green'>You are in the biome: <span style='color: "+mapList[player.biome].color+"'>"+player.biomename+"</span></span>"
+				}
+				document.getElementById("flower-state-inside").style.display="none"
+				document.getElementById("flower-state-outside").style.display="flex"
+				if(player.currencydisplay==="Remain") {
+					document.getElementById("total-currency").style.display="none"
+					document.getElementById("currency").style.display="unset"
+				} else {
+					document.getElementById("currency").style.display="none"
+					document.getElementById("total-currency").style.display="unset"
+				}
+				document.getElementById("currency").innerHTML="Your currency: <span class='text2'>"+remainingStar()+"</span>★"
+				document.getElementById("total-currency").innerHTML="Your total currency: <span class='text2'>"+totalStar()+"</span>★"
+			}
+		}
+		function switchCurrency() {
+			if(player.currencydisplay==="Remain") {
+				player.currencydisplay="Total"
+			} else {
+				player.currencydisplay="Remain"
+			}
+			updateFlowerState()
+		}
+		function updateValue() {
+			resetDefault()
+		}
+		function flowerInjure() {
+		}
+		function flowerHeal(petal) {
+			console.log("Heal: "+petal.attribute.heal)
+		}
+		function spawnPetalInitial(x,y) {
+			let petalSpawner=levelList[player.biomename][game.level].spawner[0]
+			let totalWeight=0
+			for(let i=0;i<petalSpawner.length;i++) if(!petalSpawner[i].hasOwnProperty("noinitial")) totalWeight+=petalSpawner[i].weight
+			let seed=roll(1,totalWeight)
+			for(let i=0;i<petalSpawner.length;i++) if(!petalSpawner[i].hasOwnProperty("noinitial")) {
+				seed-=petalSpawner[i].weight
+				if(seed<=0) {
+					let pendingSpawn=petalSpawner[i].result(x,y)
+					pendingSpawn.newspawn=true
+					return pendingSpawn
+				}
+			}
+		}
+		function spawnPetal(x,y,spawnSet) {
+			let petalSpawner=levelList[player.biomename][game.level].spawner[spawnSet]
+			let totalWeight=0
+			for(let i=0;i<petalSpawner.length;i++) totalWeight+=petalSpawner[i].weight
+			let seed=roll(1,totalWeight)
+			for(let i=0;i<petalSpawner.length;i++) {
+				seed-=petalSpawner[i].weight
+				if(seed<=0) {
+					let pendingSpawn=petalSpawner[i].result(x,y)
+					pendingSpawn.newspawn=true
+					return pendingSpawn
+				}
+			}
+		}
+		function initialSpawn() {
+			for(let i=1;i<=game.width;i++) for(let j=1;j<=game.height;j++) if(game.board[i][j].content==="Uninitialized") {
+				game.board[i][j]=spawnPetalInitial(i,j)
+			}
+			while(!adjustMap()) {
+				for(let i=1;i<=game.width;i++) for(let j=1;j<=game.height;j++) if(game.board[i][j].newspawn===true) game.board[i][j]=spawnPetalInitial(i,j)
+			}
+			if(mapRearranged) {
+				for(let i=1;i<=game.width;i++) for(let j=1;j<=game.height;j++) if(mapClone[i][j].state==="Rearranging") {
+					game.board[i][j]=mapClone[i][j].clone()
+					game.board[i][j].state="Existing"
+				}
+				mapRearranged=false
+			}
+			for(let i=1;i<=game.width;i++) for(let j=1;j<=game.height;j++) game.board[i][j].newspawn=false
+		}
+		function crushCheck(gridX,gridY,content) {
+			let targetGrid=game.board[gridX][gridY].clone()
+			if(content!==undefined) targetGrid.content=content
+			if(targetGrid.state==="Empty" || !isPetal(targetGrid.content)) return false
+			let rowSame=new Object()
+			for(let i=-2;i<=2;i++) if(gridX+i>=1 && gridX+i<=game.width && game.board[gridX+i][gridY].state!=="Empty" && isPetal(game.board[gridX+i][gridY].content) && game.board[gridX+i][gridY].content.id===targetGrid.content.id) rowSame[i]=true
+			if(rowSame[-2]===true && rowSame[-1]===true) return true
+			if(rowSame[-1]===true && rowSame[1]===true) return true
+			if(rowSame[1]===true && rowSame[2]===true) return true
+			let columnSame=new Object()
+			for(let i=-2;i<=2;i++) if(gridY+i>=1 && gridY+i<=game.height && game.board[gridX][gridY+i].state!=="Empty" && isPetal(game.board[gridX][gridY+i].content) && game.board[gridX][gridY+i].content.id===targetGrid.content.id) columnSame[i]=true
+			if(columnSame[-2]===true && columnSame[-1]===true) return true
+			if(columnSame[-1]===true && columnSame[1]===true) return true
+			if(columnSame[1]===true && columnSame[2]===true) return true
+			return false
+		}
+		function crushCheckGrid(grid1,grid2,grid3) {
+			if(grid1.state==="Empty" || !isPetal(grid1.content)) return false
+			if(grid2.state==="Empty" || !isPetal(grid2.content)) return false
+			if(grid3.state==="Empty" || !isPetal(grid3.content)) return false
+			if(grid1.content.id!==grid2.content.id) return false
+			if(grid1.content.id!==grid3.content.id) return false
+			return true
+		}
+		function validSwapCheck(gridX,gridY,dir) {
+			if(gridX+dx[dir]<1 || gridX+dx[dir]>game.width || gridY+dy[dir]<1 || gridY+dy[dir]>game.height) return false
+			if(game.wall[gridX][gridY][dir]>0) return false
+			if(dir===4) return validSwapCheck(gridX-1,gridY,2)
+			if(dir===1) return validSwapCheck(gridX,gridY-1,3)
+			let targetGrid1=game.board[gridX][gridY],targetGrid2=game.board[gridX+dx[dir]][gridY+dy[dir]]
+			if(targetGrid1.state==="Empty" || targetGrid1.content.attribute.move==="Disabled") return false
+			if(targetGrid2.state==="Empty" || targetGrid2.content.attribute.move==="Disabled") return false
+			if(dir===2) {
+				if(isPetal(targetGrid1.content)) {
+					let rowSame=new Object()
+					for(let i=-2;i<=2;i++) if(gridX+1+i>=1 && gridX+1+i<=game.width && game.board[gridX+1+i][gridY].state!=="Empty" && isPetal(game.board[gridX+1+i][gridY].content) && game.board[gridX+1+i][gridY].content.id===targetGrid1.content.id) rowSame[i]=true
+					rowSame[-1]=false
+					if(rowSame[-2]===true && rowSame[-1]===true) return true
+					if(rowSame[-1]===true && rowSame[1]===true) return true
+					if(rowSame[1]===true && rowSame[2]===true) return true
+					let columnSame=new Object()
+					for(let i=-2;i<=2;i++) if(gridY+i>=1 && gridY+i<=game.height && game.board[gridX+1][gridY+i].state!=="Empty" && isPetal(game.board[gridX+1][gridY+i].content) && game.board[gridX+1][gridY+i].content.id===targetGrid1.content.id) columnSame[i]=true
+					if(columnSame[-2]===true && columnSame[-1]===true) return true
+					if(columnSame[-1]===true && columnSame[1]===true) return true
+					if(columnSame[1]===true && columnSame[2]===true) return true
+				}
+				if(isPetal(targetGrid2.content)) {
+					let rowSame=new Object()
+					for(let i=-2;i<=2;i++) if(gridX+i>=1 && gridX+i<=game.width && game.board[gridX+i][gridY].state!=="Empty" && isPetal(game.board[gridX+i][gridY].content) && game.board[gridX+i][gridY].content.id===targetGrid2.content.id) rowSame[i]=true
+					rowSame[1]=false
+					if(rowSame[-2]===true && rowSame[-1]===true) return true
+					if(rowSame[-1]===true && rowSame[1]===true) return true
+					if(rowSame[1]===true && rowSame[2]===true) return true
+					let columnSame=new Object()
+					for(let i=-2;i<=2;i++) if(gridY+i>=1 && gridY+i<=game.height && game.board[gridX][gridY+i].state!=="Empty" && isPetal(game.board[gridX][gridY+i].content) && game.board[gridX][gridY+i].content.id===targetGrid2.content.id) columnSame[i]=true
+					if(columnSame[-2]===true && columnSame[-1]===true) return true
+					if(columnSame[-1]===true && columnSame[1]===true) return true
+					if(columnSame[1]===true && columnSame[2]===true) return true
+				}
+				return false
+			}
+			if(dir===3) {
+				if(isPetal(targetGrid1.content)) {
+					let rowSame=new Object()
+					for(let i=-2;i<=2;i++) if(gridX+i>=1 && gridX+i<=game.width && game.board[gridX+i][gridY+1].state!=="Empty" && isPetal(game.board[gridX+i][gridY+1].content) && game.board[gridX+i][gridY+1].content.id===targetGrid1.content.id) rowSame[i]=true
+					if(rowSame[-2]===true && rowSame[-1]===true) return true
+					if(rowSame[-1]===true && rowSame[1]===true) return true
+					if(rowSame[1]===true && rowSame[2]===true) return true
+					let columnSame=new Object()
+					for(let i=-2;i<=2;i++) if(gridY+1+i>=1 && gridY+1+i<=game.height && game.board[gridX][gridY+1+i].state!=="Empty" && isPetal(game.board[gridX][gridY+1+i].content) && game.board[gridX][gridY+1+i].content.id===targetGrid1.content.id) columnSame[i]=true
+					columnSame[-1]=false
+					if(columnSame[-2]===true && columnSame[-1]===true) return true
+					if(columnSame[-1]===true && columnSame[1]===true) return true
+					if(columnSame[1]===true && columnSame[2]===true) return true
+				}
+				if(isPetal(targetGrid2.content)) {
+					let rowSame=new Object()
+					for(let i=-2;i<=2;i++) if(gridX+i>=1 && gridX+i<=game.width && game.board[gridX+i][gridY].state!=="Empty" && isPetal(game.board[gridX+i][gridY].content) && game.board[gridX+i][gridY].content.id===targetGrid2.content.id) rowSame[i]=true
+					if(rowSame[-2]===true && rowSame[-1]===true) return true
+					if(rowSame[-1]===true && rowSame[1]===true) return true
+					if(rowSame[1]===true && rowSame[2]===true) return true
+					let columnSame=new Object()
+					for(let i=-2;i<=2;i++) if(gridY+i>=1 && gridY+i<=game.height && game.board[gridX][gridY+i].state!=="Empty" && isPetal(game.board[gridX][gridY+i].content) && game.board[gridX][gridY+i].content.id===targetGrid2.content.id) columnSame[i]=true
+					columnSame[1]=false
+					if(columnSame[-2]===true && columnSame[-1]===true) return true
+					if(columnSame[-1]===true && columnSame[1]===true) return true
+					if(columnSame[1]===true && columnSame[2]===true) return true
+				}
+				return false
+			}
+		}
+		function mapCrushCheck() {
+			for(let i=1;i<=game.width;i++) {
+				for(let j=1;j<=game.height;j++) if(crushCheck(i,j)) return true
+			}
+			return false
+		}
+		function validMapCheck() {
+			if(mapCrushCheck()) return false
+			for(let i=1;i<game.width;i++) {
+				for(let j=1;j<=game.height;j++) if(validSwapCheck(i,j,2)) return true
+			}
+			for(let i=1;i<=game.width;i++) {
+				for(let j=1;j<game.height;j++) if(validSwapCheck(i,j,3)) return true
+			}
+			return false
+		}
+		let dropTimeIncrement=50,dropTimeLimit=300
+		let crushSign=0,crushCombo=0,dropFlag=false,dropTime=0,firstCrush=true,exchangeX1,exchangeY1,exchangeX2,exchangeY2,blastGrid
+		function combineMatch(crushId,targetCrushId) {
+			for(let i=1;i<=game.width;i++) for(let j=1;j<=game.height;j++) if(game.board[i][j].crush.match("Crush")!==null) {
+				if(parseInt(game.board[i][j].crush.match(/\d+/))===crushId) {
+					game.board[i][j].crush="Crush "+targetCrushId
+				} else if(parseInt(game.board[i][j].crush.match(/\d+/))>crushId) {
+					game.board[i][j].crush="Crush "+(parseInt(game.board[i][j].crush.match(/\d+/))-1)
+				}
+			}
+		}
+		function setMatch() {
+			for(let i=1;i<=game.width-2;i++) for(let j=1;j<=game.height;j++) if(crushCheckGrid(game.board[i][j],game.board[i+1][j],game.board[i+2][j])) {
+				if(game.board[i][j].crush.match("Crush")===null && game.board[i+1][j].crush.match("Crush")===null && game.board[i+2][j].crush.match("Crush")===null) {
+					crushSign++
+					game.board[i][j].crush="Crush "+crushSign
+					game.board[i+1][j].crush="Crush "+crushSign
+					game.board[i+2][j].crush="Crush "+crushSign
+				} else {
+					let newCrush=crushSign
+					for(let k=i;k<=i+2;k++) if(game.board[k][j].crush.match("Crush")!==null && parseInt(game.board[k][j].crush.match(/\d+/))<newCrush) newCrush=parseInt(game.board[k][j].crush.match(/\d+/))
+					for(let k=i;k<=i+2;k++) if(game.board[k][j].crush!=="Crush "+newCrush) {
+						if(game.board[k][j].crush.match("Crush")===null) {
+							game.board[k][j].crush="Crush "+newCrush
+						} else {
+							combineMatch(parseInt(game.board[k][j].crush.match(/\d+/)),newCrush)
+						}
+					}
+				}
+			}
+			for(let i=1;i<=game.width;i++) for(let j=1;j<=game.height-2;j++) if(crushCheckGrid(game.board[i][j],game.board[i][j+1],game.board[i][j+2])) {
+				if(game.board[i][j].crush.match("Crush")===null && game.board[i][j+1].crush.match("Crush")===null && game.board[i][j+2].crush.match("Crush")===null) {
+					crushSign++
+					game.board[i][j].crush="Crush "+crushSign
+					game.board[i][j+1].crush="Crush "+crushSign
+					game.board[i][j+2].crush="Crush "+crushSign
+				} else {
+					let newCrush=crushSign
+					for(let k=j;k<=j+2;k++) if(game.board[i][k].crush.match("Crush")!==null && parseInt(game.board[i][k].crush.match(/\d+/))<newCrush) newCrush=parseInt(game.board[i][k].crush.match(/\d+/))
+					for(let k=j;k<=j+2;k++) if(game.board[i][k].crush!=="Crush "+newCrush) {
+						if(game.board[i][k].crush.match("Crush")===null) {
+							game.board[i][k].crush="Crush "+newCrush
+						} else {
+							combineMatch(parseInt(game.board[i][k].crush.match(/\d+/)),newCrush)
+						}
+					}
+				}
+			}
+		}
+		async function matchResult(crushId) {
+			let pendingType="Normal",pendingRarity=-1,mobArray=new Array(),validCreate=new Array()
+			for(let i=1;i<=game.width;i++) for(let j=1;j<=game.height;j++) if(game.board[i][j].crush==="Crush "+crushId) {
+				if(game.board[i][j].content.attribute.hasOwnProperty("damage")) {
+					for(let k=1;k<=4;k++) if(i+dx[k]>=1 && i+dx[k]<=game.width && j+dy[k]>=1 && j+dy[k]<=game.height && isMob(game.board[i+dx[k]][j+dy[k]].content)) mobArray.push(game.board[i+dx[k]][j+dy[k]])
+				}
+				if(game.board[i][j].state==="Existing" && game.board[i][j].type==="Normal") validCreate.push(game.board[i][j])
+				if(pendingRarity===-1) {
+					pendingRarity=game.board[i][j].content.rarity
+				} else if(pendingRarity!==game.board[i][j].content.rarity) {
+					pendingRarity=0
+				}
+			}
+			if(pendingType==="Normal") {
+				for(let i=1;i<=game.width-4;i++) for(let j=1;j<=game.height;j++) if(game.board[i][j].crush==="Crush "+crushId && game.board[i+1][j].crush==="Crush "+crushId && game.board[i+2][j].crush==="Crush "+crushId && game.board[i+3][j].crush==="Crush "+crushId && game.board[i+4][j].crush==="Crush "+crushId) pendingType="Kaleidoscope"
+			}
+			if(pendingType==="Normal") {
+				for(let i=1;i<=game.width;i++) for(let j=1;j<=game.height-4;j++) if(game.board[i][j].crush==="Crush "+crushId && game.board[i][j+1].crush==="Crush "+crushId && game.board[i][j+2].crush==="Crush "+crushId && game.board[i][j+3].crush==="Crush "+crushId && game.board[i][j+4].crush==="Crush "+crushId) pendingType="Kaleidoscope"
+			}
+			let rowCheck=0,columnCheck=0,comboCheck=false
+			for(let i=1;i<=game.width-2;i++) for(let j=1;j<=game.height;j++) if(game.board[i][j].crush==="Crush "+crushId && game.board[i+1][j].crush==="Crush "+crushId && game.board[i+2][j].crush==="Crush "+crushId) {
+				rowCheck++
+				if(game.board[i][j].newspawn===false && game.board[i+1][j].newspawn===false && game.board[i+2][j].newspawn===false) comboCheck=true
+			}
+			for(let i=1;i<=game.width;i++) for(let j=1;j<=game.height-2;j++) if(game.board[i][j].crush==="Crush "+crushId && game.board[i][j+1].crush==="Crush "+crushId && game.board[i][j+2].crush==="Crush "+crushId) {
+				columnCheck++
+				if(game.board[i][j].newspawn===false && game.board[i][j+1].newspawn===false && game.board[i][j+2].newspawn===false) comboCheck=true
+			}
+			if(pendingType==="Normal" && rowCheck>0 && columnCheck>0) pendingType="Bomb"
+			if(pendingType==="Normal" && columnCheck>=2) pendingType="Row"
+			if(pendingType==="Normal" && rowCheck>=2) pendingType="Column"
+			if(comboCheck) crushCombo++
+			let targetMob
+			if(mobArray.length>0) targetMob=mobArray[roll(0,mobArray.length-1)]
+			let targetSpawn,targetSpawnRarity
+			if(validCreate.length>0 && (pendingType!=="Normal" || pendingRarity>0)) {
+				if(firstCrush) {
+					let priorityCreate=new Array()
+					for(let i=0;i<validCreate.length;i++) if((validCreate[i].x===exchangeX1 && validCreate[i].y===exchangeY1) || (validCreate[i].x===exchangeX2 && validCreate[i].y===exchangeY2)) priorityCreate.push(validCreate[i])
+					if(priorityCreate.length>0) validCreate=priorityCreate
+				}
+				targetSpawn=validCreate[roll(0,validCreate.length-1)].clone()
+				if(pendingType!=="Normal") {
+					targetSpawnRarity=targetSpawn.content.rarity
+				} else {
+					targetSpawnRarity=Math.min(pendingRarity+1,NewValue.maxrarity)
+				}
+			}
+			for(let i=1;i<=game.width;i++) for(let j=1;j<=game.height;j++) if(game.board[i][j].crush==="Crush "+crushId) game.board[i][j].destroy(targetMob)
+			await delay(200)
+			let delayFlag=false
+			for(let i=1;i<=game.width;i++) for(let j=1;j<=game.height;j++) if(isMob(game.board[i][j].content) && game.board[i][j].content.attribute.health===0) {
+				collapseGrid(getGrid(0,i,j))
+				game.board[i][j]=new Grid(i,j)
+				delayFlag=true
+			}
+			if(targetSpawn && targetSpawn.content.attribute.craft!=="Disabled") {
+				game.board[targetSpawn.x][targetSpawn.y]=new Grid(targetSpawn.x,targetSpawn.y,targetSpawn.content.clone(),"Existing")
+				game.board[targetSpawn.x][targetSpawn.y].type=pendingType
+				game.board[targetSpawn.x][targetSpawn.y].content.rarity=targetSpawnRarity
+				game.board[targetSpawn.x][targetSpawn.y].print()
+			}
+			if(delayFlag) await delay(1500)
+		}
+		async function blastAll() {
+			for(let i in blastGrid) blastGrid[i].crush="Blasted"
+			blastGrid=new Array()
+			for(let i=1;i<=game.width;i++) for(let j=1;j<=game.height;j++) if(game.board[i][j].crush==="Blasted") {
+				game.board[i][j].destroy()
+			}
+			await delay(200)
+			let delayFlag=false
+			for(let i=1;i<=game.width;i++) for(let j=1;j<=game.height;j++) if(isMob(game.board[i][j].content) && game.board[i][j].content.attribute.health===0) {
+				collapseGrid(getGrid(0,i,j))
+				game.board[i][j]=new Grid(i,j)
+				delayFlag=true
+			}
+			if(delayFlag) await delay(1500)
+		}
+		function dropable(gridX,gridY,dir=0) {
+			if(game.board[gridX][gridY].state!=="Existing") return false
+			if(game.board[gridX][gridY].content.attribute.drop==="Disabled") return false
+			if(gridX+dir<1 || gridX+dir>game.width || gridY+1>game.height) return false
+			if(game.board[gridX+dir][gridY+1].state!=="Empty") return false
+			if(levelList[player.biomename][game.level].hasOwnProperty("transportset")) for(let i=0;i<levelList[player.biomename][game.level].transportset.length;i++) {
+				if(levelList[player.biomename][game.level].transportset[i].end.x===gridX+dir && levelList[player.biomename][game.level].transportset[i].end.y===gridY+1) return false
+			}
+			if(game.wall[gridX][gridY][3]>0) return false
+			if(dir===1 && game.wall[gridX][gridY][2]>0) return false
+			if(dir===-1 && game.wall[gridX][gridY][4]>0) return false
+			return true
+		}
+		async function dropAll() {
+			dropFlag=false
+			dropTime=0
+			if(levelList[player.biomename][game.level].hasOwnProperty("spawnset")) for(let i=0;i<levelList[player.biomename][game.level].spawnset.length;i++) if(game.board[levelList[player.biomename][game.level].spawnset[i].x][levelList[player.biomename][game.level].spawnset[i].y].state==="Empty") {
+				game.board[levelList[player.biomename][game.level].spawnset[i].x][levelList[player.biomename][game.level].spawnset[i].y]=spawnPetal(levelList[player.biomename][game.level].spawnset[i].x,levelList[player.biomename][game.level].spawnset[i].y,levelList[player.biomename][game.level].spawnset[i].set)
+				dropTime+=dropTimeIncrement
+				game.board[levelList[player.biomename][game.level].spawnset[i].x][levelList[player.biomename][game.level].spawnset[i].y].print()
+			}
+			if(levelList[player.biomename][game.level].hasOwnProperty("transportset")) for(let i=0;i<levelList[player.biomename][game.level].transportset.length;i++) {
+				let transportGrid=levelList[player.biomename][game.level].transportset[i]
+				if(game.board[transportGrid.start.x][transportGrid.start.y].state==="Existing" && isPetal(game.board[transportGrid.start.x][transportGrid.start.y].content) && game.board[transportGrid.end.x][transportGrid.end.y].state==="Empty") {
+					dropFlag=true
+					dropTime+=dropTimeIncrement
+					game.board[transportGrid.end.x][transportGrid.end.y]=game.board[transportGrid.start.x][transportGrid.start.y].clone(transportGrid.end.x,transportGrid.end.y)
+					game.board[transportGrid.end.x][transportGrid.end.y].print()
+					game.board[transportGrid.start.x][transportGrid.start.y].empty()
+					game.board[transportGrid.start.x][transportGrid.start.y].print()
+				}
+			}
+			for(let i=1;i<=game.height;i++) for(let j=1;j<=game.width;j++) if(dropable(j,i)) game.board[j][i].drop()
+			if(!dropFlag) {
+				let sideDrop=new Array()
+				for(let i=1;i<=game.width;i++) for(let j=1;j<=game.height;j++) {
+					if(dropable(i,j,1)) sideDrop.push({x:i,y:j,dir:1})
+					if(dropable(i,j,-1)) sideDrop.push({x:i,y:j,dir:-1})
+				}
+				if(sideDrop.length>0) {
+					let singleSideDrop=sideDrop[roll(0,sideDrop.length-1)]
+					game.board[singleSideDrop.x][singleSideDrop.y].drop(singleSideDrop.dir)
+				}
+			}
+			if(dropTime===0) dropTime=dropTimeIncrement
+			if(dropTime>dropTimeLimit) dropTime=dropTimeLimit
+			await delay(dropTime)
+		}
+		async function exchange(gridX,gridY,dir) {
+			animation=true
+			firstCrush=true
+			exchangeX1=gridX
+			exchangeY1=gridY
+			exchangeX2=gridX+dx[dir]
+			exchangeY2=gridY+dy[dir]
+			let tempGrid=game.board[gridX][gridY].clone()
+			game.board[gridX][gridY]=game.board[gridX+dx[dir]][gridY+dy[dir]].clone(gridX,gridY)
+			game.board[gridX+dx[dir]][gridY+dy[dir]]=tempGrid.clone(gridX+dx[dir],gridY+dy[dir])
+			game.board[gridX][gridY].print()
+			game.board[gridX+dx[dir]][gridY+dy[dir]].print()
+			await delay(100)
+			crushCombo=0
+			while(mapCrushCheck()) {
+				crushSign=0
+				blastGrid=new Array()
+				setMatch()
+				for(let i=1;i<=crushSign;i++) await matchResult(i)
+				for(let i=1;i<=game.width;i++) for(let j=1;j<=game.height;j++) game.board[i][j].crush="None"
+				while(blastGrid.length>0) await blastAll()
+				dropFlag=true
+				while(dropFlag) await dropAll()
+				firstCrush=false
+			}
+			//mobs here
+			await delay(200)
+			let scoreElement=document.createElement("span"),scoreAdd=crushCombo**3,scoreMinus=betterFloor(levelList[player.biomename][game.level].coefficient*((game.turn+1)**levelList[player.biomename][game.level].exponent))-betterFloor(levelList[player.biomename][game.level].coefficient*(game.turn**levelList[player.biomename][game.level].exponent))
+			scoreElement.classList.add("apos","text3-c")
+			scoreElement.innerHTML="<span class='purple'>+"+scoreAdd+"</span><span class='red lmargin'>-"+scoreMinus+"</span>"
+			scoreElement.style.top=document.getElementById("score-tracker").getBoundingClientRect().top+40+"px"
+			scoreElement.style.left=document.getElementById("score-tracker").getBoundingClientRect().left+"px"
+			scoreElement.style.opacity=1
+			scoreElement.style.transition="opacity 300ms linear"
+			document.body.appendChild(scoreElement)
+			await delay(100)
+			document.getElementById("score-tracker").style.color="#ffffff"
+			scoreElement.style.opacity=0
+			await delay(100)
+			game.score+=scoreAdd
+			game.turn++
+			game.score-=scoreMinus
+			if(game.score<0) game.score=0
+			updateFlowerState()
+			await delay(200)
+			scoreElement.remove()
+			for(let i=1;i<=game.width;i++) for(let j=1;j<=game.height;j++) game.board[i][j].newspawn=false
+			animation=false
+			let mobFlag=false
+			for(let i=1;i<=game.width;i++) for(let j=1;j<=game.height;j++) if(isMob(game.board[i][j].content)) mobFlag=true
+			if(!mobFlag) {
+				endGame(true)
+				return
+			}
+			if(!adjustMap()) {
+				animation=true
+				document.getElementById("end1").style["pointer-events"]="unset"
+				for(let i=0;i<=10;i++) {
+					document.getElementById("end1").style.opacity=1-((10-i)/10)**2
+					await delay(100)
+				}
+				await delay(500)
+				animation=false
+				endGame()
+				for(let i=0;i<=10;i++) {
+					document.getElementById("end1").style.opacity=1-(i/10)**2
+					await delay(100)
+				}
+				document.getElementById("end1").style["pointer-events"]="none"
+			}
+			if(mapRearranged) {
+				await delay(200)
+				for(let i=1;i<=game.width;i++) for(let j=1;j<=game.height;j++) if(mapClone[i][j].state==="Rearranging") {
+					game.board[i][j].empty()
+					game.board[i][j].print()
+				}
+				await delay(500)
+				for(let i=1;i<=game.width;i++) for(let j=1;j<=game.height;j++) if(mapClone[i][j].state==="Rearranging") {
+					game.board[i][j]=mapClone[i][j].clone()
+					game.board[i][j].state="Existing"
+					game.board[i][j].print()
+				}
+				mapRearranged=false
+				await delay(200)
+			}
+			mouseGridInfo()
+		}
+		let mapClone,mapRearranged=false
+		function crushFixCheck(crusher,fixer) {
+			if(mapClone[crusher.x][crusher.y].state!=="Rearranging" || mapClone[fixer.x][fixer.y].state!=="Rearranging") return false
+			let rowSame=new Object()
+			for(let i=-2;i<=2;i++) if(crusher.x+i>=1 && crusher.x+i<=game.width && mapClone[crusher.x+i][crusher.y].state!=="Empty" && isPetal(mapClone[crusher.x+i][crusher.y].content) && mapClone[crusher.x+i][crusher.y].content.id===mapClone[fixer.x][fixer.y].content.id) rowSame[i]=true
+			if(rowSame[-2]===true && rowSame[-1]===true) return false
+			if(rowSame[-1]===true && rowSame[1]===true) return false
+			if(rowSame[1]===true && rowSame[2]===true) return false
+			let columnSame=new Object()
+			for(let i=-2;i<=2;i++) if(crusher.y+i>=1 && crusher.y+i<=game.height && mapClone[crusher.x][crusher.y+i].state!=="Empty" && isPetal(mapClone[crusher.x][crusher.y+i].content) && mapClone[crusher.x][crusher.y+i].content.id===mapClone[fixer.x][fixer.y].content.id) columnSame[i]=true
+			if(columnSame[-2]===true && columnSame[-1]===true) return false
+			if(columnSame[-1]===true && columnSame[1]===true) return false
+			if(columnSame[1]===true && columnSame[2]===true) return false
+			rowSame=new Object()
+			for(let i=-2;i<=2;i++) if(fixer.x+i>=1 && fixer.x+i<=game.width && mapClone[fixer.x+i][fixer.y].state!=="Empty" && isPetal(mapClone[fixer.x+i][fixer.y].content) && mapClone[fixer.x+i][fixer.y].content.id===mapClone[crusher.x][crusher.y].content.id) rowSame[i]=true
+			if(rowSame[-2]===true && rowSame[-1]===true) return false
+			if(rowSame[-1]===true && rowSame[1]===true) return false
+			if(rowSame[1]===true && rowSame[2]===true) return false
+			columnSame=new Object()
+			for(let i=-2;i<=2;i++) if(fixer.y+i>=1 && fixer.y+i<=game.height && mapClone[fixer.x][fixer.y+i].state!=="Empty" && isPetal(mapClone[fixer.x][fixer.y+i].content) && mapClone[fixer.x][fixer.y+i].content.id===mapClone[crusher.x][crusher.y].content.id) columnSame[i]=true
+			if(columnSame[-2]===true && columnSame[-1]===true) return false
+			if(columnSame[-1]===true && columnSame[1]===true) return false
+			if(columnSame[1]===true && columnSame[2]===true) return false
+			return true
+		}
+		function adjustMap() {
+			if(validMapCheck()) return true
+			if(player.biomename==="Training Ground" && game.level<=4) return false
+			let adjustList=new Array(),availablePetalNum=new Object(),availablePetal=new Array()
+			mapClone=new Array()
+			for(let i=1;i<=game.width;i++) {
+				mapClone[i]=new Array()
+				for(let j=1;j<=game.height;j++) mapClone[i][j]=game.board[i][j].clone()
+			}
+			for(let i=1;i<=game.width;i++) for(let j=1;j<=game.height;j++) if(mapClone[i][j].state==="Existing" && isPetal(mapClone[i][j].content) && mapClone[i][j].type==="Normal") {
+				if(!availablePetalNum.hasOwnProperty(mapClone[i][j].content.id)) availablePetalNum[mapClone[i][j].content.id]=0
+				availablePetalNum[mapClone[i][j].content.id]++
+				mapClone[i][j].state="Rearranging"
+				availablePetal.push(mapClone[i][j].clone())
+			}
+			for(let i=1;i<=game.width;i++) for(let j=1;j<=game.height-2;j++) {
+				if(mapClone[i][j].state==="Empty") continue
+				if(mapClone[i][j+1].state==="Empty") continue
+				if(mapClone[i][j+2].state==="Empty") continue
+				if(mapClone[i][j].content.attribute.move==="Disabled") continue
+				if(mapClone[i][j+1].content.attribute.move==="Disabled") continue
+				if(mapClone[i][j+2].content.attribute.move==="Disabled") continue
+				for(let k in availablePetalNum) {
+					for(let swapPlace=0;swapPlace<=2;swapPlace++) for(let swapDir=1;swapDir<=4;swapDir++) {
+						let swapStart={x:i,y:j+swapPlace},swapEnd={x:i+dx[swapDir],y:j+swapPlace+dy[swapDir]},kId=parseInt(k)
+						if(swapEnd.x<1 || swapEnd.x>game.width || swapEnd.y<1 || swapEnd.y>game.height) continue
+						if(game.wall[i][j+swapPlace][swapDir]>0) continue
+						if(swapEnd.x===i && swapEnd.y>=j && swapEnd.y<=j+2) continue
+						if(swapPlace!==0 && mapClone[i][j].state!=="Rearranging" && (!isPetal(mapClone[i][j].content) || mapClone[i][j].content.id!==kId)) continue
+						if(swapPlace!==1 && mapClone[i][j+1].state!=="Rearranging" && (!isPetal(mapClone[i][j+1].content) || mapClone[i][j+1].content.id!==kId)) continue
+						if(swapPlace!==2 && mapClone[i][j+2].state!=="Rearranging" && (!isPetal(mapClone[i][j+2].content) || mapClone[i][j+2].content.id!==kId)) continue
+						if(mapClone[swapEnd.x][swapEnd.y].state!=="Rearranging" && (!isPetal(mapClone[swapEnd.x][swapEnd.y].content) || mapClone[swapEnd.x][swapEnd.y].content.id!==kId)) continue
+						if(mapClone[swapStart.x][swapStart.y].state!=="Rearranging" && mapClone[swapStart.x][swapStart.y].state!=="Existing") continue
+						if(mapClone[swapEnd.x][swapEnd.y].state!=="Rearranging" && mapClone[swapEnd.x][swapEnd.y].state!=="Existing") continue
+						if(mapClone[swapStart.x][swapStart.y].state==="Existing" && isPetal(mapClone[swapStart.x][swapStart.y].content) && mapClone[swapStart.x][swapStart.y].content.id===kId) continue
+						let requiredAmount=3
+						if(swapPlace!==0 && mapClone[i][j].state!=="Rearranging" && isPetal(mapClone[i][j].content) && mapClone[i][j].content.id===kId) requiredAmount--
+						if(swapPlace!==1 && mapClone[i][j+1].state!=="Rearranging" && isPetal(mapClone[i][j+1].content) && mapClone[i][j+1].content.id===kId) requiredAmount--
+						if(swapPlace!==2 && mapClone[i][j+2].state!=="Rearranging" && isPetal(mapClone[i][j+2].content) && mapClone[i][j+2].content.id===kId) requiredAmount--
+						if(mapClone[swapEnd.x][swapEnd.y].state!=="Rearranging" && isPetal(mapClone[swapEnd.x][swapEnd.y].content) && mapClone[swapEnd.x][swapEnd.y].content.id===kId) requiredAmount--
+						if(requiredAmount>availablePetalNum[k]) continue
+						let newAdjust=new Object()
+						newAdjust.adjustId=kId
+						newAdjust.adjustPetal=new Array()
+						newAdjust.adjustPetal[1]={x:i,y:j}
+						newAdjust.adjustPetal[2]={x:i,y:j+1}
+						newAdjust.adjustPetal[3]={x:i,y:j+2}
+						newAdjust.adjustPetal[swapPlace+1]=swapEnd
+						adjustList.push(newAdjust)
+					}
+				}
+			}
+			for(let i=1;i<=game.width-2;i++) for(let j=1;j<=game.height;j++) {
+				if(mapClone[i][j].state==="Empty") continue
+				if(mapClone[i+1][j].state==="Empty") continue
+				if(mapClone[i+2][j].state==="Empty") continue
+				if(mapClone[i][j].content.attribute.move==="Disabled") continue
+				if(mapClone[i+1][j].content.attribute.move==="Disabled") continue
+				if(mapClone[i+2][j].content.attribute.move==="Disabled") continue
+				for(let k in availablePetalNum) {
+					for(let swapPlace=0;swapPlace<=2;swapPlace++) for(let swapDir=1;swapDir<=4;swapDir++) {
+						let swapStart={x:i+swapPlace,y:j},swapEnd={x:i+swapPlace+dx[swapDir],y:j+dy[swapDir]},kId=parseInt(k)
+						if(swapEnd.x<1 || swapEnd.x>game.width || swapEnd.y<1 || swapEnd.y>game.height) continue
+						if(game.wall[i+swapPlace][j][swapDir]>0) continue
+						if(swapEnd.y===j && swapEnd.x>=i && swapEnd.x<=i+2) continue
+						if(swapPlace!==0 && mapClone[i][j].state!=="Rearranging" && (!isPetal(mapClone[i][j].content) || mapClone[i][j].content.id!==kId)) continue
+						if(swapPlace!==1 && mapClone[i+1][j].state!=="Rearranging" && (!isPetal(mapClone[i+1][j].content) || mapClone[i+1][j].content.id!==kId)) continue
+						if(swapPlace!==2 && mapClone[i+2][j].state!=="Rearranging" && (!isPetal(mapClone[i+2][j].content) || mapClone[i+2][j].content.id!==kId)) continue
+						if(mapClone[swapEnd.x][swapEnd.y].state!=="Rearranging" && (!isPetal(mapClone[swapEnd.x][swapEnd.y].content) || mapClone[swapEnd.x][swapEnd.y].content.id!==kId)) continue
+						if(mapClone[swapStart.x][swapStart.y].state!=="Rearranging" && mapClone[swapStart.x][swapStart.y].state!=="Existing") continue
+						if(mapClone[swapEnd.x][swapEnd.y].state!=="Rearranging" && mapClone[swapEnd.x][swapEnd.y].state!=="Existing") continue
+						if(mapClone[swapStart.x][swapStart.y].state==="Existing" && isPetal(mapClone[swapStart.x][swapStart.y].content) && mapClone[swapStart.x][swapStart.y].content.id===kId) continue
+						let requiredAmount=3
+						if(swapPlace!==0 && mapClone[i][j].state!=="Rearranging" && isPetal(mapClone[i][j].content) && mapClone[i][j].content.id===kId) requiredAmount--
+						if(swapPlace!==1 && mapClone[i+1][j].state!=="Rearranging" && isPetal(mapClone[i+1][j].content) && mapClone[i+1][j].content.id===kId) requiredAmount--
+						if(swapPlace!==2 && mapClone[i+2][j].state!=="Rearranging" && isPetal(mapClone[i+2][j].content) && mapClone[i+2][j].content.id===kId) requiredAmount--
+						if(mapClone[swapEnd.x][swapEnd.y].state!=="Rearranging" && isPetal(mapClone[swapEnd.x][swapEnd.y].content) && mapClone[swapEnd.x][swapEnd.y].content.id===kId) requiredAmount--
+						if(requiredAmount>availablePetalNum[k]) continue
+						let newAdjust=new Object()
+						newAdjust.adjustId=kId
+						newAdjust.adjustPetal=new Array()
+						newAdjust.adjustPetal[1]={x:i,y:j}
+						newAdjust.adjustPetal[2]={x:i+1,y:j}
+						newAdjust.adjustPetal[3]={x:i+2,y:j}
+						newAdjust.adjustPetal[swapPlace+1]=swapEnd
+						adjustList.push(newAdjust)
+					}
+				}
+			}
+			while(adjustList.length>0) {
+				let newAdjust=adjustList.splice(roll(0,adjustList.length-1),1)[0]
+				let indexArray=new Array(),indexArrayMatch=new Array()
+				for(let i=0;i<availablePetal.length;i++) {
+					indexArray.push(i)
+					if(availablePetal[i].content.id===newAdjust.adjustId) indexArrayMatch.push(i)
+				}
+				for(let i=1;i<=3;i++) if(mapClone[newAdjust.adjustPetal[i].x][newAdjust.adjustPetal[i].y].state==="Rearranging") {
+					let matchRearrange=indexArrayMatch.splice(roll(0,indexArrayMatch.length-1),1)[0]
+					indexArray.splice(indexArray.indexOf(matchRearrange),1)
+					mapClone[newAdjust.adjustPetal[i].x][newAdjust.adjustPetal[i].y]=availablePetal[matchRearrange].clone(newAdjust.adjustPetal[i].x,newAdjust.adjustPetal[i].y)
+					mapClone[newAdjust.adjustPetal[i].x][newAdjust.adjustPetal[i].y].state="Rearranged"
+				}
+				for(let i=1;i<=game.width;i++) for(let j=1;j<=game.height;j++) if(mapClone[i][j].state==="Rearranging") {
+					let normalRearrange=indexArray.splice(roll(0,indexArray.length-1),1)[0]
+					mapClone[i][j]=availablePetal[normalRearrange].clone(i,j)
+				}
+				let crushArray=new Array(),fixFlag=true
+				for(let i=1;i<=game.width;i++) for(let j=1;j<=game.height-2;j++) if(isPetal(mapClone[i][j].content) && isPetal(mapClone[i][j+1].content) && isPetal(mapClone[i][j+2].content) && mapClone[i][j].content.id===mapClone[i][j+1].content.id && mapClone[i][j].content.id===mapClone[i][j+2].content.id) crushArray.push([{x:i,y:j},{x:i,y:j+1},{x:i,y:j+2}])
+				for(let i=1;i<=game.width-2;i++) for(let j=1;j<=game.height;j++) if(isPetal(mapClone[i][j].content) && isPetal(mapClone[i+1][j].content) && isPetal(mapClone[i+2][j].content) && mapClone[i][j].content.id===mapClone[i+1][j].content.id && mapClone[i][j].content.id===mapClone[i+2][j].content.id) crushArray.push([{x:i,y:j},{x:i+1,y:j},{x:i+2,y:j}])
+				while(crushArray.length>0 && fixFlag) {
+					fixFlag=false
+					let fixingCrush=crushArray.splice(roll(0,crushArray.length-1),1)[0]
+					while(fixingCrush.length>0 && !fixFlag) {
+						let specifiedFix=fixingCrush.splice(roll(0,fixingCrush.length-1),1)[0]
+						let fixableArray=new Array()
+						for(let i=1;i<=game.width;i++) for(let j=1;j<=game.height;j++) if(crushFixCheck({x:specifiedFix.x,y:specifiedFix.y},{x:i,y:j})) fixableArray.push({x:i,y:j})
+						if(fixableArray.length>0) {
+							fixFlag=true
+							let fixer=fixableArray[roll(0,fixableArray.length-1)]
+							let tempGrid=mapClone[fixer.x][fixer.y].clone()
+							mapClone[fixer.x][fixer.y]=mapClone[specifiedFix.x][specifiedFix.y].clone(fixer.x,fixer.y)
+							mapClone[specifiedFix.x][specifiedFix.y]=tempGrid.clone(specifiedFix.x,specifiedFix.y)
+						}
+					}
+					crushArray=new Array()
+					for(let i=1;i<=game.width;i++) for(let j=1;j<=game.height-2;j++) if(isPetal(mapClone[i][j].content) && isPetal(mapClone[i][j+1].content) && isPetal(mapClone[i][j+2].content) && mapClone[i][j].content.id===mapClone[i][j+1].content.id && mapClone[i][j].content.id===mapClone[i][j+2].content.id) crushArray.push([{x:i,y:j},{x:i,y:j+1},{x:i,y:j+2}])
+					for(let i=1;i<=game.width-2;i++) for(let j=1;j<=game.height;j++) if(isPetal(mapClone[i][j].content) && isPetal(mapClone[i+1][j].content) && isPetal(mapClone[i+2][j].content) && mapClone[i][j].content.id===mapClone[i+1][j].content.id && mapClone[i][j].content.id===mapClone[i+2][j].content.id) crushArray.push([{x:i,y:j},{x:i+1,y:j},{x:i+2,y:j}])
+				}
+				for(let i=1;i<=3;i++) if(mapClone[newAdjust.adjustPetal[i].x][newAdjust.adjustPetal[i].y].state==="Rearranged") {
+					mapClone[newAdjust.adjustPetal[i].x][newAdjust.adjustPetal[i].y].state="Rearranging"
+				}
+				if(fixFlag===true) {
+					mapRearranged=true
+					return true
+				}
+			}
+			return false
+		}
+	</script>
+	<script>
+		const perfectGame="The game is perfect, there are no bugs"
+		console.log(perfectGame)
+	</script>
+</head>
+<body>
+	<div class="tl">
+		<button type="button" tabindex="-1" onclick="settings()" class="circbtn" title="Settings">
+			<svg viewBox="0 0 100 100" class="in-svg">
+				<path d="M50 2A48 48 0 0 0 50 98A48 48 0 0 0 50 2"/>
+				<path class="fblack-path" d="M50 30A20 20 0 0 0 50 70L50 60A10 10 0 0 1 50 40L50 30A20 20 0 0 1 50 70L50 60A10 10 0 0 0 50 40Z"/>
+				<g id="cog-icon">
+					<path class="fblack-path" d="M45 22L55 22L55 35L45 35ZM78 45L78 55L65 55L65 45ZM55 78L45 78L45 65L55 65ZM22 55L22 45L35 45L35 55Z"/>
+					<path class="diag fblack-path" d="M45 22L55 22L55 35L45 35ZM78 45L78 55L65 55L65 45ZM55 78L45 78L45 65L55 65ZM22 55L22 45L35 45L35 55Z"/>
+				</g>
+			</svg>
+		</button>
+	</div>
+	<div class="tr">
+		<button type="button" tabindex="-1" onclick="howToPlay()" class="circbtn" title="How to play">
+			<svg viewBox="0 0 100 100" class="in-svg">
+				<path d="M50 2A48 48 0 0 0 50 98A48 48 0 0 0 50 2"/>
+				<path id="help-icon" d="M35 35A15 15 0 1 1 59 47A22.5 22.5 0 0 0 50 65"/>
+				<path class="fblack-path" d="M50 75A4 4 0 0 0 50 83A4 4 0 0 0 50 75"/>
+			</svg>
+		</button>
+	</div>
+	<div class="bl">
+		<button type="button" tabindex="-1" id="pause-btn" onclick="pauseGame()" class="circbtn" title="Pause">
+			<svg viewBox="0 0 100 100" class="in-svg">
+				<path d="M50 2A48 48 0 0 0 50 98A48 48 0 0 0 50 2"/>
+				<path id="pause-icon" class="fblack-path" d="M36 30L42 30L42 70L36 70ZM58 30L64 30L64 70L58 70Z"/>
+			</svg>
+		</button>
+	</div>
+	<div class="br">
+		<button type="button" tabindex="-1" id="level-btn" onclick="showLevel()" class="circbtn" title="Level">
+			<svg viewBox="0 0 100 100" class="in-svg">
+				<path d="M50 2A48 48 0 0 0 50 98A48 48 0 0 0 50 2"/>
+				<path id="map-icon" class="fred-path ns" d="M50 25.7L50 32.8A7.1 7.1 0 0 0 50 47L50 75.4L37.7 47A14.2 14.2 0 0 1 50 25.7M50 25.7L50 32.8A7.1 7.1 0 0 1 50 47L50 75.4L62.3 47A14.2 14.2 0 0 0 50 25.7"/>
+			</svg>
+		</button>
+	</div>
+	<div id="settings" class="mid grey-bg box highz hsize nd"></div>
+	<div id="help" class="mid llpurple-bg box highz hsize nd">
+		<button type="button" tabindex="-1" onclick="book(-1)" class="circbtn tl" title="Previous book">
+			<svg viewBox="0 0 100 100" class="in-svg">
+				<path class="rcap" d="M50 2A48 48 0 0 0 50 98A48 48 0 0 0 50 2M20 50L40 30M20 50L40 70M20 50L80 50"/>
+			</svg>
+		</button>
+		<button type="button" tabindex="-1" onclick="book(1)" class="circbtn tr" title="Next book">
+			<svg viewBox="0 0 100 100" class="in-svg">
+				<path class="rcap" d="M50 2A48 48 0 0 0 50 98A48 48 0 0 0 50 2M80 50L60 30M80 50L60 70M80 50L20 50"/>
+			</svg>
+		</button>
+		<div id="book-content" class="cflex"></div>
+		<br>
+		<span class="nowrap">🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲</span>
+		<br>
+		<span>六三六一等于七十九的平方</span>
+		<br>
+		<span>QQ: 807581283</span>
+		<br>
+	</div>
+	<div id="pause" class="mid lblue-bg box highestz nd">
+		<h2>Paused</h2>
+		<span class="nowrap">🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲</span>
+		<div class="cmargin">
+			<button type="button" tabindex="-1" onclick="pauseGame(false)" class="green-bg bgrid lmargin" title="Resume">
+				<svg viewBox="0 0 100 100" class="in-svg">
+					<path class='fwhite-path ns' d='M40 32L70 50L40 68Z'/>
+				</svg>
+			</button>
+			<button type="button" tabindex="-1" onclick="retreat()" class="grey-bg bgrid lmargin" title="Quit">
+				<svg viewBox="0 0 100 100" class="in-svg">
+					<path class='fwhite-path ns' d='M35 20L65 20A5 5 0 0 1 70 25L70 32L65 32L65 25L35 25L35 75L65 75L65 68L70 68L70 75A5 5 0 0 1 65 80L35 80A5 5 0 0 1 30 75L30 25A5 5 0 0 1 35 20'/>
+					<path class='white-path rcap wide' d='M75 50L55 50M75 50L68 43M75 50L68 57'/>
+				</svg>
+			</button>
+		</div>
+	</div>
+	<div id="level" class="mid lyellow-bg box highz hsize nd"></div>
+	<div class="cmargin text3-c">
+		<button type="button" tabindex="-1" onclick="importSave()" class="lmargin lblue-bg recbtn pointer" title="Import Save">Retrieve Memories</button>
+		<button type="button" tabindex="-1" onclick="hardReset()" class="lmargin lred-bg recbtn forbidden" title="HARD RESET">Restart the Universe</button>
+		<button type="button" tabindex="-1" id="export-btn" onclick="exportSave()" class="lmargin lyellow-bg recbtn pointer" title="Export Save">Store Memories</button>
+	</div>
+	<div id="game-state" class="cmargin rmid text2-c nowrap"></div>
+	<div id="game-container" class="mid simgrid nd"></div>
+	<div id="world-container" class="mid lhsize border nd">
+		<svg id="blank" viewBox="0 0 100 100" class="in-svg drag">
+			<g id="world-trans">
+			</g>
+		</svg>
+		<button type="button" tabindex="-1" id="house" onclick="home()" class="mid circbtn nd" title="Home">
+			<svg viewBox="0 0 100 100" class="in-svg">
+				<path d="M50 2A48 48 0 0 0 50 98A48 48 0 0 0 50 2"/>
+				<path class="fyellow-path" d="M20 45L50 20L80 45Z"/>
+				<path class="fdbrown-path" d="M30 45L30 75L70 75L70 45Z"/>
+				<path class="fdgreen-path" d="M52 75L52 55L64 55L64 75Z"/>
+			</svg>
+		</button>
+	</div>
+	<div id="mapinfo" class="llcyan-bg mid text3-c infobox nd"></div>
+	<div id="gridinfo" class="llpurple-bg mid infobox higherz nd"></div>
+	<div id="dialog" class="mid infobox text3-c shwidth highestz nd" onclick="dialog('Skip',6361)">
+		<h3 id="dialog-title"></h3>
+		<span id="dialog-maintext"></span>
+		<br>
+	</div>
+	<div id="log" class="side-log"></div>
+	<div id="command" class="side-command text3-c">
+		<input type="text" tabindex="-1" id="command-call" onkeydown="command(event.key)" class="side-input" autocomplete="off" title="Command">
+		<svg viewBox="0 0 10 10" id="cleaner" onclick="cleanLog()" class="llmargin small-svg circ">
+			<path class="fred-path black-path mwidth" d="M5 0A5 5 0 0 0 5 10A5 5 0 0 0 5 0"/>
+			<path class="cyan-path mwidth" d="M3 3L7 7"/>
+			<path class="cyan-path mwidth" d="M7 3L3 7"/>
+		</svg>
+		<svg viewBox="0 0 10 10" id="expander" onclick="expandLog()" class="small-svg circ">
+			<path class="fgreen-path black-path mwidth" d="M5 0A5 5 0 0 0 5 10A5 5 0 0 0 5 0"/>
+			<path class="purple-path mwidth nd" d="M5 2L5 8"/>
+			<path class="purple-path mwidth" d="M2 5L8 5"/>
+		</svg>
+	</div>
+	<div id="flower-state-outside" class="bottom text3-c cflex nd">
+		<br>
+		<span id="currency" onclick="switchCurrency()" class="pointer nd"></span>
+		<span id="total-currency" onclick="switchCurrency()" class="pointer nd"></span>
+	</div>
+	<div id="flower-state-inside" class="bottom text3-c cflex nd">
+		<br>
+		<div id="bar-health-c" class="bar-container">
+			<div id="bar-health" class="bar"></div>
+			<span id="flower-health" class="bar-text"></span>
+		</div>
+		<div id="flower-effect-buff" class="apos nlh"></div>
+		<div id="flower-effect-debuff" class="apos nlh"></div>
+	</div>
+	<div id="version1"></div>
+	<div id="version2">
+		<h2>Announcement</h2>
+		<span>This game was updated again when you left!</span>
+		<span>Do you want to perform a <span class="bold">hard reset</span> before starting the game?</span>
+		<br>
+		<span>The last update was on 2026/3/13,</span>
+		<span>which created Petal Crush Rewritten.</span>
+		<br>
+		<button type="button" tabindex="-1" id="version3" onclick="updateVersion(false)">No, just update the version.</button>
+		<br>
+		<button type="button" tabindex="-1" id="version4" onclick="updateVersion(true)">Yes, hard reset before starting.</button>
+	</div>
+	<div id="endgame1"></div>
+	<div id="endgame2"></div>
+	<div id="end1"></div>
+	<div id="end2"></div>
+</body>
+</html>
