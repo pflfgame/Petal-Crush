@@ -279,6 +279,15 @@
 			width: 40px;
 			padding: 0px;
 		}
+		.lsgrid {
+			background: none;
+			position: relative;
+			border: none;
+			outline: none;
+			height: 50px;
+			width: 50px;
+			padding: 0px;
+		}
 		.grid {
 			background: none;
 			position: relative;
@@ -915,7 +924,7 @@
 			stroke-width: 0.5px;
 		}
 		.narrowp {
-			stroke-width: 0.1px;
+			stroke-width: 0.2px;
 		}
 		.shsize {
 			height: 30%;
@@ -937,6 +946,38 @@
 		}
 		.lhwidth {
 			width: 70%;
+		}
+		.mobile {
+			display: none;
+		}
+		@media (pointer: coarse) and (hover: none) {
+			.mobile {
+				display: unset;
+			}
+			.mingrid {
+				height: 20px;
+				width: 20px;
+			}
+			.sgrid {
+				height: 25px;
+				width: 25px;
+			}
+			.lsgrid {
+				height: 30px;
+				width: 30px;
+			}
+			.grid {
+				height: 40px;
+				width: 40px;
+			}
+			.lbgrid {
+				height: 50px;
+				width: 50px;
+			}
+			.bgrid {
+				height: 60px;
+				width: 60px;
+			}
 		}
 		.apos {
 			position: absolute;
@@ -976,6 +1017,12 @@
 		}
 		.bold {
 			font-weight: bold;
+		}
+		.ipe {
+			pointer-events: none;
+		}
+		.ipe * {
+			pointer-events: auto;
 		}
 		.npe {
 			pointer-events: none;
@@ -1087,7 +1134,7 @@
 			if(this.attribute.hasOwnProperty("maxhealth") && !this.attribute.hasOwnProperty("health")) {
 				this.attribute.health=this.attribute.maxhealth
 			}
-			if(!this.attribute.hasOwnProperty("actionbar")) this.actionbar=0
+			if(this.action!=="None" && !this.attribute.hasOwnProperty("actionbar")) this.attribute.actionbar=0
 		}
 		function isMob(potentialMob) {
 			return Mob.prototype.isPrototypeOf(potentialMob)
@@ -1096,23 +1143,26 @@
 			return Object.assign(new Mob(),structuredClone(this))
 		}
 		Mob.prototype.print=function(gridX,gridY) {
-			return createGrid(0,gridX,gridY,"Mob_"+this.name,1,this.rarity)
+			let pendingGrid=createGrid(0,gridX,gridY,"Mob_"+this.name,1,this.rarity)
+			let editingPath=pendingGrid.children[0].children[0]
+			let actionProgress=this.attribute.actionbar/NewValue.upperlimit,healthP=this.attribute.health/this.attribute.maxhealth
+			if(isNaN(healthP)) healthP=1
+			if(isNaN(actionProgress)) actionProgress=0
+			if(actionProgress>1) actionProgress=1
+			if(actionProgress<0) actionProgress=0
+			editingPath.setAttribute("d","M8 100A8 8 0 0 1 0 92L0 8A8 8 0 0 1 8 0L92 0A8 8 0 0 1 100 8L100 92A8 8 0 0 1 92 100L92 8L8 8ZM8 92L92 92L92 100L8 100L8 97L"+(8+84*actionProgress)+" 97L"+(8+84*actionProgress)+" 95L8 95ZM8 8L92 8L92 "+(92-84*healthP)+"L8 "+(92-84*healthP)+"Z")
+			return pendingGrid
 		}
 		Mob.prototype.progress=async function(actionX,actionY) {
 			if(this.attribute.action==="None") return
 			if(this.name==="!Hornet" && this.attribute.action==="Default") {
 				dropFlag=true
-				this.actionbar+=this.attribute.speed
-				if(this.actionbar>=NewValue.upperlimit) {
-					this.actionbar=NewValue.upperlimit
+				this.attribute.actionbar+=this.attribute.speed
+				game.board[actionX][actionY].print()
+				if(this.attribute.actionbar>=NewValue.upperlimit) {
+					this.attribute.actionbar=NewValue.upperlimit
 					addLog("[Mob] Action of "+this.name+" at ("+actionX+","+actionY+")...","#bfbf00")
-					this.actionbar-=this.attribute.cost
-					if(!player.settings.hasOwnProperty("skipanimation")) {
-						for(let i=0;i<=40;i++) {
-							getGrid(0,actionX,actionY).style.scale=1.3-0.015*Math.abs(i-20)
-							await delay(30)
-						}
-					}
+					this.attribute.actionbar-=this.attribute.cost
 					let availableArray=new Array()
 					for(let i=1;i<=4;i++) if(actionX+dx[i]>=1 && actionX+dx[i]<=game.width && actionY+dy[i]>=1 && actionY+dy[i]<=game.height) {
 						if(game.board[actionX+dx[i]][actionY+dy[i]].state==="Empty") availableArray.push(i)
@@ -1120,15 +1170,23 @@
 					}
 					if(availableArray.length>0 && determine(this.attribute.shoot,true," for shoot")) availableArray=new Array()
 					if(availableArray.length>0) {
+						if(!player.settings.hasOwnProperty("skipanimation")) {
+							for(let i=0;i<=40;i++) {
+								getGrid(0,actionX,actionY).style.scale=1.3-0.015*Math.abs(i-20)
+								await delay(20)
+							}
+						}
 						let spawnDir=availableArray[roll(0,availableArray.length-1)]
 						game.board[actionX+dx[spawnDir]][actionY+dy[spawnDir]]=new Grid(actionX+dx[spawnDir],actionY+dy[spawnDir],new Mob("!Missile",this.rarity,{damage:this.attribute.damage,health:this.attribute.summon}),"Existing")
 						game.board[actionX+dx[spawnDir]][actionY+dy[spawnDir]].print()
 						this.attribute.damage+=this.attribute.increment
 						await delay(300)
 					} else {
-						for(let i=0;i<=36;i++) {
-							getGrid(0,actionX,actionY).children[0].children[1].style.transform="rotate("+(10*i%360)+"deg)"
-							await delay(20)
+						if(!player.settings.hasOwnProperty("skipanimation")) {
+							for(let i=0;i<=36;i++) {
+								getGrid(0,actionX,actionY).children[0].children[1].style.transform="rotate("+(10*i%360)+"deg)"
+								await delay(20)
+							}
 						}
 						for(let i=1;i<=4;i++) if(actionX+dx[i]>=1 && actionX+dx[i]<=game.width && actionY+dy[i]>=1 && actionY+dy[i]<=game.height && game.board[actionX+dx[i]][actionY+dy[i]].state==="Existing" && isMob(game.board[actionX+dx[i]][actionY+dy[i]].content) && game.board[actionX+dx[i]][actionY+dy[i]].content.name==="!Missile") {
 							let missileX=actionX+dx[i],missileY=actionY+dy[i]
@@ -1140,13 +1198,15 @@
 						dropFlag=true
 						await delay(100)
 					}
+					game.board[actionX][actionY].print()
 				}
 				return
 			}
 		}
 		Mob.prototype.defeat=function(defeatX,defeatY) {
-			if(this.attribute.reflect>0) for(let i=1;i<=4;i++) if(defeatX+dx[i]>=1 && defeatX+dx[i]<=game.width && defeatY+dy[i]>=1 && defeatY+dy[i]<=game.height && isMob(game.board[defeatX+dx[i]][defeatY+dy[i]].content)) {
-				game.board[defeatX+dx[i]][defeatY+dy[i]].content.injure({name:"Reflection",damage:this.attribute.reflect})
+			if(this.attribute.reflect>0) for(let i=1;i<=4;i++) if(defeatX+dx[i]>=1 && defeatX+dx[i]<=game.width && defeatY+dy[i]>=1 && defeatY+dy[i]<=game.height && isMob(game.board[defeatX+dx[i]][defeatY+dy[i]].content) && game.board[defeatX+dx[i]][defeatY+dy[i]].content.attribute.health>0) {
+				game.board[defeatX+dx[i]][defeatY+dy[i]].content.injure(defeatX+dx[i],defeatY+dy[i],{name:"Reflection",damage:this.attribute.reflect})
+				if(game.board[defeatX+dx[i]][defeatY+dy[i]].content.attribute.health===0) defeatedMob.push({x:defeatX+dx[i],y:defeatY+dy[i]})
 			}
 			if(this.name==="!Hornet") for(let i=1;i<=4;i++) if(defeatX+dx[i]>=1 && defeatX+dx[i]<=game.width && defeatY+dy[i]>=1 && defeatY+dy[i]<=game.height && isMob(game.board[defeatX+dx[i]][defeatY+dy[i]].content) && game.board[defeatX+dx[i]][defeatY+dy[i]].content.name==="!Missile" && game.board[defeatX+dx[i]][defeatY+dy[i]].content.attribute.health>0) {
 				let aliveFlag=false,missileX=defeatX+dx[i],missileY=defeatY+dy[i]
@@ -1157,7 +1217,7 @@
 				}
 			}
 		}
-		Mob.prototype.injure=function(petal) {
+		Mob.prototype.injure=function(mobX,mobY,petal) {
 			if(this.attribute.health===0) return
 			let pendingDamage
 			if(petal.name==="Reflection") {
@@ -1172,6 +1232,7 @@
 				this.attribute.health-=pendingDamage
 				addLog("[Petal] <span style='color: "+rarityColorEP[petal.rarity]+"'>"+petal.name+"</span> dealt "+pendingDamage+" damage to <span style='color: "+rarityColorEP[this.rarity]+"'>"+this.name+"</span>, "+this.attribute.health+" health remaining.","#9f9fdf")
 			}
+			game.board[mobX][mobY].print()
 			if(this.name==="!Rock") {
 				game.score+=pendingDamage
 				updateFlowerState()
@@ -1185,27 +1246,29 @@
 				updateFlowerState()
 			}
 		}
-		Mob.prototype.repulse=function(petal) {
+		Mob.prototype.repulse=function(mobX,mobY,petal) {
 			if(this.attribute.action==="None") return
 			if(petal.name==="Connection") {
 				let lowerLimit=petal.lowerlimit
-				if(this.actionbar<=lowerLimit) return
+				if(this.attribute.actionbar<=lowerLimit) return
 				let pendingKnockback=petal.knockback
-				if(pendingKnockback>this.actionbar-lowerLimit) pendingKnockback=this.actionbar-lowerLimit
-				this.actionbar-=pendingKnockback
+				if(pendingKnockback>this.attribute.actionbar-lowerLimit) pendingKnockback=this.attribute.actionbar-lowerLimit
+				this.attribute.actionbar-=pendingKnockback
 				addLog("[Mob] <span style='color: "+rarityColorEP[this.rarity]+"'>"+this.name+"</span> received "+pendingKnockback+" knockback from Connection.","#bfbf00")
+				game.board[mobX][mobY].print()
 				return
 			}
 			let lowerLimit=NewValue.lowerlimit
 			let pendingKnockback=petal.attribute.knockback
-			if(this.actionbar>lowerLimit) {
-				if(pendingKnockback>this.actionbar-lowerLimit) pendingKnockback=this.actionbar-lowerLimit
-				this.actionbar-=pendingKnockback
+			if(this.attribute.actionbar>lowerLimit) {
+				if(pendingKnockback>this.attribute.actionbar-lowerLimit) pendingKnockback=this.attribute.actionbar-lowerLimit
+				this.attribute.actionbar-=pendingKnockback
 				addLog("[Petal] <span style='color: "+rarityColorEP[petal.rarity]+"'>"+petal.name+"</span> dealt "+pendingKnockback+" knockback to <span style='color: "+rarityColorEP[this.rarity]+"'>"+this.name+"</span>.","#9f9fdf")
+				game.board[mobX][mobY].print()
 			}
 			if(this.attribute.hasOwnProperty("connect") && this.attribute.connect.hasOwnProperty("knockback")) {
 				if(this.attribute.connect.knockback.match("Rarity")!==null) {
-					for(let i=1;i<=game.width;i++) for(let j=1;j<=game.height;j++) if(isMob(game.board[i][j].content) && game.board[i][j].content.attribute.hasOwnProperty("connect") && game.board[i][j].content.attribute.connect.knockback===this.attribute.connect.knockback && game.board[i][j].content!==this && game.board[i][j].content.rarity===this.rarity) game.board[i][j].content.repulse({name:"Connection",knockback:pendingKnockback,lowerlimit:lowerLimit})
+					for(let i=1;i<=game.width;i++) for(let j=1;j<=game.height;j++) if(isMob(game.board[i][j].content) && game.board[i][j].content.attribute.hasOwnProperty("connect") && game.board[i][j].content.attribute.connect.knockback===this.attribute.connect.knockback && game.board[i][j].content!==this && game.board[i][j].content.rarity===this.rarity) game.board[i][j].content.repulse(i,j,{name:"Connection",knockback:pendingKnockback,lowerlimit:lowerLimit})
 				}
 			}
 		}
@@ -1352,40 +1415,36 @@
 			}
 			if(this.state==="Existing" && this.crush==="Blasted" && this.content.attribute.blast==="Destroy") this.content.attribute=new Object()
 			if(targetMob && this.state==="Existing" && this.content.attribute.damage>0) {
-				targetMob.content.injure(this.content)
+				targetMob.content.injure(targetMob.x,targetMob.y,this.content)
 				addTempMovingGrid(createGrid(79,0,0,"Petal_"+this.content.name,1,this.content.rarity),this.x,this.y,targetMob.x,targetMob.y)
 			}
 			if(this.state==="Existing" && this.content.attribute.damage>0) {
-				for(let i=1;i<=4;i++) if(this.x+dx[i]>=1 && this.x+dx[i]<=game.width && this.y+dy[i]>=1 && this.y+dy[i]<=game.height && isMob(game.board[this.x+dx[i]][this.y+dy[i]].content)) {
-					game.board[this.x+dx[i]][this.y+dy[i]].content.injure(this.content)
-				}
+				for(let i=1;i<=4;i++) if(this.x+dx[i]>=1 && this.x+dx[i]<=game.width && this.y+dy[i]>=1 && this.y+dy[i]<=game.height && isMob(game.board[this.x+dx[i]][this.y+dy[i]].content)) game.board[this.x+dx[i]][this.y+dy[i]].content.injure(this.x+dx[i],this.y+dy[i],this.content)
 			}
 			if(this.state==="Existing" && this.content.attribute.knockback>0) {
-				for(let i=1;i<=4;i++) if(this.x+dx[i]>=1 && this.x+dx[i]<=game.width && this.y+dy[i]>=1 && this.y+dy[i]<=game.height && isMob(game.board[this.x+dx[i]][this.y+dy[i]].content)) {
-					game.board[this.x+dx[i]][this.y+dy[i]].content.repulse(this.content)
-				}
+				for(let i=1;i<=4;i++) if(this.x+dx[i]>=1 && this.x+dx[i]<=game.width && this.y+dy[i]>=1 && this.y+dy[i]<=game.height && isMob(game.board[this.x+dx[i]][this.y+dy[i]].content)) game.board[this.x+dx[i]][this.y+dy[i]].content.repulse(this.x+dx[i],this.y+dy[i],this.content)
 			}
 			if(this.state==="Existing" && this.content.attribute.heal>0) {
 				flowerHeal(this.content)
 			}
 			if(this.state==="Existing" && this.type==="Row") {
 				for(let i=1;i<=game.width;i++) if(game.board[i][this.y].state!=="Empty" && game.board[i][this.y].crush==="None") {
-					if(isMob(game.board[i][this.y].content) && this.content.attribute.damage>0 && this.content.attribute.blast!=="Destroy") game.board[i][this.y].content.injure(this.content)
-					if(isMob(game.board[i][this.y].content) && this.content.attribute.knockback>0 && this.content.attribute.blast!=="Destroy") game.board[i][this.y].content.repulse(this.content)
+					if(isMob(game.board[i][this.y].content) && this.content.attribute.damage>0 && this.content.attribute.blast!=="Destroy") game.board[i][this.y].content.injure(i,this.y,this.content)
+					if(isMob(game.board[i][this.y].content) && this.content.attribute.knockback>0 && this.content.attribute.blast!=="Destroy") game.board[i][this.y].content.repulse(i,this.y,this.content)
 					if(isPetal(game.board[i][this.y].content)) blastGrid.push(game.board[i][this.y])
 				}
 			}
 			if(this.state==="Existing" && this.type==="Column") {
 				for(let i=1;i<=game.height;i++) if(game.board[this.x][i].state!=="Empty" && game.board[this.x][i].crush==="None") {
-					if(isMob(game.board[this.x][i].content) && this.content.attribute.damage>0 && this.content.attribute.blast!=="Destroy") game.board[this.x][i].content.injure(this.content)
-					if(isMob(game.board[this.x][i].content) && this.content.attribute.knockback>0 && this.content.attribute.blast!=="Destroy") game.board[this.x][i].content.repulse(this.content)
+					if(isMob(game.board[this.x][i].content) && this.content.attribute.damage>0 && this.content.attribute.blast!=="Destroy") game.board[this.x][i].content.injure(this.x,i,this.content)
+					if(isMob(game.board[this.x][i].content) && this.content.attribute.knockback>0 && this.content.attribute.blast!=="Destroy") game.board[this.x][i].content.repulse(this.x,i,this.content)
 					if(isPetal(game.board[this.x][i].content)) blastGrid.push(game.board[this.x][i])
 				}
 			}
 			if(this.state==="Existing" && this.type==="Bomb") {
 				for(let i=1;i<=game.width;i++) for(let j=1;j<=game.height;j++) if(((i-this.x)**2+(j-this.y)**2)<=5 && game.board[i][j].state!=="Empty" && game.board[i][j].crush==="None") {
-					if(isMob(game.board[i][j].content) && this.content.attribute.damage>0 && this.content.attribute.blast!=="Destroy") game.board[i][j].content.injure(this.content)
-					if(isMob(game.board[i][j].content) && this.content.attribute.knockback>0 && this.content.attribute.blast!=="Destroy") game.board[i][j].content.repulse(this.content)
+					if(isMob(game.board[i][j].content) && this.content.attribute.damage>0 && this.content.attribute.blast!=="Destroy") game.board[i][j].content.injure(i,j,this.content)
+					if(isMob(game.board[i][j].content) && this.content.attribute.knockback>0 && this.content.attribute.blast!=="Destroy") game.board[i][j].content.repulse(i,j,this.content)
 					if(isPetal(game.board[i][j].content)) blastGrid.push(game.board[i][j])
 				}
 			}
@@ -1409,7 +1468,6 @@
 		}
 		let levelList=new Object()
 		levelList["Training Ground"]=new Array()
-//		levelList["Training Ground"][0]={x:81,y:27,precondition:[1],height:6,width:6,coefficient:10,exponent:2,goal:354233654641216,initialmap:() => [,[,new Grid(1,1,"Uninitialized"),new Grid(1,2,"Uninitialized"),new Grid(1,3,"Uninitialized"),new Grid(1,4,"Uninitialized"),new Grid(1,5,"Uninitialized"),new Grid(1,6,new Mob("!Rock",1,10000),"Existing")],[,new Grid(2,1,"Uninitialized"),new Grid(2,2,"Uninitialized"),new Grid(2,3,new Petal("Basic",1),"Existing"),new Grid(2,4,new Petal("Leaf",1),"Existing"),new Grid(2,5,"Uninitialized"),new Grid(2,6,"Uninitialized")],[,new Grid(3,1,"Uninitialized"),new Grid(3,2,"Uninitialized"),new Grid(3,3,new Petal("Basic",1),"Existing"),new Grid(3,4,new Petal("Leaf",1),"Existing"),new Grid(3,5,"Uninitialized"),new Grid(3,6,"Uninitialized")],[,new Grid(4,1,"Uninitialized"),new Grid(4,2,"Uninitialized"),new Grid(4,3,new Petal("Leaf",1),"Existing","Column"),new Grid(4,4,new Petal("Basic",1),"Existing"),new Grid(4,5,"Uninitialized"),new Grid(4,6,"Uninitialized")],[,new Grid(5,1,"Uninitialized"),new Grid(5,2,"Uninitialized"),new Grid(5,3,new Petal("Basic",1),"Existing"),new Grid(5,4,new Petal("Leaf",1),"Existing"),new Grid(5,5,"Uninitialized"),new Grid(5,6,"Uninitialized")],[,new Grid(6,1,"Uninitialized"),new Grid(6,2,"Uninitialized"),new Grid(6,3,new Petal("Stinger",1),"Existing"),new Grid(6,4,new Petal("Stinger",1),"Existing"),new Grid(6,5,"Uninitialized"),new Grid(6,6,"Uninitialized")]],spawner:[[{weight:20,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")}]],spawnset:[{x:1,y:1,set:0},{x:2,y:1,set:0},{x:3,y:1,set:0},{x:4,y:1,set:0},{x:5,y:1,set:0},{x:6,y:1,set:0}]}
 		levelList["Training Ground"][1]={x:50,y:50,precondition:[],height:2,width:4,coefficient:100,exponent:2,goal:132651,initialmap:() => [,[,new Grid(1,1),new Grid(1,2,new Mob("!Rock",1,10),"Existing")],[,new Grid(2,1),new Grid(2,2,new Petal("Basic",1),"Existing")],[,new Grid(3,1,new Petal("Basic",1),"Existing"),new Grid(3,2,new Petal("Stinger",1),"Existing")],[,new Grid(4,1),new Grid(4,2,new Petal("Basic",1),"Existing")]]}
 		levelList["Training Ground"][2]={x:30,y:50,precondition:[1],height:5,width:6,coefficient:100,exponent:2,goal:262144,initialmap:() => [,[,new Grid(1,1,new Petal("Basic",1),"Existing"),new Grid(1,2,new Petal("Basic",1),"Existing"),new Grid(1,3,new Petal("Stinger",1),"Existing"),new Grid(1,4,new Petal("Basic",1),"Existing"),new Grid(1,5,new Mob("!Rock",2,100),"Existing")],[,new Grid(2,1,new Mob("!Rock",2,100),"Existing"),new Grid(2,2,new Item("?Void",9),"Existing"),new Grid(2,3,new Petal("Basic",1),"Existing"),new Grid(2,4,new Item("?Void",9),"Existing"),new Grid(2,5,new Petal("Basic",2),"Existing")],[,new Grid(3,1,new Item("?Void",9),"Existing"),new Grid(3,2,new Item("?Void",9),"Existing"),new Grid(3,3,new Petal("Basic",4),"Existing"),new Grid(3,4,new Item("?Void",9),"Existing"),new Grid(3,5,new Petal("Basic",2),"Existing")],[,new Grid(4,1,new Item("?Void",9),"Existing"),new Grid(4,2,new Item("?Void",9),"Existing"),new Grid(4,3,new Item("?Void",9),"Existing"),new Grid(4,4,new Petal("Basic",5),"Existing"),new Grid(4,5,new Petal("Stinger",2),"Existing")],[,new Grid(5,1,new Item("?Void",9),"Existing"),new Grid(5,2,new Petal("Basic",4),"Existing"),new Grid(5,3,new Mob("!Rock",2,100),"Existing"),new Grid(5,4,new Item("?Void",9),"Existing"),new Grid(5,5,new Petal("Basic",2),"Existing")],[,new Grid(6,1,new Petal("Basic",2),"Existing"),new Grid(6,2,new Petal("Stinger",3),"Existing"),new Grid(6,3,new Petal("Basic",2),"Existing"),new Grid(6,4,new Petal("Basic",2),"Existing"),new Grid(6,5,new Item("?Void",9),"Existing")]]}
 		levelList["Training Ground"][3]={x:30,y:70,precondition:[2],height:4,width:5,coefficient:100,exponent:2,goal:314432,initialmap:() => [,[,new Grid(1,1),new Grid(1,2,new Item("?Void",9),"Existing"),new Grid(1,3,new Mob("!Rock",1,10),"Existing"),new Grid(1,4,new Item("?Void",9),"Existing")],[,new Grid(2,1),new Grid(2,2,new Petal("Basic",2),"Existing"),new Grid(2,3,new Item("?Void",9),"Existing"),new Grid(2,4,new Petal("Basic",1),"Existing","Bomb")],[,new Grid(3,1),new Grid(3,2,new Petal("Basic",2),"Existing"),new Grid(3,3,new Item("?Void",9),"Existing"),new Grid(3,4,new Petal("Stinger",1),"Existing")],[,new Grid(4,1,new Petal("Basic",2),"Existing","Row"),new Grid(4,2,new Petal("Stinger",7),"Existing"),new Grid(4,3,new Item("?Void",9),"Existing"),new Grid(4,4,new Petal("Basic",1),"Existing")],[,new Grid(5,1,new Mob("!Rock",2,100),"Existing"),new Grid(5,2,new Petal("Basic",2),"Existing"),new Grid(5,3,new Item("?Void",9),"Existing"),new Grid(5,4,new Petal("Basic",1),"Existing")]]}
@@ -1418,7 +1476,8 @@
 		levelList["Training Ground"][6]={x:30,y:90,precondition:[5],height:5,width:5,coefficient:10,exponent:2,goal:614125,initialmap:() => [,[,new Grid(1,1,new Petal("Basic",1),"Existing"),new Grid(1,2,"Uninitialized"),new Grid(1,3,"Uninitialized"),new Grid(1,4,"Uninitialized"),new Grid(1,5,new Mob("!Rock",1,343),"Existing")],[,new Grid(2,1,"Uninitialized"),new Grid(2,2,"Uninitialized"),new Grid(2,3,"Uninitialized"),new Grid(2,4,"Uninitialized"),new Grid(2,5,"Uninitialized")],[,new Grid(3,1,"Uninitialized"),new Grid(3,2,"Uninitialized"),new Grid(3,3,"Uninitialized"),new Grid(3,4,"Uninitialized"),new Grid(3,5,"Uninitialized")],[,new Grid(4,1,"Uninitialized"),new Grid(4,2,"Uninitialized"),new Grid(4,3,"Uninitialized"),new Grid(4,4,"Uninitialized"),new Grid(4,5,"Uninitialized")],[,new Grid(5,1,"Uninitialized"),new Grid(5,2,"Uninitialized"),new Grid(5,3,"Uninitialized"),new Grid(5,4,"Uninitialized"),new Grid(5,5,"Uninitialized")]],spawner:[[{weight:20,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:10,result:(x,y) => new Grid(x,y,new Petal("Basic",2),"Existing")},{weight:10,result:(x,y) => new Grid(x,y,new Petal("Stinger",2),"Existing")}]],spawnset:"Default",wall:[{x:4,y:2,dir:2,stack:1},{x:3,y:3,dir:2,stack:3},{x:4,y:3,dir:2,stack:1},{x:1,y:4,dir:2,stack:9},{x:2,y:4,dir:2,stack:6},{x:3,y:4,dir:2,stack:3},{x:4,y:4,dir:2,stack:1},{x:2,y:5,dir:2,stack:6},{x:3,y:5,dir:2,stack:3},{x:4,y:5,dir:2,stack:1},{x:1,y:1,dir:3,stack:1},{x:2,y:1,dir:3,stack:1},{x:3,y:1,dir:3,stack:1},{x:4,y:1,dir:3,stack:1},{x:1,y:2,dir:3,stack:3},{x:2,y:2,dir:3,stack:3},{x:3,y:2,dir:3,stack:3},{x:1,y:3,dir:3,stack:6},{x:2,y:3,dir:3,stack:6},{x:2,y:4,dir:3,stack:9}]}
 		levelList["Training Ground"][7]={x:50,y:90,precondition:[6],height:5,width:5,coefficient:10,exponent:2,goal:354233654641216,initialmap:() => [,[,new Grid(1,1,new Mob("!Rock",1,100),"Existing"),new Grid(1,2,new Item("?Void",9),"Existing"),new Grid(1,3,"Uninitialized"),new Grid(1,4,"Uninitialized"),new Grid(1,5,"Uninitialized")],[,new Grid(2,1,"Uninitialized"),new Grid(2,2,new Item("?Void",9),"Existing"),new Grid(2,3,"Uninitialized"),new Grid(2,4,"Uninitialized"),new Grid(2,5,"Uninitialized")],[,new Grid(3,1,"Uninitialized"),new Grid(3,2,new Item("?Void",9),"Existing"),new Grid(3,3,"Uninitialized"),new Grid(3,4,"Uninitialized"),new Grid(3,5,"Uninitialized")],[,new Grid(4,1,"Uninitialized"),new Grid(4,2,new Item("?Void",9),"Existing"),new Grid(4,3,"Uninitialized"),new Grid(4,4,"Uninitialized"),new Grid(4,5,"Uninitialized")],[,new Grid(5,1,"Uninitialized"),new Grid(5,2,new Item("?Void",9),"Existing"),new Grid(5,3,new Item("?Void",9),"Existing"),new Grid(5,4,new Item("?Void",9),"Existing"),new Grid(5,5,new Item("?Void",9),"Existing")]],spawner:[[{weight:20,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")}]],spawnset:[{x:2,y:1,set:0},{x:3,y:1,set:0},{x:4,y:1,set:0},{x:5,y:1,set:0}],transportset:[{start:{x:2,y:1},end:{x:1,y:3}},{start:{x:3,y:1},end:{x:2,y:3}},{start:{x:4,y:1},end:{x:3,y:3}},{start:{x:5,y:1},end:{x:4,y:3}}]}
 		levelList["Centralia Field 1"]=new Array()
-		levelList["Centralia Field 1"][1]={x:50,y:50,precondition:[],height:6,width:6,coefficient:10,exponent:1.2,goal:6400,initialmap:() => [,[,new Grid(1,1,"Uninitialized"),new Grid(1,2,"Uninitialized"),new Grid(1,3,"Uninitialized"),new Grid(1,4,"Uninitialized"),new Grid(1,5,new Mob("!Rock",3,200),"Existing"),new Grid(1,6,new Mob("!Hornet",1,200),"Existing")],[,new Grid(2,1,"Uninitialized"),new Grid(2,2,"Uninitialized"),new Grid(2,3,"Uninitialized"),new Grid(2,4,"Uninitialized"),new Grid(2,5,new Mob("!Rock",2,100),"Existing"),new Grid(2,6,"Uninitialized")],[,new Grid(3,1,"Uninitialized"),new Grid(3,2,"Uninitialized"),new Grid(3,3,"Uninitialized"),new Grid(3,4,"Uninitialized"),new Grid(3,5,new Mob("!Rock",1,50),"Existing"),new Grid(3,6,"Uninitialized")],[,new Grid(4,1,"Uninitialized"),new Grid(4,2,"Uninitialized"),new Grid(4,3,"Uninitialized"),new Grid(4,4,"Uninitialized"),new Grid(4,5,new Mob("!Rock",1,50),"Existing"),new Grid(4,6,"Uninitialized")],[,new Grid(5,1,"Uninitialized"),new Grid(5,2,"Uninitialized"),new Grid(5,3,"Uninitialized"),new Grid(5,4,"Uninitialized"),new Grid(5,5,new Mob("!Rock",2,100),"Existing"),new Grid(5,6,"Uninitialized")],[,new Grid(6,1,"Uninitialized"),new Grid(6,2,"Uninitialized"),new Grid(6,3,"Uninitialized"),new Grid(6,4,"Uninitialized"),new Grid(6,5,new Mob("!Rock",3,200),"Existing"),new Grid(6,6,new Mob("!Hornet",1,200),"Existing")]],spawner:[[{weight:14,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing","Row"),noinitial:true},{weight:1,result:(x,y) => new Grid(x,y,new Petal("Basic",5),"Existing"),noinitial:true},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing"),noinitial:true},{weight:25,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:25,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")}]],spawnset:"Default",valueset:() => {PetalAttributeList[1].damage=20; MobAttributeList[1].increment=0; MobAttributeList[2].reflect="200%"},valuetext:{petal:"Nerfed Stinger: 30->20",mob:"Nerfed Hornet damage increment: 1->0<br>Buffed Missile damage reflect: 50%->200%"}}
+		levelList["Centralia Field 1"][1]={x:50,y:50,precondition:[],height:6,width:6,coefficient:10,exponent:1.2,goal:6400,initialmap:() => [,[,new Grid(1,1,"Uninitialized"),new Grid(1,2,"Uninitialized"),new Grid(1,3,"Uninitialized"),new Grid(1,4,"Uninitialized"),new Grid(1,5,new Mob("!Rock",3,200),"Existing"),new Grid(1,6,new Mob("!Hornet",1,200),"Existing")],[,new Grid(2,1,"Uninitialized"),new Grid(2,2,"Uninitialized"),new Grid(2,3,"Uninitialized"),new Grid(2,4,"Uninitialized"),new Grid(2,5,new Mob("!Rock",2,100),"Existing"),new Grid(2,6,"Uninitialized")],[,new Grid(3,1,"Uninitialized"),new Grid(3,2,"Uninitialized"),new Grid(3,3,"Uninitialized"),new Grid(3,4,"Uninitialized"),new Grid(3,5,new Mob("!Rock",1,50),"Existing"),new Grid(3,6,"Uninitialized")],[,new Grid(4,1,"Uninitialized"),new Grid(4,2,"Uninitialized"),new Grid(4,3,"Uninitialized"),new Grid(4,4,"Uninitialized"),new Grid(4,5,new Mob("!Rock",1,50),"Existing"),new Grid(4,6,"Uninitialized")],[,new Grid(5,1,"Uninitialized"),new Grid(5,2,"Uninitialized"),new Grid(5,3,"Uninitialized"),new Grid(5,4,"Uninitialized"),new Grid(5,5,new Mob("!Rock",2,100),"Existing"),new Grid(5,6,"Uninitialized")],[,new Grid(6,1,"Uninitialized"),new Grid(6,2,"Uninitialized"),new Grid(6,3,"Uninitialized"),new Grid(6,4,"Uninitialized"),new Grid(6,5,new Mob("!Rock",3,200),"Existing"),new Grid(6,6,new Mob("!Hornet",1,200),"Existing")]],spawner:[[{weight:14,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing","Row"),noinitial:true},{weight:1,result:(x,y) => new Grid(x,y,new Petal("Basic",5),"Existing"),noinitial:true},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing"),noinitial:true},{weight:25,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:25,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")}]],spawnset:"Default",valueset:() => {PetalAttributeList[1].damage=20; MobAttributeList[1].increment=0; MobAttributeList[2].reflect="200%"},valuetext:{petal:"Nerfed Stinger damage: 30->20",mob:"Nerfed Hornet damage increment: 1->0<br>Buffed Missile damage reflect: 50%->200%"}}
+		levelList["Centralia Field 1"][3]={x:30,y:70,precondition:[1],height:8,width:8,coefficient:10,exponent:1.2,goal:6000,initialmap:() => [,[,new Grid(1,1,"Uninitialized"),new Grid(1,2,"Uninitialized"),new Grid(1,3,"Uninitialized"),new Grid(1,4,"Uninitialized"),new Grid(1,5,"Uninitialized"),new Grid(1,6,"Uninitialized"),new Grid(1,7,"Uninitialized"),new Grid(1,8,"Uninitialized")],[,new Grid(2,1),new Grid(2,2,"Uninitialized"),new Grid(2,3,"Uninitialized"),new Grid(2,4,"Uninitialized"),new Grid(2,5,"Uninitialized"),new Grid(2,6,"Uninitialized"),new Grid(2,7,"Uninitialized"),new Grid(2,8,"Uninitialized")],[,new Grid(3,1),new Grid(3,2),new Grid(3,3,"Uninitialized"),new Grid(3,4,"Uninitialized"),new Grid(3,5,"Uninitialized"),new Grid(3,6,"Uninitialized"),new Grid(3,7,"Uninitialized"),new Grid(3,8,"Uninitialized")],[,new Grid(4,1,new Mob("!Hornet",3,{maxhealth:300,actionbar:-500}),"Existing"),new Grid(4,2,new Mob("!Rock",1,10),"Existing"),new Grid(4,3),new Grid(4,4,"Uninitialized"),new Grid(4,5,"Uninitialized"),new Grid(4,6,"Uninitialized"),new Grid(4,7,"Uninitialized"),new Grid(4,8,"Uninitialized")],[,new Grid(5,1,new Mob("!Hornet",3,{maxhealth:300,actionbar:-1000}),"Existing"),new Grid(5,2,new Mob("!Rock",3,100),"Existing"),new Grid(5,3),new Grid(5,4,"Uninitialized"),new Grid(5,5,"Uninitialized"),new Grid(5,6,"Uninitialized"),new Grid(5,7,"Uninitialized"),new Grid(5,8,"Uninitialized")],[,new Grid(6,1),new Grid(6,2),new Grid(6,3,"Uninitialized"),new Grid(6,4,"Uninitialized"),new Grid(6,5,"Uninitialized"),new Grid(6,6,"Uninitialized"),new Grid(6,7,"Uninitialized"),new Grid(6,8,"Uninitialized")],[,new Grid(7,1),new Grid(7,2,"Uninitialized"),new Grid(7,3,"Uninitialized"),new Grid(7,4,"Uninitialized"),new Grid(7,5,"Uninitialized"),new Grid(7,6,"Uninitialized"),new Grid(7,7,"Uninitialized"),new Grid(7,8,"Uninitialized")],[,new Grid(8,1,"Uninitialized"),new Grid(8,2,"Uninitialized"),new Grid(8,3,"Uninitialized"),new Grid(8,4,"Uninitialized"),new Grid(8,5,"Uninitialized"),new Grid(8,6,"Uninitialized"),new Grid(8,7,"Uninitialized"),new Grid(8,8,"Uninitialized")]],spawner:[[{weight:18,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Basic",2),"Existing")},{weight:2,result:(x,y) => new Grid(x,y,new Petal("Basic",3),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Stinger",2),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Rose",2),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Leaf",2),"Existing")}],[{weight:30,result:(x,y) => new Grid(x,y,new Petal("Basic",4),"Existing","Column")},{weight:30,result:(x,y) => new Grid(x,y,new Petal("Basic",4),"Existing","Bomb")},{weight:30,result:(x,y) => new Grid(x,y,new Petal("Stinger",4),"Existing","Row")},{weight:10,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")}]],spawnset:[{x:1,y:1,set:0},{x:8,y:1,set:0},{x:4,y:2,set:1},{x:5,y:2,set:1}],wall:[{x:3,y:2,dir:2,stack:6361},{x:4,y:2,dir:2,stack:6361},{x:5,y:2,dir:2,stack:6361},{x:4,y:3,dir:3,stack:6361},{x:5,y:3,dir:3,stack:6361}],valueset:() => {PetalAttributeList[4].knockback=0; NewValue.damagemult[4]=0},valuetext:{petal:"Nerfed Leaf knockback: 50->0",other:"Nerfed [RAR4] Petal damage multiplier: 8->0"}}
 		let mapList=new Array()
 		mapList[0]={name:"Training Ground",x:50,y:50,color:"#bfbfbf",precondition:[],cost:79}
 		mapList[1]={name:"Centralia Field 1",x:30,y:50,color:"#bfffbf",precondition:[0],cost:27}
@@ -1433,7 +1492,7 @@
 			mouseX=mouse.clientX
 			mouseY=mouse.clientY
 		} )
-		const version=20260314,acceptedVersion=20260313
+		const version=20260316,acceptedVersion=20260313
 		const svgNS="http://www.w3.org/2000/svg"
 		const dx=[0,0,1,0,-1],dy=[0,-1,0,1,0],dx5=[0,1,2,2,1,-1,-2,-2,-1],dy5=[0,-2,-1,1,2,2,1,-1,-2]
 		let rarityColor=["#000000","#7eef6d","#ffe65d","#4d52e3","#861fde","#de1f1f","#1fdbde","#ff2b75","#2bffa3","#555555"]
@@ -1458,6 +1517,11 @@
 		if(!player.hasOwnProperty("settings")) player.settings=new Object()
 		if(!player.hasOwnProperty("book")) player.book=["Flower Game Guide"]
 		if(!player.hasOwnProperty("bookreading")) player.bookreading=0
+		if(!player.hasOwnProperty("PFLF")) player.PFLF=new Object()
+		if(!player.PFLF.hasOwnProperty("highscore")) player.PFLF.highscore=0
+		if(!player.PFLF.hasOwnProperty("highscoreturn")) player.PFLF.highscoreturn=0
+		if(!player.PFLF.hasOwnProperty("highscoreclear")) player.PFLF.highscoreclear=0
+		if(!player.PFLF.hasOwnProperty("active")) player.PFLF.active=false
 		if(!player.hasOwnProperty("dialog")) player.dialog=new Object()
 		if(!player.hasOwnProperty("world")) player.world=new Object()
 		if(!player.hasOwnProperty("currencydisplay")) player.currencydisplay="Remain"
@@ -1640,6 +1704,7 @@
 			newGrid.addEventListener("mousedown",() => dragGridStart(newGrid))
 			return newGrid
 		}
+		let gridSize
 		let selectedGrid=new Object()
 		selectedGrid.select=false
 		let draggingGrid=new Object()
@@ -1649,7 +1714,7 @@
 		}
 		function mouseGridInfo() {
 			let topLeft=getGrid(0,1,1).getBoundingClientRect()
-			let mouseRow=betterFloor((mouseX-topLeft.left)/70)+1,mouseColumn=betterFloor((mouseY-topLeft.top)/70)+1
+			let mouseRow=betterFloor((mouseX-topLeft.left)/gridSize)+1,mouseColumn=betterFloor((mouseY-topLeft.top)/gridSize)+1
 			if(mouseRow<1 || mouseRow>game.width || mouseColumn<1 || mouseColumn>game.height) {
 				return
 			}
@@ -1696,7 +1761,7 @@
 			draggingGrid.drag=false
 			document.removeEventListener("mouseup",dragGridEnd)
 			let topLeft=getGrid(0,1,1).getBoundingClientRect()
-			let mouseRow=betterFloor((mouseX-topLeft.left)/70)+1,mouseColumn=betterFloor((mouseY-topLeft.top)/70)+1
+			let mouseRow=betterFloor((mouseX-topLeft.left)/gridSize)+1,mouseColumn=betterFloor((mouseY-topLeft.top)/gridSize)+1
 			if(mouseRow<1 || mouseRow>game.width || mouseColumn<1 || mouseColumn>game.height) {
 				return
 			}
@@ -1786,6 +1851,85 @@
 			let commandInput=document.getElementById("command-call").value
 			document.getElementById("command-call").value=""
 			if(commandInput.startsWith(".")) {
+				commandInput=commandInput.slice(1)
+				let validCommand=false
+				if(commandInput==="help") {
+					validCommand=true
+					addLog("[Help] Help: Print list of all available commands. (Format: .help)","#bf7fbf")
+					addLog("[Help] PFLFstart: Play PFLF with bot#7976. (Format: .PFLFstart)","#bf7fbf")
+					addLog("[Help] PFLFend: End PFLF game. (Format: .PFLFend)","#bf7fbf")
+					addLog("[Help] Claim: Claim number in PFLF. (Format: .claim [number])","#bf7fbf")
+					addLog("[Help] PFLFget: Print PFLF state. (Format: .PFLFget)","#bf7fbf")
+					addLog("[Help] PFLFhighscore: Print PFLF highscore. (Format: .PFLFhighscore)","#bf7fbf")
+				}
+				if(commandInput==="PFLFstart" && player.PFLF.active===false) {
+					validCommand=true
+					player.PFLF.active=true
+					player.PFLF.turn=0
+					player.PFLF.score=-1001
+					player.PFLF.clear=-1
+					player.PFLF.dice=0
+					commandInput="claim 0"
+					addLog("[bot#7976] PFLF started!","#7f7fff")
+				}
+				if(commandInput==="PFLFend" && player.PFLF.active===true) {
+					validCommand=true
+					player.PFLF.active=false
+					addLog("[bot#7976] PFLF ended!","#7f7fff")
+				}
+				if(commandInput.startsWith("claim ") && player.PFLF.active===true) {
+					let testValid=true,claimNum=commandInput.slice(6).match(/^\d+/)
+					if(claimNum===null) testValid=false
+					if(testValid===true) {
+						claimNum=parseInt(claimNum)
+						testValid=isPFLF(claimNum)
+					}
+					if(testValid===true) {
+						let testStr1=player.PFLF.dice.toString(),testStr2=claimNum.toString()
+						if(testStr1==="0") testStr1=""
+						if(testStr2==="0") testStr2=""
+						for(let i=0;i<testStr2.length;i++) {
+							if(testStr1.indexOf(testStr2[i])===-1) {
+								testValid=false
+							} else {
+								testStr1=testStr1.slice(0,testStr1.indexOf(testStr2[i]))+testStr1.slice(testStr1.indexOf(testStr2[i])+1)
+							}
+						}
+						if(testValid===true) {
+							player.PFLF.score+=(testStr2.length+1)**3
+							if(testStr1==="") {
+								player.PFLF.clear++
+								player.PFLF.score+=1000
+							}
+							player.PFLF.dice=parseInt("0"+testStr1)
+						}
+					}
+					if(testValid===true) {
+						if(player.PFLF.dice>100000) {
+							if(player.PFLF.score>player.PFLF.highscore) {
+								player.PFLF.highscore=player.PFLF.score
+								player.PFLF.highscoreturn=player.PFLF.turn
+								player.PFLF.highscoreclear=player.PFLF.clear
+							}
+							addLog("[bot#7976] Final Turn: "+player.PFLF.turn+", Score: "+player.PFLF.score+", Clear: "+player.PFLF.clear,"#7f7fff")
+							player.PFLF.active=false
+						}  else {
+							player.PFLF.turn++
+							for(let i=1;i<=3;i++) player.PFLF.dice=player.PFLF.dice*10+dice()
+							commandInput="PFLFget"
+						}
+					}
+					validCommand=testValid
+				}
+				if(commandInput==="PFLFget" && player.PFLF.active===true) {
+					validCommand=true
+					addLog("[bot#7976] Turn: "+player.PFLF.turn+", Score: "+player.PFLF.score+", Clear: "+player.PFLF.clear+", Dice: "+player.PFLF.dice,"#7f7fff")
+				}
+				if(commandInput==="PFLFhighscore") {
+					validCommand=true
+					addLog("[bot#7976] Highest Score: "+player.PFLF.highscore+", Achieved with Turn "+player.PFLF.highscoreturn+" and Clear "+player.PFLF.highscoreclear+".","#7f7fff")
+				}
+				if(validCommand===false) addLog("[Command] Invalid command. (Command not exist or available)","#bf7f3f")
 			} else {
 				addLog("[Chat] Traveler: "+commandInput.replaceAll("<","&lt;"))
 			}
@@ -2180,6 +2324,13 @@
 				let addButton=settingButton(4,3,"On")
 				qolDisplay.appendChild(addButton)
 			}
+			if(!player.settings.hasOwnProperty("forcemobile")) {
+				let addButton=settingButton(5,3,"Off")
+				qolDisplay.appendChild(addButton)
+			} else {
+				let addButton=settingButton(5,3,"On")
+				qolDisplay.appendChild(addButton)
+			}
 			document.getElementById("settings").appendChild(qolDisplay)
 			document.getElementById("settings").appendChild(document.createElement("br"))
 			document.getElementById("settings").style.display="flex"
@@ -2305,6 +2456,14 @@
 			}
 			if(setX===4 && setY===3 && state==="Off") {
 				addButton=createGrid(5,setX,setY,"Text_Skip<br>all<br>animation",2)
+				addButton.classList.add("red-bg")
+			}
+			if(setX===5 && setY===3 && state==="On") {
+				addButton=createGrid(5,setX,setY,"Text_Force<br>map<br>translate<br>button",2)
+				addButton.classList.add("green-bg")
+			}
+			if(setX===5 && setY===3 && state==="Off") {
+				addButton=createGrid(5,setX,setY,"Text_Force<br>map<br>translate<br>button",2)
 				addButton.classList.add("red-bg")
 			}
 			addButton.classList.add("llmargin")
@@ -2469,6 +2628,17 @@
 					getGrid(5,setX,setY).replaceWith(settingButton(setX,setY,"Off"))
 				}
 			}
+			if(setX===5 && setY===3) {
+				if(!player.settings.hasOwnProperty("forcemobile")) {
+					player.settings.forcemobile=true
+					document.getElementById("map-btn").classList.remove("mobile")
+					getGrid(5,setX,setY).replaceWith(settingButton(setX,setY,"On"))
+				} else {
+					delete player.settings.forcemobile
+					document.getElementById("map-btn").classList.add("mobile")
+					getGrid(5,setX,setY).replaceWith(settingButton(setX,setY,"Off"))
+				}
+			}
 			setPlayer()
 		}
 		function howToPlay(open=true) {
@@ -2563,7 +2733,7 @@
 					for(let j=0;j<editingSpawner.length;j++) {
 						let testResult=editingSpawner[j].result(0,0)
 						editingLevelHTML+="<span>Weight "+editingSpawner[j].weight+":"
-						editingLevelHTML+="<span style='color: "+rarityColorEP[testResult.content.rarity]+"'>"+testResult.content.name+"</span>"
+						editingLevelHTML+="<span class='bold' style='color: "+rarityColorEP[testResult.content.rarity]+"'>"+testResult.content.name+"</span>"
 						if(testResult.type!=="Normal") editingLevelHTML+=", with a special type of <span class='bold'>"+testResult.type+"</span>"
 						if(editingSpawner[j].noinitial===true) editingLevelHTML+=", but can not generate in initial map"
 						editingLevelHTML+="</span>"
@@ -2573,13 +2743,19 @@
 			}
 			if(levelList[player.biomename][game.level].hasOwnProperty("valueset")) {
 				editingLevelHTML+="<h3>Value Adjustment</h3>"
+				let editingValueHTML=""
 				let adjustText=levelList[player.biomename][game.level].valuetext
 				if(adjustText.hasOwnProperty("petal")) {
-					editingLevelHTML+="<span class='lcmargin'>Petal Adjustment</span><span style='color: #9f9fdf'>"+adjustText.petal+"</span><br>"
+					editingValueHTML+="<span class='lcmargin'>Petal Adjustment</span><span style='color: #9f9fdf'>"+adjustText.petal+"</span><br>"
 				}
 				if(adjustText.hasOwnProperty("mob")) {
-					editingLevelHTML+="<span class='lcmargin'>Mob Adjustment</span><span style='color: #bfbf00'>"+adjustText.mob+"</span><br>"
+					editingValueHTML+="<span class='lcmargin'>Mob Adjustment</span><span style='color: #bfbf00'>"+adjustText.mob+"</span><br>"
 				}
+				if(adjustText.hasOwnProperty("other")) {
+					editingValueHTML+="<span class='lcmargin'>Other Adjustment</span><span style='color: #bfbf00'>"+adjustText.other+"</span><br>"
+				}
+				editingValueHTML=editingValueHTML.replaceAll(/\[RAR(\d)\]/g,(match,rarity) => ("<span class='bold' style='color: "+rarityColorEP[rarity]+"'>"+rarityName[rarity]+"</span>"))
+				editingLevelHTML+=editingValueHTML
 			}
 			document.getElementById("level").innerHTML=editingLevelHTML
 			document.getElementById("level").style.display="flex"
@@ -2789,6 +2965,9 @@
 			if(player.settings.transparentinfo===true) {
 				document.getElementById("gridinfo").style.opacity=0.5
 			}
+			if(player.settings.forcemobile===true) {
+				document.getElementById("map-btn").classList.remove("mobile")
+			}
 			if(player.explore.hasOwnProperty("Training Ground") && player.explore["Training Ground"].highscore.hasOwnProperty(7)) {
 				for(let i=1;i<=7;i++) levelList["Training Ground"][i].goal=5156
 			}
@@ -2840,6 +3019,7 @@
 			document.getElementById("end1").style["pointer-events"]="none"
 			animation=false
 			updateFlowerState()
+			addLog("Use .help for command information!")
 			if(player.dialog.startdialog===0) dialog("Skip")
 			if(player.dialog.petaltypedialog===0) dialog("Skip")
 		}
@@ -2865,6 +3045,12 @@
 			document.addEventListener("mouseup",function() {
 				drag=false
 			} )
+		}
+		function mapTranslate(dir) {
+			worldcX+=10*dx[dir]
+			worldcY+=10*dy[dir]
+			document.getElementById("world-trans").style.transform="translate("+worldcX+"px, "+worldcY+"px)"
+			updateHome()
 		}
 		function updateHome() {
 			let scaledX=worldcX/parseFloat(window.getComputedStyle(document.getElementById("world-container")).width)
@@ -2982,6 +3168,7 @@
 			if(player.world[spotValue].purchased===true) {
 				player.biome=spotValue
 				player.biomename=mapList[spotValue].name
+				closeMapInfo()
 				printBiome()
 				document.getElementById("level-btn").classList.remove("llred-bg")
 				updateFlowerState()
@@ -2989,6 +3176,7 @@
 			}
 			if(remainingStar()<mapList[spotValue].cost) return
 			player.world[spotValue].purchased=true
+			closeMapInfo()
 			printWorld()
 			updateFlowerState()
 		}
@@ -2996,6 +3184,7 @@
 			if(animation) return
 			if(!isVisible(document.getElementById("mapinfo"))) return
 			let spotValue=parseInt(spot.getAttribute("value"))
+			closeMapInfo()
 			startGame(spotValue)
 			document.getElementById("pause-btn").classList.remove("llred-bg")
 		}
@@ -3040,6 +3229,9 @@
 					pendingText="<span style='color: #bfbf00'>Has no action but can be shot by Hornet.</span>"
 				}
 				return pendingText
+			}
+			if(attributeName==="actionbar") {
+				return ""
 			}
 			if(attributeName==="cost") {
 				if(mob.attribute.hasOwnProperty("speed")) {
@@ -3131,7 +3323,7 @@
 				if(game.board[gridX][gridY].state==="Empty" || game.board[gridX][gridY].content===undefined) return
 				document.getElementById("gridinfo").style.setProperty("--transform2","translate(0%,-50%)")
 				document.getElementById("gridinfo").style.top=grid.getBoundingClientRect().top-10+"px"
-				document.getElementById("gridinfo").style.left=grid.getBoundingClientRect().left+40+"px"
+				document.getElementById("gridinfo").style.left=grid.getBoundingClientRect().left+(gridSize/2)+"px"
 				let editingGridHTML,gridContent=game.board[gridX][gridY].content
 				if(isPetal(gridContent)) {
 					editingGridHTML="<h3 style='color: "+rarityColorEP[gridContent.rarity]+"'>"+gridContent.name+"</h3>"
@@ -3148,7 +3340,7 @@
 					if(JSON.stringify(gridContent.attribute)!=="{}") {
 						let pendingText=""
 						if(gridContent.attribute.action!=="None") {
-							pendingText+="<span style='color: #bf7fff'>Actionbar: "+gridContent.actionbar+"/"+NewValue.upperlimit+"</span>"
+							pendingText+="<span style='color: #bf7fff'>Actionbar: "+gridContent.attribute.actionbar+"/"+NewValue.upperlimit+"</span>"
 						}
 						for(let i in gridContent.attribute) pendingText+=mobAttributeText(i,gridContent.attribute[i],gridContent)
 						editingGridHTML+=pendingText+"<br>"
@@ -3195,6 +3387,7 @@
 		function displayGame() {
 			document.getElementById("world-container").style.display="none"
 			document.getElementById("game-container").style.display="grid"
+			gridSize=getGrid(0,1,1).getBoundingClientRect().height
 		}
 		function printGameBoard() {
 			document.getElementById("game-container").style["grid-template-columns"]="repeat("+game.width+", 1fr)"
@@ -3341,11 +3534,16 @@
 		}
 		function checkAvailableBiome() {
 			if(!player.explore.hasOwnProperty(player.biomename)) player.explore[player.biomename]=new Object()
-			if(!player.explore[player.biomename].hasOwnProperty("highscore")) player.explore[player.biomename].highscore=new Object()
-			if(!player.explore[player.biomename].hasOwnProperty("available")) player.explore[player.biomename].available=new Array()
-			if(player.explore[player.biomename].available.indexOf(1)===-1) player.explore[player.biomename].available.push(1)
-			for(let i in levelList[player.biomename]) if(player.explore[player.biomename].available.indexOf(parseInt(i))===-1) {
-				for(let j of levelList[player.biomename][i].precondition) if(player.explore[player.biomename].highscore[j]>=0 && player.explore[player.biomename].available.indexOf(parseInt(i))===-1 && player.explore[player.biomename].available.indexOf(parseInt(i))===-1) player.explore[player.biomename].available.push(parseInt(i))
+			let exploreUpdate=player.explore[player.biomename]
+			if(!exploreUpdate.hasOwnProperty("highscore")) exploreUpdate.highscore=new Object()
+			if(!exploreUpdate.hasOwnProperty("available")) exploreUpdate.available=new Array()
+			if(exploreUpdate.available.indexOf(1)===-1) exploreUpdate.available.push(1)
+			for(let i in exploreUpdate.available) if(!levelList[player.biomename].hasOwnProperty(exploreUpdate.available[i])) {
+				exploreUpdate.available.splice(i,1)
+				delete exploreUpdate.highscore[i]
+			}
+			for(let i in levelList[player.biomename]) if(exploreUpdate.available.indexOf(parseInt(i))===-1) {
+				for(let j of levelList[player.biomename][i].precondition) if(exploreUpdate.highscore[j]>=0 && exploreUpdate.available.indexOf(parseInt(i))===-1) exploreUpdate.available.push(parseInt(i))
 			}
 			setPlayer()
 		}
@@ -3690,6 +3888,7 @@
 			while(defeatedMob.length>0) {
 				let newDefeated=defeatedMob.splice(0,1)[0]
 				game.board[newDefeated.x][newDefeated.y].content.defeat(newDefeated.x,newDefeated.y)
+				game.board[newDefeated.x][newDefeated.y].print()
 				collapseGrid(getGrid(0,newDefeated.x,newDefeated.y))
 				game.board[newDefeated.x][newDefeated.y]=new Grid(newDefeated.x,newDefeated.y)
 				delayFlag=true
@@ -3716,6 +3915,7 @@
 			while(defeatedMob.length>0) {
 				let newDefeated=defeatedMob.splice(0,1)[0]
 				game.board[newDefeated.x][newDefeated.y].content.defeat(newDefeated.x,newDefeated.y)
+				game.board[newDefeated.x][newDefeated.y].print()
 				collapseGrid(getGrid(0,newDefeated.x,newDefeated.y))
 				game.board[newDefeated.x][newDefeated.y]=new Grid(newDefeated.x,newDefeated.y)
 				delayFlag=true
@@ -3789,8 +3989,8 @@
 				blastGrid=new Array()
 				setMatch()
 				for(let i=1;i<=crushSign;i++) await matchResult(i)
-				for(let i=1;i<=game.width;i++) for(let j=1;j<=game.height;j++) game.board[i][j].crush="None"
 				while(blastGrid.length>0) await blastAll()
+				for(let i=1;i<=game.width;i++) for(let j=1;j<=game.height;j++) game.board[i][j].crush="None"
 				dropFlag=true
 				while(dropFlag) await dropAll()
 				firstCrush=false
@@ -3805,8 +4005,8 @@
 				blastGrid=new Array()
 				setMatch()
 				for(let i=1;i<=crushSign;i++) await matchResult(i)
-				for(let i=1;i<=game.width;i++) for(let j=1;j<=game.height;j++) game.board[i][j].crush="None"
 				while(blastGrid.length>0) await blastAll()
+				for(let i=1;i<=game.width;i++) for(let j=1;j<=game.height;j++) game.board[i][j].crush="None"
 				dropFlag=true
 				while(dropFlag) await dropAll()
 				firstCrush=false
@@ -4051,6 +4251,19 @@
 		}
 	</script>
 	<script>
+//		levelList["Training Ground"][0]={x:81,y:27,precondition:[1],height:6,width:6,coefficient:10,exponent:2,goal:354233654641216,initialmap:() => [,[,new Grid(1,1,"Uninitialized"),new Grid(1,2,"Uninitialized"),new Grid(1,3,"Uninitialized"),new Grid(1,4,"Uninitialized"),new Grid(1,5,"Uninitialized"),new Grid(1,6,new Mob("!Rock",1,10000),"Existing")],[,new Grid(2,1,"Uninitialized"),new Grid(2,2,"Uninitialized"),new Grid(2,3,new Petal("Basic",1),"Existing"),new Grid(2,4,new Petal("Leaf",1),"Existing"),new Grid(2,5,"Uninitialized"),new Grid(2,6,"Uninitialized")],[,new Grid(3,1,"Uninitialized"),new Grid(3,2,"Uninitialized"),new Grid(3,3,new Petal("Basic",1),"Existing"),new Grid(3,4,new Petal("Leaf",1),"Existing"),new Grid(3,5,"Uninitialized"),new Grid(3,6,"Uninitialized")],[,new Grid(4,1,"Uninitialized"),new Grid(4,2,"Uninitialized"),new Grid(4,3,new Petal("Leaf",1),"Existing","Column"),new Grid(4,4,new Petal("Basic",1),"Existing"),new Grid(4,5,"Uninitialized"),new Grid(4,6,"Uninitialized")],[,new Grid(5,1,"Uninitialized"),new Grid(5,2,"Uninitialized"),new Grid(5,3,new Petal("Basic",1),"Existing"),new Grid(5,4,new Petal("Leaf",1),"Existing"),new Grid(5,5,"Uninitialized"),new Grid(5,6,"Uninitialized")],[,new Grid(6,1,"Uninitialized"),new Grid(6,2,"Uninitialized"),new Grid(6,3,new Petal("Stinger",1),"Existing"),new Grid(6,4,new Petal("Stinger",1),"Existing"),new Grid(6,5,"Uninitialized"),new Grid(6,6,"Uninitialized")]],spawner:[[{weight:20,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")}]],spawnset:[{x:1,y:1,set:0},{x:2,y:1,set:0},{x:3,y:1,set:0},{x:4,y:1,set:0},{x:5,y:1,set:0},{x:6,y:1,set:0}]}
+		function generateMapText(width,height) {
+			let editingStr="["
+			for(let i=1;i<=width;i++) {
+				editingStr+=",["
+				for(let j=1;j<=height;j++) {
+					editingStr+=",new Grid("+i+","+j+",\"Uninitialized\")"
+				}
+				editingStr+="]"
+			}
+			editingStr+="]"
+			return editingStr
+		}
 		const perfectGame="The game is perfect, there are no bugs"
 		console.log(perfectGame)
 	</script>
@@ -4143,6 +4356,16 @@
 		<svg id="blank" viewBox="0 0 100 100" class="in-svg drag">
 			<g id="world-trans">
 			</g>
+			<g id="map-btn" class="mobile">
+				<path class="fcyan-path narrowp" onclick="mapTranslate(1)" d="M47 84L53 84L53 90L47 90Z"/>
+				<path class="narrowp npe" d="M50 85L48.5 86.5M50 85L51.5 86.5M50 85L50 89"/>
+				<path class="fcyan-path narrowp" onclick="mapTranslate(2)" d="M54 91L60 91L60 97L54 97Z"/>
+				<path class="narrowp npe" d="M59 94L57.5 92.5M59 94L57.5 95.5M59 94L55 94"/>
+				<path class="fcyan-path narrowp" onclick="mapTranslate(3)" d="M47 91L53 91L53 97L47 97Z"/>
+				<path class="narrowp npe" d="M50 96L48.5 94.5M50 96L51.5 94.5M50 96L50 92"/>
+				<path class="fcyan-path narrowp" onclick="mapTranslate(4)" d="M40 91L46 91L46 97L40 97Z"/>
+				<path class="narrowp npe" d="M41 94L42.5 92.5M41 94L42.5 95.5M41 94L45 94"/>
+			</g>
 		</svg>
 		<button type="button" tabindex="-1" id="house" onclick="home()" class="mid circbtn nd" title="Home">
 			<svg viewBox="0 0 100 100" class="in-svg">
@@ -4153,8 +4376,8 @@
 			</svg>
 		</button>
 	</div>
-	<div id="mapinfo" class="llcyan-bg mid text3-c infobox nd"></div>
-	<div id="gridinfo" class="llpurple-bg mid infobox higherz nd"></div>
+	<div id="mapinfo" class="llcyan-bg mid text3-c infobox npe nd"></div>
+	<div id="gridinfo" class="llpurple-bg mid infobox higherz npe nd"></div>
 	<div id="dialog" class="mid infobox text3-c shwidth highestz nd" onclick="dialog('Skip',6361)">
 		<h3 id="dialog-title"></h3>
 		<span id="dialog-maintext"></span>
@@ -4174,7 +4397,7 @@
 			<path class="purple-path mwidth" d="M2 5L8 5"/>
 		</svg>
 	</div>
-	<div id="flower-state-outside" class="bottom text3-c cflex nd">
+	<div id="flower-state-outside" class="bottom text3-c cflex ipe nd">
 		<br>
 		<span id="currency" onclick="switchCurrency()" class="pointer nd"></span>
 		<span id="total-currency" onclick="switchCurrency()" class="pointer nd"></span>
@@ -4194,11 +4417,15 @@
 		<span>This game was updated again when you left!</span>
 		<span>Do you want to perform a <span class="bold">hard reset</span> before starting the game?</span>
 		<br>
-		<span>The last update was on 2026/3/14,</span>
+		<span>The last update was on 2026/3/16,</span>
+		<span>which updated 1 level.</span>
+		<span>Fixed bugs related to blast and Hornet.</span>
+		<br>
+		<span>The last update before was on 2026/3/14,</span>
 		<span>which updated Hornet and 1 level.</span>
 		<span>Fixed a bug related to blast.</span>
 		<br>
-		<span>The last update before was on 2026/3/13,</span>
+		<span>The last important update before was on 2026/3/13,</span>
 		<span>which created Petal Crush Rewritten.</span>
 		<br>
 		<button type="button" tabindex="-1" id="version3" onclick="updateVersion(false)">No, just update the version.</button>
