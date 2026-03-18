@@ -1056,7 +1056,7 @@
 	</style>
 	<script>
 		const PetalNameList=["Basic","Stinger","Air","Rose","Leaf","Web","Shell","Cotton","Coin","Jelly"]
-		const PetalDefaultAttributeList=[{damage:10,knockback:"Default"},{damage:30,knockback:"Default",blast:"Destroy"},{craft:"Disabled"},{heal:10,blast:"Destroy"},{heal:3,duration:3,knockback:"Default",blast:"Destroy"},{damage:5,weavestrength:70,knockback:"Default",blast:"Destroy"},{shield:10,decay:0.05,blast:"Destroy"},{cotton:20,duration:1,blast:"Destroy"},{damage:8,knockback:"Default"},{damage:8,knockback:250,limit:-200}]
+		const PetalDefaultAttributeList=[{damage:10,knockback:"Default"},{damage:30,knockback:"Default",blast:"Destroy"},{craft:"Disabled"},{heal:10,blast:"Destroy"},{heal:3,duration:3,knockback:"Default",blast:"Destroy"},{damage:5,weavestrength:70,blast:"Destroy"},{shield:10,decay:0.05,blast:"Destroy"},{cotton:20,duration:1,blast:"Destroy"},{damage:8,knockback:"Default"},{damage:8,knockback:250,limit:-200}]
 		let PetalAttributeList=structuredClone(PetalDefaultAttributeList)
 		const PetalDescriptionList=["The most basic.","Really hurts but fragile.","Literally nothing.","Amazing healing.","Photosynthesis for constant heal.","Traps enemies.","Applies decaying shield.","Absorbs damage temporarily.","The valuable one.","Deals higher knockback."]
 		const PetalSVGArray=new Object()
@@ -1201,7 +1201,7 @@
 						}
 					}
 					await delay(200)
-					this.attribute.actionbar-=this.attribute.cost
+					this.attribute.actionbar=0
 					game.board[actionX][actionY].state="Existing"
 					game.board[actionX][actionY].print()
 					return
@@ -1649,6 +1649,7 @@
 		levelList["Centralia Field 1"][2]={x:30,y:30,precondition:[1],height:7,width:7,coefficient:10,exponent:1.3,goal:6241,initialmap:() => [,[,new Grid(1,1,"Uninitialized"),new Grid(1,2,"Uninitialized"),new Grid(1,3,"Uninitialized"),new Grid(1,4,"Uninitialized"),new Grid(1,5,"Uninitialized"),new Grid(1,6,"Uninitialized"),new Grid(1,7,"Uninitialized")],[,new Grid(2,1,"Uninitialized"),new Grid(2,2,"Uninitialized"),new Grid(2,3,"Uninitialized"),new Grid(2,4,"Uninitialized"),new Grid(2,5,"Uninitialized"),new Grid(2,6,"Uninitialized"),new Grid(2,7,"Uninitialized")],[,new Grid(3,1,"Uninitialized"),new Grid(3,2,"Uninitialized"),new Grid(3,3,"Uninitialized"),new Grid(3,4,new Mob("!Missile",7,{health:6361,damage:50}),"Existing"),new Grid(3,5,"Uninitialized"),new Grid(3,6,"Uninitialized"),new Grid(3,7,"Uninitialized")],[,new Grid(4,1,"Uninitialized"),new Grid(4,2,"Uninitialized"),new Grid(4,3,new Mob("!Missile",7,{health:6361,damage:50}),"Existing"),new Grid(4,4,new Mob("!Hornet",1,{maxhealth:50,actionbar:-300}),"Existing"),new Grid(4,5,new Mob("!Missile",7,{health:6361,damage:50}),"Existing"),new Grid(4,6,"Uninitialized"),new Grid(4,7,"Uninitialized")],[,new Grid(5,1,"Uninitialized"),new Grid(5,2,"Uninitialized"),new Grid(5,3,"Uninitialized"),new Grid(5,4,new Mob("!Missile",7,{health:6361,damage:50}),"Existing"),new Grid(5,5,"Uninitialized"),new Grid(5,6,"Uninitialized"),new Grid(5,7,"Uninitialized")],[,new Grid(6,1,"Uninitialized"),new Grid(6,2,"Uninitialized"),new Grid(6,3,"Uninitialized"),new Grid(6,4,"Uninitialized"),new Grid(6,5,"Uninitialized"),new Grid(6,6,"Uninitialized"),new Grid(6,7,"Uninitialized")],[,new Grid(7,1,"Uninitialized"),new Grid(7,2,"Uninitialized"),new Grid(7,3,"Uninitialized"),new Grid(7,4,"Uninitialized"),new Grid(7,5,"Uninitialized"),new Grid(7,6,"Uninitialized"),new Grid(7,7,"Uninitialized")]],spawner:[[{weight:20,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")}]],spawnset:"Default",valueset:() => {MobAttributeList[2].immune="All"},valuetext:{mob:"Modify Missile: Immunes all damage"}}
 		levelList["Centralia Field 1"][3]={x:30,y:70,precondition:[1],height:8,width:8,coefficient:10,exponent:1.2,goal:6241,initialmap:() => [,[,new Grid(1,1,"Uninitialized"),new Grid(1,2,"Uninitialized"),new Grid(1,3,"Uninitialized"),new Grid(1,4,"Uninitialized"),new Grid(1,5,"Uninitialized"),new Grid(1,6,"Uninitialized"),new Grid(1,7,"Uninitialized"),new Grid(1,8,"Uninitialized")],[,new Grid(2,1),new Grid(2,2,"Uninitialized"),new Grid(2,3,"Uninitialized"),new Grid(2,4,"Uninitialized"),new Grid(2,5,"Uninitialized"),new Grid(2,6,"Uninitialized"),new Grid(2,7,"Uninitialized"),new Grid(2,8,"Uninitialized")],[,new Grid(3,1),new Grid(3,2),new Grid(3,3,"Uninitialized"),new Grid(3,4,"Uninitialized"),new Grid(3,5,"Uninitialized"),new Grid(3,6,"Uninitialized"),new Grid(3,7,"Uninitialized"),new Grid(3,8,"Uninitialized")],[,new Grid(4,1,new Mob("!Hornet",3,{maxhealth:300,actionbar:-500}),"Existing"),new Grid(4,2,new Mob("!Rock",1,10),"Existing"),new Grid(4,3),new Grid(4,4,"Uninitialized"),new Grid(4,5,"Uninitialized"),new Grid(4,6,"Uninitialized"),new Grid(4,7,"Uninitialized"),new Grid(4,8,"Uninitialized")],[,new Grid(5,1,new Mob("!Hornet",3,{maxhealth:300,actionbar:-1000}),"Existing"),new Grid(5,2,new Mob("!Rock",3,100),"Existing"),new Grid(5,3),new Grid(5,4,"Uninitialized"),new Grid(5,5,"Uninitialized"),new Grid(5,6,"Uninitialized"),new Grid(5,7,"Uninitialized"),new Grid(5,8,"Uninitialized")],[,new Grid(6,1),new Grid(6,2),new Grid(6,3,"Uninitialized"),new Grid(6,4,"Uninitialized"),new Grid(6,5,"Uninitialized"),new Grid(6,6,"Uninitialized"),new Grid(6,7,"Uninitialized"),new Grid(6,8,"Uninitialized")],[,new Grid(7,1),new Grid(7,2,"Uninitialized"),new Grid(7,3,"Uninitialized"),new Grid(7,4,"Uninitialized"),new Grid(7,5,"Uninitialized"),new Grid(7,6,"Uninitialized"),new Grid(7,7,"Uninitialized"),new Grid(7,8,"Uninitialized")],[,new Grid(8,1,"Uninitialized"),new Grid(8,2,"Uninitialized"),new Grid(8,3,"Uninitialized"),new Grid(8,4,"Uninitialized"),new Grid(8,5,"Uninitialized"),new Grid(8,6,"Uninitialized"),new Grid(8,7,"Uninitialized"),new Grid(8,8,"Uninitialized")]],spawner:[[{weight:18,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Basic",2),"Existing")},{weight:2,result:(x,y) => new Grid(x,y,new Petal("Basic",3),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Stinger",2),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Rose",2),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Leaf",2),"Existing")}],[{weight:30,result:(x,y) => new Grid(x,y,new Petal("Basic",4),"Existing","Column")},{weight:30,result:(x,y) => new Grid(x,y,new Petal("Basic",4),"Existing","Bomb")},{weight:30,result:(x,y) => new Grid(x,y,new Petal("Stinger",4),"Existing","Row")},{weight:10,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")}]],spawnset:[{x:1,y:1,set:0},{x:8,y:1,set:0},{x:4,y:2,set:1},{x:5,y:2,set:1}],wall:[{x:3,y:2,dir:2,stack:6361},{x:4,y:2,dir:2,stack:6361},{x:5,y:2,dir:2,stack:6361},{x:4,y:3,dir:3,stack:6361},{x:5,y:3,dir:3,stack:6361}],valueset:() => {PetalAttributeList[3].heal=0; PetalAttributeList[4].heal=2; NewValue.damagemult[4]=0; NewValue.healmult[1]=0},valuetext:{petal:"Nerfed Rose heal: 10->0<br>Nefted Leaf heal: 3->2",other:"Nerfed [RAR4] Petal damage multiplier: 8->0<br>Nerfed [RAR1] Petal heal multiplier: 1->0"}}
 		levelList["Centralia Field 1"][4]={x:10,y:50,precondition:[2,3],height:6,width:6,coefficient:10,exponent:1.2,goal:6400,initialmap:() => [,[,new Grid(1,1,new Mob("!Rock",1,30),"Existing"),new Grid(1,2,"Uninitialized"),new Grid(1,3,"Uninitialized"),new Grid(1,4,"Uninitialized"),new Grid(1,5,"Uninitialized"),new Grid(1,6,new Mob("!Hornet",1,80),"Existing")],[,new Grid(2,1,"Uninitialized"),new Grid(2,2,new Mob("!Rock",1,30),"Existing"),new Grid(2,3,"Uninitialized"),new Grid(2,4,"Uninitialized"),new Grid(2,5,new Mob("!Spider",2,150),"Existing"),new Grid(2,6,"Uninitialized")],[,new Grid(3,1,"Uninitialized"),new Grid(3,2,"Uninitialized"),new Grid(3,3,new Mob("!Rock",1,30),"Existing"),new Grid(3,4,new Mob("!Rock",1,30),"Existing"),new Grid(3,5,"Uninitialized"),new Grid(3,6,"Uninitialized")],[,new Grid(4,1,"Uninitialized"),new Grid(4,2,"Uninitialized"),new Grid(4,3,new Mob("!Rock",1,30),"Existing"),new Grid(4,4,new Mob("!Rock",1,30),"Existing"),new Grid(4,5,"Uninitialized"),new Grid(4,6,"Uninitialized")],[,new Grid(5,1,"Uninitialized"),new Grid(5,2,new Mob("!Rock",1,30),"Existing"),new Grid(5,3,"Uninitialized"),new Grid(5,4,"Uninitialized"),new Grid(5,5,new Mob("!Spider",2,150),"Existing"),new Grid(5,6,"Uninitialized")],[,new Grid(6,1,new Mob("!Rock",1,30),"Existing"),new Grid(6,2,"Uninitialized"),new Grid(6,3,"Uninitialized"),new Grid(6,4,"Uninitialized"),new Grid(6,5,"Uninitialized"),new Grid(6,6,new Mob("!Hornet",1,80),"Existing")]],spawner:[[{weight:25,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Leaf",4),"Existing")},{weight:25,result:(x,y) => new Grid(x,y,new Petal("Web",1),"Existing")}]],spawnset:"Default",valueset:() => {MobAttributeList[1].increment=2},valuetext:{mob:"Buffed Hornet damage increment: 1->2"}}
+		levelList["Centralia Field 1"][6]={x:-10,y:70,precondition:[4],height:7,width:7,coefficient:5,exponent:1.15,goal:5200,initialmap:() => [,[,new Grid(1,1,"Uninitialized"),new Grid(1,2,"Uninitialized"),new Grid(1,3,"Uninitialized"),new Grid(1,4,"Uninitialized"),new Grid(1,5,"Uninitialized"),new Grid(1,6,new Item("?Void",9),"Existing"),new Grid(1,7,new Mob("!Hornet",1,50),"Existing")],[,new Grid(2,1,"Uninitialized"),new Grid(2,2,"Uninitialized"),new Grid(2,3,"Uninitialized"),new Grid(2,4,"Uninitialized"),new Grid(2,5,"Uninitialized"),new Grid(2,6,"Uninitialized"),new Grid(2,7,new Petal("Basic",1,{rearrange:"None"}),"Existing")],[,new Grid(3,1,"Uninitialized"),new Grid(3,2,"Uninitialized"),new Grid(3,3,"Uninitialized"),new Grid(3,4,"Uninitialized"),new Grid(3,5,"Uninitialized"),new Grid(3,6,new Item("?Void",9),"Existing"),new Grid(3,7,new Mob("!Spider",2,100),"Existing")],[,new Grid(4,1,"Uninitialized"),new Grid(4,2,"Uninitialized"),new Grid(4,3,"Uninitialized"),new Grid(4,4,"Uninitialized"),new Grid(4,5,"Uninitialized"),new Grid(4,6,"Uninitialized"),new Grid(4,7,new Item("?Void",9),"Existing")],[,new Grid(5,1,"Uninitialized"),new Grid(5,2,"Uninitialized"),new Grid(5,3,"Uninitialized"),new Grid(5,4,"Uninitialized"),new Grid(5,5,"Uninitialized"),new Grid(5,6,new Item("?Void",9),"Existing"),new Grid(5,7,new Mob("!Spider",3,{maxhealth:150,speed:30}),"Existing")],[,new Grid(6,1,"Uninitialized"),new Grid(6,2,"Uninitialized"),new Grid(6,3,"Uninitialized"),new Grid(6,4,"Uninitialized"),new Grid(6,5,"Uninitialized"),new Grid(6,6,"Uninitialized"),new Grid(6,7,new Petal("Basic",1,{rearrange:"None"}),"Existing")],[,new Grid(7,1,"Uninitialized"),new Grid(7,2,"Uninitialized"),new Grid(7,3,"Uninitialized"),new Grid(7,4,"Uninitialized"),new Grid(7,5,"Uninitialized"),new Grid(7,6,new Item("?Void",9),"Existing"),new Grid(7,7,new Mob("!Hornet",1,50),"Existing")]],spawner:[[{weight:10,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:10,result:(x,y) => new Grid(x,y,new Petal("Stinger",2),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:17,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:3,result:(x,y) => new Grid(x,y,new Petal("Rose",6),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Web",1),"Existing")}],[{weight:100,result:(x,y) => new Grid(x,y,new Petal("Rose",3),"Existing","Row")}],[{weight:100,result:(x,y) => new Grid(x,y,new Petal("Basic",1,{rearrange:"None"}),"Existing")}],[{weight:100,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing","Bomb")}]],spawnset:[{x:1,y:1,set:0},{x:2,y:1,set:0},{x:3,y:1,set:0},{x:4,y:1,set:0},{x:5,y:1,set:0},{x:6,y:1,set:0},{x:7,y:1,set:0},{x:1,y:7,set:1},{x:2,y:7,set:2},{x:3,y:7,set:3},{x:5,y:7,set:3},{x:6,y:7,set:2},{x:7,y:7,set:1}],valueset:() => {MobAttributeList[2].reflect=0,MobAttributeList[3].weavestrength=10},valuetext:{mob:"Nerfed Missile damage reflect: 50%->0<br>Nerfed Spider weave strength: 30->10"}}
 		let mapList=new Array()
 		mapList[0]={name:"Training Ground",x:50,y:50,color:"#bfbfbf",precondition:[],cost:79}
 		mapList[1]={name:"Centralia Field 1",x:30,y:50,color:"#bfffbf",precondition:[0],cost:27}
@@ -1663,7 +1664,7 @@
 			mouseX=mouse.clientX
 			mouseY=mouse.clientY
 		} )
-		const version=20260317,acceptedVersion=20260313
+		const version=20260318,acceptedVersion=20260313
 		const svgNS="http://www.w3.org/2000/svg"
 		const dx=[0,0,1,0,-1],dy=[0,-1,0,1,0],dx5=[0,1,2,2,1,-1,-2,-2,-1],dy5=[0,-2,-1,1,2,2,1,-1,-2]
 		let rarityColor=["#000000","#7eef6d","#ffe65d","#4d52e3","#861fde","#de1f1f","#1fdbde","#ff2b75","#2bffa3","#555555"]
@@ -3394,6 +3395,10 @@
 				let pendingText="<span style='color: #ff5f5f'>Has no effect when crushed by blast (row/column/bomb).</span>"
 				return pendingText
 			}
+			if(attributeName==="rearrange" && attributeValue==="None") {
+				let pendingText="<span style='color: #ff5f9f'>Can not be rearranged.</span>"
+				return pendingText
+			}
 			return "<span>"+attributeName+": "+attributeValue+"</span>"
 		}
 		function mobAttributeText(attributeName,attributeValue,mob) {
@@ -4145,7 +4150,7 @@
 			if(delayFlag) await delay(1500)
 		}
 		async function blastAll() {
-			for(let i in blastGrid) blastGrid[i].crush="Blasted"
+			for(let i in blastGrid) if(blastGrid[i].crush==="None") blastGrid[i].crush="Blasted"
 			blastGrid=new Array()
 			for(let i=1;i<=game.width;i++) for(let j=1;j<=game.height;j++) if(game.board[i][j].crush==="Blasted") {
 				game.board[i][j].destroy()
@@ -4426,7 +4431,7 @@
 				mapClone[i]=new Array()
 				for(let j=1;j<=game.height;j++) mapClone[i][j]=game.board[i][j].clone()
 			}
-			for(let i=1;i<=game.width;i++) for(let j=1;j<=game.height;j++) if(mapClone[i][j].state==="Existing" && isPetal(mapClone[i][j].content) && mapClone[i][j].type==="Normal") {
+			for(let i=1;i<=game.width;i++) for(let j=1;j<=game.height;j++) if(mapClone[i][j].state==="Existing" && isPetal(mapClone[i][j].content) && mapClone[i][j].type==="Normal" && mapClone[i][j].content.attribute.rearrange!=="None") {
 				if(!availablePetalNum.hasOwnProperty(mapClone[i][j].content.id)) availablePetalNum[mapClone[i][j].content.id]=0
 				availablePetalNum[mapClone[i][j].content.id]++
 				mapClone[i][j].state="Rearranging"
@@ -4722,12 +4727,11 @@
 		<span>This game was updated again when you left!</span>
 		<span>Do you want to perform a <span class="bold">hard reset</span> before starting the game?</span>
 		<br>
-		<span>The last update was on 2026/3/17,</span>
-		<span>which updated Spider and 2 levels.</span>
-		<br>
-		<span>The last update before was on 2026/3/16,</span>
+		<span>The last update was on 2026/3/18,</span>
 		<span>which updated 1 level.</span>
-		<span>Fixed bugs related to blast and Hornet.</span>
+		<br>
+		<span>The last update before was on 2026/3/17,</span>
+		<span>which updated Spider and 2 levels.</span>
 		<br>
 		<span>The last important update before was on 2026/3/13,</span>
 		<span>which created Petal Crush Rewritten.</span>
