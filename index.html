@@ -316,6 +316,7 @@
 			height: 80px;
 			width: 80px;
 			padding: 0px;
+			white-space: nowrap;
 		}
 		.bar-container {
 			background-color: #7f7f7f;
@@ -935,7 +936,7 @@
 			z-index: 8000;
 		}
 		.wider {
-			stroke-width: 8px;
+			stroke-width: 6px;
 		}
 		.wide {
 			stroke-width: 3px;
@@ -1059,6 +1060,7 @@
 		const PetalDefaultAttributeList=[{damage:10,knockback:"Default"},{damage:30,knockback:"Default",blast:"Destroy"},{craft:"Disabled"},{heal:10,blast:"Destroy"},{heal:3,duration:3,knockback:"Default",blast:"Destroy"},{damage:5,weavestrength:70,blast:"Destroy"},{shield:10,decay:0.05,blast:"Destroy"},{cotton:20,duration:1,blast:"Destroy"},{damage:8,knockback:"Default"},{damage:8,knockback:250,limit:-200}]
 		let PetalAttributeList=structuredClone(PetalDefaultAttributeList)
 		const PetalDescriptionList=["The most basic.","Really hurts but fragile.","Literally nothing.","Amazing healing.","Photosynthesis for constant heal.","Traps enemies.","Applies decaying shield.","Absorbs damage temporarily.","The valuable one.","Deals higher knockback."]
+		let PetalDescriptionListTrans=structuredClone(PetalDescriptionList)
 		const PetalSVGArray=new Object()
 		PetalSVGArray.Basic="<svg viewBox='0 0 100 100' class='in-svg'><path class='fwhite-path ns' d='M50 25A25 25 0 0 0 50 75A25 25 0 0 0 50 25'/><path class='white-path' d='M50 25A25 25 0 0 0 50 75A25 25 0 0 0 50 25' style='filter:brightness(90%)'/></svg>"
 		PetalSVGArray.Stinger="<svg viewBox='0 0 100 100' class='in-svg'><path class='fdgrey-path ns' d='M39 31L72 50L39 69Z'/><path class='dgrey-path' d='M39 31L72 50L39 69Z' style='filter:brightness(90%)'/></svg>"
@@ -1070,19 +1072,25 @@
 		PetalSVGArray.Cotton=PetalSVGArray.Basic
 		PetalSVGArray.Coin=PetalSVGArray.Basic
 		PetalSVGArray.Jelly=PetalSVGArray.Basic
-		const MobNameList=["!Rock","!Hornet","!Missile","!Spider"]
-		const MobDefaultAttributeList=[{action:"None",drop:"Disabled",move:"Disabled"},{action:"Default",cost:50,speed:50,connect:{knockback:"Rarity Hornet"},summon:"10%",damage:10,increment:1,shoot:20,drop:"Disabled",move:"Disabled"},{action:"Default",connect:{knockback:"Rarity Hornet"},reflect:"50%",drop:"Disabled",move:"Disabled"},{action:"Default",cost:"Default",speed:50,damage:20,increment:0,duration:5,weavestrength:30,drop:"Disabled",move:"Disabled"}]
+		const MobNameList=["!Rock","!Hornet","!Missile (H)","!Spider","!Cactus","!Scorpion","!Missile (S)","!Beetle"]
+		const MobDefaultAttributeList=[{action:"None",drop:"Disabled",move:"Disabled"},{action:"Default",cost:50,speed:50,connect:{knockback:"Rarity Hornets"},summon:"10%",damage:10,increment:1,shoot:20,drop:"Disabled",move:"Disabled"},{action:"Default",connect:{knockback:"Rarity Hornets"},reflect:"50%",drop:"Disabled",move:"Disabled"},{action:"Default",cost:"Default",speed:50,damage:20,increment:0,duration:5,weavestrength:30,drop:"Disabled",move:"Disabled"},{action:"Default",cost:"Default",speed:50,drop:"Disabled",move:"Disabled"},{action:"Default",cost:"Default",speed:50,summon:"20%",damage:10,increment:1,duration:3,drop:"Disabled",move:"Disabled"},{action:"Default",drop:"Disabled",move:"Disabled"},{action:"Default",cost:100,speed:50,eat:"Basic",damage:20,increment:2,drop:"Disabled"}]
 		let MobAttributeList=structuredClone(MobDefaultAttributeList)
-		const MobDescriptionList=["It does nothing.","Accumulates missiles and shoots.","Summoned by Hornet.","Weaves webs."]
+		const MobDescriptionList=["It does nothing.","Accumulates missiles and shoots.","Summoned by Hornet.","Weaves webs.","Hurts petals around.","It stings.","Summoned by Scorpion.","Eats petals."]
+		let MobDescriptionListTrans=structuredClone(MobDescriptionList)
 		const MobSVGArray=new Object()
 		MobSVGArray["!Rock"]="<svg viewBox='0 0 100 100' class='in-svg'><path class='fblack-path ns' fill-opacity='0.2' d='M8 100A8 8 0 0 1 0 92L0 8A8 8 0 0 1 8 0L92 0A8 8 0 0 1 100 8L100 92A8 8 0 0 1 92 100L92 8L8 8ZM8 92L92 92L92 100L8 100Z'/><g><path class='fgrey-path ns' d='M32 38L54 30L64 38L70 54L56 68L40 68L32 52Z'/><path class='grey-path' d='M32 38L54 30L64 38L70 54L56 68L40 68L32 52Z' style='filter:brightness(90%)'/></g></svg>"
 		MobSVGArray["!Hornet"]="<svg viewBox='0 0 100 100' class='in-svg'><path class='fblack-path ns' fill-opacity='0.2' d='M8 100A8 8 0 0 1 0 92L0 8A8 8 0 0 1 8 0L92 0A8 8 0 0 1 100 8L100 92A8 8 0 0 1 92 100L92 8L8 8ZM8 92L92 92L92 100L8 100Z'/><g><path class='wide rcap' d='M47 32A20 20 0 0 0 43 22M53 32A20 20 0 0 1 57 22'/><path class='fblack-path wide rcap' d='M46 62L50 74L54 62'/><path class='fyellow-path ns' d='M50 30A18 10 90 0 0 50 66A18 10 90 0 0 50 30'/><path class='rcap' d='M45 38A15 15 0 0 0 55 38M42 47A24 24 0 0 0 58 47M43 57A21 21 0 0 0 57 57'/><path class='dyellow-path wide' d='M50 30A18 10 90 0 0 50 66A18 10 90 0 0 50 30'/></g></svg>"
-		MobSVGArray["!Missile"]="<svg viewBox='0 0 100 100' class='in-svg'><path class='fblack-path ns' fill-opacity='0.2' d='M8 100A8 8 0 0 1 0 92L0 8A8 8 0 0 1 8 0L92 0A8 8 0 0 1 100 8L100 92A8 8 0 0 1 92 100L92 8L8 8ZM8 92L92 92L92 100L8 100Z'/><g><path class='fblack-path wide rcap' d='M50 32L60 62L40 62Z'/></g></svg>"
+		MobSVGArray["!Missile (H)"]="<svg viewBox='0 0 100 100' class='in-svg'><path class='fblack-path ns' fill-opacity='0.2' d='M8 100A8 8 0 0 1 0 92L0 8A8 8 0 0 1 8 0L92 0A8 8 0 0 1 100 8L100 92A8 8 0 0 1 92 100L92 8L8 8ZM8 92L92 92L92 100L8 100Z'/><g><path class='fblack-path wide rcap' d='M50 32L60 62L40 62Z'/></g></svg>"
 		MobSVGArray["!Spider"]="<svg viewBox='0 0 100 100' class='in-svg'><path class='fblack-path ns' fill-opacity='0.2' d='M8 100A8 8 0 0 1 0 92L0 8A8 8 0 0 1 8 0L92 0A8 8 0 0 1 100 8L100 92A8 8 0 0 1 92 100L92 8L8 8ZM8 92L92 92L92 100L8 100Z'/><g><path class='black-path wide rcap' d='M42 38A20 20 0 0 0 33 31M37 45A25 25 0 0 0 27 41M36 53A25 25 0 0 1 27 55M40 60A15 15 0 0 1 32 64M58 38A20 20 0 0 1 67 31M63 45A25 25 0 0 1 73 41M64 53A25 25 0 0 0 73 55M60 60A15 15 0 0 0 68 64'/><path class='fdgrey-path wide' d='M50 38A12 12 0 0 0 50 62A12 12 0 0 0 50 38'/></g></svg>"
+		MobSVGArray["!Cactus"]="<svg viewBox='0 0 100 100' class='in-svg'><path class='fblack-path ns' fill-opacity='0.2' d='M8 100A8 8 0 0 1 0 92L0 8A8 8 0 0 1 8 0L92 0A8 8 0 0 1 100 8L100 92A8 8 0 0 1 92 100L92 8L8 8ZM8 92L92 92L92 100L8 100Z'/><g><path class='fgreen-path ns' d='M50 26A11 11 0 0 0 67 33A11 11 0 0 0 74 50A11 11 0 0 0 67 67A11 11 0 0 0 50 74A11 11 0 0 0 33 67A11 11 0 0 0 26 50A11 11 0 0 0 33 33A11 11 0 0 0 50 26Z'/><path class='green-path wide rcap' d='M50 26A11 11 0 0 0 67 33A11 11 0 0 0 74 50A11 11 0 0 0 67 67A11 11 0 0 0 50 74A11 11 0 0 0 33 67A11 11 0 0 0 26 50A11 11 0 0 0 33 33A11 11 0 0 0 50 26Z' style='filter: brightness(80%)'/><path class='flgreen-path ns' d='M50 38A12 12 0 0 0 50 62A12 12 0 0 0 50 38Z'/></g></svg>"
+		MobSVGArray["!Scorpion"]="<svg viewBox='0 0 100 100' class='in-svg'><path class='fblack-path ns' fill-opacity='0.2' d='M8 100A8 8 0 0 1 0 92L0 8A8 8 0 0 1 8 0L92 0A8 8 0 0 1 100 8L100 92A8 8 0 0 1 92 100L92 8L8 8ZM8 92L92 92L92 100L8 100Z'/><g><path class='wide rcap' d='M45 30L47 23M55 30L53 23M40 38L36 37M38 43L34 43M38 50L34 51M60 38L64 37M62 43L66 43M62 50L66 51'/><path class='fyellow-path ns' d='M55 30A30 18 60 0 1 50 68A30 18 120 0 1 45 30A10 7 90 0 1 55 30Z' style='filter: brightness(90%)'/><path class='yellow-path wide rcap' d='M55 30A30 18 60 0 1 50 68A30 18 120 0 1 45 30A10 7 90 0 1 55 30ZM46 36L54 36M44 44L56 44M42 52L58 52M45 60L55 60' style='filter: brightness(80%)'/><path class='fyellow-path ns' d='M50 64A6 6 0 0 1 54 71A6 6 0 0 1 46 71A6 6 0 0 1 50 64Z' style='filter: brightness(90%)'/><path class='yellow-path mwidth rcap' d='M50 64A6 6 0 0 1 54 71A6 6 0 0 1 46 71A6 6 0 0 1 50 64Z' style='filter: brightness(80%)'/><path class='fblack-path narrow rcap' d='M50 62L54 66L46 66Z'/></g></svg>"
+		MobSVGArray["!Missile (S)"]="<svg viewBox='0 0 100 100' class='in-svg'><path class='fblack-path ns' fill-opacity='0.2' d='M8 100A8 8 0 0 1 0 92L0 8A8 8 0 0 1 8 0L92 0A8 8 0 0 1 100 8L100 92A8 8 0 0 1 92 100L92 8L8 8ZM8 92L92 92L92 100L8 100Z'/><g><path class='fblack-path wide rcap' d='M50 44L60 54L40 54Z'/></g></svg>"
+		MobSVGArray["!Beetle"]="<svg viewBox='0 0 100 100' class='in-svg'><path class='fblack-path ns' fill-opacity='0.2' d='M8 100A8 8 0 0 1 0 92L0 8A8 8 0 0 1 8 0L92 0A8 8 0 0 1 100 8L100 92A8 8 0 0 1 92 100L92 8L8 8ZM8 92L92 92L92 100L8 100Z'/><g><path class='wider rcap' d='M41 35A20 20 0 0 1 43 20M59 35A20 20 0 0 0 57 20'/><path class='fdpurple-path ns' d='M34 42A14 14 0 0 1 44 32A24 24 0 0 1 56 32A14 14 0 0 1 66 42A48 48 0 0 1 66 66A14 14 0 0 1 56 76A24 24 0 0 1 44 76A14 14 0 0 1 34 66A48 48 0 0 1 34 42Z'/><path class='dpurple-path rcap' d='M34 42A14 14 0 0 1 44 32A24 24 0 0 1 56 32A14 14 0 0 1 66 42A48 48 0 0 1 66 66A14 14 0 0 1 56 76A24 24 0 0 1 44 76A14 14 0 0 1 34 66A48 48 0 0 1 34 42ZM50 42L50 66' style='filter: brightness(90%)'/><path class='fdpurple-path ns' d='M41 39A4 4 0 0 0 41 47A4 4 0 0 0 41 39ZM41 50A4 4 0 0 0 41 58A4 4 0 0 0 41 50ZM41 61A4 4 0 0 0 41 69A4 4 0 0 0 41 61ZM59 39A4 4 0 0 0 59 47A4 4 0 0 0 59 39ZM59 50A4 4 0 0 0 59 58A4 4 0 0 0 59 50ZM59 61A4 4 0 0 0 59 69A4 4 0 0 0 59 61Z' style='filter: brightness(80%)'></g></svg>"
 		const ItemNameList=["?Void","?Trader"]
 		const ItemDefaultAttributeList=[{drop:"Disabled",move:"Disabled"},{convert:"Coin",drop:"Disabled",move:"Disabled"}]
 		let ItemAttributeList=structuredClone(ItemDefaultAttributeList)
 		const ItemDescriptionList=["Truly nothing.","If you have wares."]
+		let ItemDescriptionListTrans=structuredClone(ItemDescriptionList)
 		const ItemSVGArray=new Object()
 		ItemSVGArray["?Void"]="<svg viewBox='0 0 100 100' class='in-svg'></svg>"
 		ItemSVGArray["?Trader"]=ItemSVGArray["?Void"]
@@ -1181,7 +1189,7 @@
 		}
 		Mob.prototype.progress=async function(actionX,actionY) {
 			if(this.attribute.action==="None") return
-			if(this.name==="!Missile" && this.attribute.action==="Default") return
+			if(this.name==="!Missile (H)" && this.attribute.action==="Default") return
 			this.attribute.actionbar+=this.attribute.speed
 			if(this.attribute.actionbar>NewValue.upperlimit) this.attribute.actionbar=NewValue.upperlimit
 			game.board[actionX][actionY].print()
@@ -1211,7 +1219,11 @@
 			}
 			if(this.name==="!Hornet" && this.attribute.action==="Default" && this.attribute.actionbar===NewValue.upperlimit) {
 				this.attribute.actionbar=NewValue.upperlimit
-				addLog("[Mob] Action of "+this.name+" at ("+actionX+","+actionY+")...","#bfbf00")
+				if(player.savesettings.language==="Chinese") {
+					addLog("[Mob] 位于("+actionX+","+actionY+")的"+translateText(this.name)+"的行动...","#bfbf00")
+				} else {
+					addLog("[Mob] Action of "+this.name+" at ("+actionX+","+actionY+")...","#bfbf00")
+				}
 				this.attribute.actionbar-=this.attribute.cost
 				let availableArray=new Array()
 				for(let i=1;i<=4;i++) if(actionX+dx[i]>=1 && actionX+dx[i]<=game.width && actionY+dy[i]>=1 && actionY+dy[i]<=game.height) {
@@ -1227,7 +1239,7 @@
 						}
 					}
 					let spawnDir=availableArray[roll(0,availableArray.length-1)]
-					game.board[actionX+dx[spawnDir]][actionY+dy[spawnDir]]=new Grid(actionX+dx[spawnDir],actionY+dy[spawnDir],new Mob("!Missile",this.rarity,{damage:this.attribute.damage,health:this.attribute.summon}),"Existing")
+					game.board[actionX+dx[spawnDir]][actionY+dy[spawnDir]]=new Grid(actionX+dx[spawnDir],actionY+dy[spawnDir],new Mob("!Missile (H)",this.rarity,{damage:this.attribute.damage,health:this.attribute.summon}),"Existing")
 					game.board[actionX+dx[spawnDir]][actionY+dy[spawnDir]].print()
 					this.attribute.damage+=this.attribute.increment
 					await delay(300)
@@ -1238,7 +1250,7 @@
 							await delay(20)
 						}
 					}
-					for(let i=1;i<=4;i++) if(actionX+dx[i]>=1 && actionX+dx[i]<=game.width && actionY+dy[i]>=1 && actionY+dy[i]<=game.height && game.board[actionX+dx[i]][actionY+dy[i]].state==="Existing" && isMob(game.board[actionX+dx[i]][actionY+dy[i]].content) && game.board[actionX+dx[i]][actionY+dy[i]].content.name==="!Missile") {
+					for(let i=1;i<=4;i++) if(actionX+dx[i]>=1 && actionX+dx[i]<=game.width && actionY+dy[i]>=1 && actionY+dy[i]<=game.height && game.board[actionX+dx[i]][actionY+dy[i]].state==="Existing" && isMob(game.board[actionX+dx[i]][actionY+dy[i]].content) && game.board[actionX+dx[i]][actionY+dy[i]].content.name==="!Missile (H)") {
 						dropFlag=true
 						let missileX=actionX+dx[i],missileY=actionY+dy[i]
 						flowerInjure(game.board[missileX][missileY].content)
@@ -1254,7 +1266,11 @@
 			}
 			if(this.name==="!Spider" && this.attribute.action==="Default" && this.attribute.actionbar===NewValue.upperlimit) {
 				this.attribute.actionbar=NewValue.upperlimit
-				addLog("[Mob] Action of "+this.name+" at ("+actionX+","+actionY+")...","#bfbf00")
+				if(player.savesettings.language==="Chinese") {
+					addLog("[Mob] 位于("+actionX+","+actionY+")的"+translateText(this.name)+"的行动...","#bfbf00")
+				} else {
+					addLog("[Mob] Action of "+this.name+" at ("+actionX+","+actionY+")...","#bfbf00")
+				}
 				this.attribute.actionbar-=this.attribute.cost
 				let availableArray=new Array()
 				for(let i=1;i<=4;i++) if(actionX+dx[i]>=1 && actionX+dx[i]<=game.width && actionY+dy[i]>=1 && actionY+dy[i]<=game.height) {
@@ -1299,15 +1315,81 @@
 					await delay(100)
 				}
 				game.board[actionX][actionY].print()
+				return
 			}
-			return
+			if(this.name==="!Cactus" && this.attribute.action==="Default" && this.attribute.actionbar===NewValue.upperlimit) {
+				this.attribute.actionbar=NewValue.upperlimit
+				if(player.savesettings.language==="Chinese") {
+					addLog("[Mob] 位于("+actionX+","+actionY+")的"+translateText(this.name)+"的行动...","#bfbf00")
+				} else {
+					addLog("[Mob] Action of "+this.name+" at ("+actionX+","+actionY+")...","#bfbf00")
+				}
+				this.attribute.actionbar-=this.attribute.cost
+				if(!player.settings.hasOwnProperty("skipanimation")) {
+					for(let i=0;i<=40;i++) {
+						getGrid(0,actionX,actionY).style.scale=1.3-0.015*Math.abs(i-20)
+						await delay(20)
+					}
+				}
+				for(let i=1;i<=4;i++) if(actionX+dx[i]>=1 && actionX+dx[i]<=game.width && actionY+dy[i]>=1 && actionY+dy[i]<=game.height) {
+					if(isPetal(game.board[actionX+dx[i]][actionY+dy[i]].content) && game.board[actionX+dx[i]][actionY+dy[i]].content.attribute.blast==="Destroy") game.board[actionX+dx[i]][actionY+dy[i]].content.attribute=new Object()
+				}
+				game.board[actionX][actionY].print()
+				return
+			}
+			if(this.name==="!Scorpion" && this.attribute.action==="Default" && this.attribute.actionbar===NewValue.upperlimit) {
+				this.attribute.actionbar=NewValue.upperlimit
+				if(player.savesettings.language==="Chinese") {
+					addLog("[Mob] 位于("+actionX+","+actionY+")的"+translateText(this.name)+"的行动...","#bfbf00")
+				} else {
+					addLog("[Mob] Action of "+this.name+" at ("+actionX+","+actionY+")...","#bfbf00")
+				}
+				this.attribute.actionbar-=this.attribute.cost
+				let availableArray=new Array()
+				for(let i=1;i<=4;i++) if(actionX+dx2[i]>=1 && actionX+dx2[i]<=game.width && actionY+dy2[i]>=1 && actionY+dy2[i]<=game.height) {
+					if(game.board[actionX+dx2[i]][actionY+dy2[i]].state==="Empty") availableArray.push(i)
+					if(game.board[actionX+dx2[i]][actionY+dy2[i]].state==="Existing" && isPetal(game.board[actionX+dx2[i]][actionY+dy2[i]].content)) availableArray.push(i)
+				}
+				if(availableArray.length>0) {
+					if(!player.settings.hasOwnProperty("skipanimation")) {
+						for(let i=0;i<=40;i++) {
+							getGrid(0,actionX,actionY).style.scale=1.3-0.015*Math.abs(i-20)
+							await delay(20)
+						}
+					}
+					let spawnDir=availableArray[roll(0,availableArray.length-1)]
+					game.board[actionX+dx2[spawnDir]][actionY+dy2[spawnDir]]=new Grid(actionX+dx2[spawnDir],actionY+dy2[spawnDir],new Mob("!Missile (S)",this.rarity,{damage:this.attribute.damage,duration:this.attribute.duration,health:this.attribute.summon}),"Existing")
+					game.board[actionX+dx2[spawnDir]][actionY+dy2[spawnDir]].print()
+					this.attribute.damage+=this.attribute.increment
+					await delay(300)
+				} else {
+					if(!player.settings.hasOwnProperty("skipanimation")) {
+						for(let i=0;i<=36;i++) {
+							getGrid(0,actionX,actionY).children[0].children[1].style.transform="rotate("+(10*i%360)+"deg)"
+							await delay(20)
+						}
+					}
+					for(let i=1;i<=4;i++) if(actionX+dx2[i]>=1 && actionX+dx2[i]<=game.width && actionY+dy2[i]>=1 && actionY+dy2[i]<=game.height && game.board[actionX+dx2[i]][actionY+dy2[i]].state==="Existing" && isMob(game.board[actionX+dx2[i]][actionY+dy2[i]].content) && game.board[actionX+dx2[i]][actionY+dy2[i]].content.name==="!Missile (S)") {
+						dropFlag=true
+						let missileX=actionX+dx2[i],missileY=actionY+dy2[i]
+						flowerInjure(game.board[missileX][missileY].content)
+						game.board[missileX][missileY].empty()
+						game.board[missileX][missileY].print()
+						await delay(100)
+					}
+					dropFlag=true
+					await delay(100)
+				}
+				game.board[actionX][actionY].print()
+				return
+			}
 		}
 		Mob.prototype.defeat=function(defeatX,defeatY) {
 			if(this.attribute.reflect>0) for(let i=1;i<=4;i++) if(defeatX+dx[i]>=1 && defeatX+dx[i]<=game.width && defeatY+dy[i]>=1 && defeatY+dy[i]<=game.height && isMob(game.board[defeatX+dx[i]][defeatY+dy[i]].content) && game.board[defeatX+dx[i]][defeatY+dy[i]].content.attribute.health>0) {
 				game.board[defeatX+dx[i]][defeatY+dy[i]].content.injure(defeatX+dx[i],defeatY+dy[i],{name:"Reflection",damage:this.attribute.reflect})
 				if(game.board[defeatX+dx[i]][defeatY+dy[i]].content.attribute.health===0) defeatedMob.push({x:defeatX+dx[i],y:defeatY+dy[i]})
 			}
-			if(this.name==="!Hornet") for(let i=1;i<=4;i++) if(defeatX+dx[i]>=1 && defeatX+dx[i]<=game.width && defeatY+dy[i]>=1 && defeatY+dy[i]<=game.height && isMob(game.board[defeatX+dx[i]][defeatY+dy[i]].content) && game.board[defeatX+dx[i]][defeatY+dy[i]].content.name==="!Missile" && game.board[defeatX+dx[i]][defeatY+dy[i]].content.attribute.health>0) {
+			if(this.name==="!Hornet") for(let i=1;i<=4;i++) if(defeatX+dx[i]>=1 && defeatX+dx[i]<=game.width && defeatY+dy[i]>=1 && defeatY+dy[i]<=game.height && isMob(game.board[defeatX+dx[i]][defeatY+dy[i]].content) && game.board[defeatX+dx[i]][defeatY+dy[i]].content.name==="!Missile (H)" && game.board[defeatX+dx[i]][defeatY+dy[i]].content.attribute.health>0) {
 				let aliveFlag=false,missileX=defeatX+dx[i],missileY=defeatY+dy[i]
 				for(let j=1;j<=4;j++) if(missileX+dx[j]>=1 && missileX+dx[j]<=game.width && missileY+dy[j]>=1 && missileY+dy[j]<=game.height && isMob(game.board[missileX+dx[j]][missileY+dy[j]].content) && game.board[missileX+dx[j]][missileY+dy[j]].content.name==="!Hornet" && game.board[missileX+dx[j]][missileY+dy[j]].content.attribute.health>0) aliveFlag=true
 				if(!aliveFlag) {
@@ -1326,13 +1408,21 @@
 				pendingDamage=petal.damage
 				if(pendingDamage>this.attribute.health) pendingDamage=this.attribute.health
 				this.attribute.health-=pendingDamage
-				addLog("[Mob] <span style='color: "+rarityColorEP[this.rarity]+"'>"+this.name+"</span> received "+pendingDamage+" damage from Reflection, "+this.attribute.health+" health remaining.","#bfbf00")
+				if(player.savesettings.language==="Chinese") {
+					addLog("[Mob] <span style='color: "+rarityColorEP[this.rarity]+"'>"+translateText(this.name)+"</span>受到了反射造成的"+pendingDamage+"伤害，剩余"+this.attribute.health+"生命值。","#bfbf00")
+				} else {
+					addLog("[Mob] <span style='color: "+rarityColorEP[this.rarity]+"'>"+this.name+"</span> received "+pendingDamage+" damage from Reflection, "+this.attribute.health+" health remaining.","#bfbf00")
+				}
 			}
 			if(isPetal(petal)) {
 				pendingDamage=petal.attribute.damage
 				if(pendingDamage>this.attribute.health) pendingDamage=this.attribute.health
 				this.attribute.health-=pendingDamage
-				addLog("[Petal] <span style='color: "+rarityColorEP[petal.rarity]+"'>"+petal.name+"</span> dealt "+pendingDamage+" damage to <span style='color: "+rarityColorEP[this.rarity]+"'>"+this.name+"</span>, "+this.attribute.health+" health remaining.","#9f9fdf")
+				if(player.savesettings.language==="Chinese") {
+					addLog("[Petal] <span style='color: "+rarityColorEP[petal.rarity]+"'>"+translateText(petal.name)+"</span>对<span style='color: "+rarityColorEP[this.rarity]+"'>"+translateText(this.name)+"</span>造成了"+pendingDamage+"伤害，剩余"+this.attribute.health+"生命值。","#9f9fdf")
+				} else {
+					addLog("[Petal] <span style='color: "+rarityColorEP[petal.rarity]+"'>"+petal.name+"</span> dealt "+pendingDamage+" damage to <span style='color: "+rarityColorEP[this.rarity]+"'>"+this.name+"</span>, "+this.attribute.health+" health remaining.","#9f9fdf")
+				}
 			}
 			game.board[mobX][mobY].print()
 			if(this.name==="!Rock") {
@@ -1343,11 +1433,27 @@
 				game.score+=pendingDamage
 				updateFlowerState()
 			}
-			if(this.name==="!Missile") {
+			if(this.name==="!Missile (H)") {
 				game.score+=approx(pendingDamage**0.5)
 				updateFlowerState()
 			}
 			if(this.name==="!Spider") {
+				game.score+=pendingDamage
+				updateFlowerState()
+			}
+			if(this.name==="!Cactus") {
+				game.score+=pendingDamage
+				updateFlowerState()
+			}
+			if(this.name==="!Scorpion") {
+				game.score+=pendingDamage
+				updateFlowerState()
+			}
+			if(this.name==="!Missile (S)") {
+				game.score+=approx(pendingDamage**0.5)
+				updateFlowerState()
+			}
+			if(this.name==="!Beetle") {
 				game.score+=pendingDamage
 				updateFlowerState()
 			}
@@ -1360,7 +1466,11 @@
 				let pendingKnockback=petal.knockback
 				if(pendingKnockback>this.attribute.actionbar-lowerLimit) pendingKnockback=this.attribute.actionbar-lowerLimit
 				this.attribute.actionbar-=pendingKnockback
-				addLog("[Mob] <span style='color: "+rarityColorEP[this.rarity]+"'>"+this.name+"</span> received "+pendingKnockback+" knockback from Connection.","#bfbf00")
+				if(player.savesettings.language==="Chinese") {
+					addLog("[Mob] <span style='color: "+rarityColorEP[this.rarity]+"'>"+translateText(this.name)+"</span>受到了连接造成的"+pendingKnockback+"击退。","#bfbf00")
+				} else {
+					addLog("[Mob] <span style='color: "+rarityColorEP[this.rarity]+"'>"+this.name+"</span> received "+pendingKnockback+" knockback from Connection.","#bfbf00")
+				}
 				game.board[mobX][mobY].print()
 				return
 			}
@@ -1374,7 +1484,11 @@
 			if(this.attribute.actionbar>lowerLimit) {
 				if(pendingKnockback>this.attribute.actionbar-lowerLimit) pendingKnockback=this.attribute.actionbar-lowerLimit
 				this.attribute.actionbar-=pendingKnockback
-				addLog("[Petal] <span style='color: "+rarityColorEP[petal.rarity]+"'>"+petal.name+"</span> dealt "+pendingKnockback+" knockback to <span style='color: "+rarityColorEP[this.rarity]+"'>"+this.name+"</span>.","#9f9fdf")
+				if(player.savesettings.language==="Chinese") {
+					addLog("[Petal] <span style='color: "+rarityColorEP[petal.rarity]+"'>"+translateText(petal.name)+"</span>对<span style='color: "+rarityColorEP[this.rarity]+"'>"+translateText(this.name)+"</span>造成了"+pendingKnockback+"击退。","#9f9fdf")
+				} else {
+					addLog("[Petal] <span style='color: "+rarityColorEP[petal.rarity]+"'>"+petal.name+"</span> dealt "+pendingKnockback+" knockback to <span style='color: "+rarityColorEP[this.rarity]+"'>"+this.name+"</span>.","#9f9fdf")
+				}
 				game.board[mobX][mobY].print()
 			}
 		}
@@ -1644,17 +1758,133 @@
 		levelList["Training Ground"][5]={x:10,y:90,precondition:[4],height:5,width:5,coefficient:10,exponent:2,goal:531441,initialmap:() => [,[,new Grid(1,1,"Uninitialized"),new Grid(1,2,"Uninitialized"),new Grid(1,3,"Uninitialized"),new Grid(1,4,"Uninitialized"),new Grid(1,5,"Uninitialized")],[,new Grid(2,1,"Uninitialized"),new Grid(2,2,"Uninitialized"),new Grid(2,3,"Uninitialized"),new Grid(2,4,"Uninitialized"),new Grid(2,5,"Uninitialized")],[,new Grid(3,1,"Uninitialized"),new Grid(3,2,"Uninitialized"),new Grid(3,3,new Mob("!Rock",1,500),"Existing"),new Grid(3,4,"Uninitialized"),new Grid(3,5,"Uninitialized")],[,new Grid(4,1,"Uninitialized"),new Grid(4,2,"Uninitialized"),new Grid(4,3,"Uninitialized"),new Grid(4,4,"Uninitialized"),new Grid(4,5,"Uninitialized")],[,new Grid(5,1,"Uninitialized"),new Grid(5,2,"Uninitialized"),new Grid(5,3,"Uninitialized"),new Grid(5,4,"Uninitialized"),new Grid(5,5,"Uninitialized")]],spawner:[[{weight:20,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:10,result:(x,y) => new Grid(x,y,new Petal("Basic",2),"Existing","Column"),noinitial:true},{weight:10,result:(x,y) => new Grid(x,y,new Petal("Stinger",2),"Existing","Bomb"),noinitial:true}]],spawnset:"Default"}
 		levelList["Training Ground"][6]={x:30,y:90,precondition:[5],height:5,width:5,coefficient:10,exponent:2,goal:614125,initialmap:() => [,[,new Grid(1,1,new Petal("Basic",1),"Existing"),new Grid(1,2,"Uninitialized"),new Grid(1,3,"Uninitialized"),new Grid(1,4,"Uninitialized"),new Grid(1,5,new Mob("!Rock",1,343),"Existing")],[,new Grid(2,1,"Uninitialized"),new Grid(2,2,"Uninitialized"),new Grid(2,3,"Uninitialized"),new Grid(2,4,"Uninitialized"),new Grid(2,5,"Uninitialized")],[,new Grid(3,1,"Uninitialized"),new Grid(3,2,"Uninitialized"),new Grid(3,3,"Uninitialized"),new Grid(3,4,"Uninitialized"),new Grid(3,5,"Uninitialized")],[,new Grid(4,1,"Uninitialized"),new Grid(4,2,"Uninitialized"),new Grid(4,3,"Uninitialized"),new Grid(4,4,"Uninitialized"),new Grid(4,5,"Uninitialized")],[,new Grid(5,1,"Uninitialized"),new Grid(5,2,"Uninitialized"),new Grid(5,3,"Uninitialized"),new Grid(5,4,"Uninitialized"),new Grid(5,5,"Uninitialized")]],spawner:[[{weight:20,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:10,result:(x,y) => new Grid(x,y,new Petal("Basic",2),"Existing")},{weight:10,result:(x,y) => new Grid(x,y,new Petal("Stinger",2),"Existing")}]],spawnset:"Default",wall:[{x:4,y:2,dir:2,stack:1},{x:3,y:3,dir:2,stack:3},{x:4,y:3,dir:2,stack:1},{x:1,y:4,dir:2,stack:9},{x:2,y:4,dir:2,stack:6},{x:3,y:4,dir:2,stack:3},{x:4,y:4,dir:2,stack:1},{x:2,y:5,dir:2,stack:6},{x:3,y:5,dir:2,stack:3},{x:4,y:5,dir:2,stack:1},{x:1,y:1,dir:3,stack:1},{x:2,y:1,dir:3,stack:1},{x:3,y:1,dir:3,stack:1},{x:4,y:1,dir:3,stack:1},{x:1,y:2,dir:3,stack:3},{x:2,y:2,dir:3,stack:3},{x:3,y:2,dir:3,stack:3},{x:1,y:3,dir:3,stack:6},{x:2,y:3,dir:3,stack:6},{x:2,y:4,dir:3,stack:9}]}
 		levelList["Training Ground"][7]={x:50,y:90,precondition:[6],height:5,width:5,coefficient:10,exponent:2,goal:354233654641216,initialmap:() => [,[,new Grid(1,1,new Mob("!Rock",1,100),"Existing"),new Grid(1,2,new Item("?Void",9),"Existing"),new Grid(1,3,"Uninitialized"),new Grid(1,4,"Uninitialized"),new Grid(1,5,"Uninitialized")],[,new Grid(2,1,"Uninitialized"),new Grid(2,2,new Item("?Void",9),"Existing"),new Grid(2,3,"Uninitialized"),new Grid(2,4,"Uninitialized"),new Grid(2,5,"Uninitialized")],[,new Grid(3,1,"Uninitialized"),new Grid(3,2,new Item("?Void",9),"Existing"),new Grid(3,3,"Uninitialized"),new Grid(3,4,"Uninitialized"),new Grid(3,5,"Uninitialized")],[,new Grid(4,1,"Uninitialized"),new Grid(4,2,new Item("?Void",9),"Existing"),new Grid(4,3,"Uninitialized"),new Grid(4,4,"Uninitialized"),new Grid(4,5,"Uninitialized")],[,new Grid(5,1,"Uninitialized"),new Grid(5,2,new Item("?Void",9),"Existing"),new Grid(5,3,new Item("?Void",9),"Existing"),new Grid(5,4,new Item("?Void",9),"Existing"),new Grid(5,5,new Item("?Void",9),"Existing")]],spawner:[[{weight:20,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")}]],spawnset:[{x:2,y:1,set:0},{x:3,y:1,set:0},{x:4,y:1,set:0},{x:5,y:1,set:0}],transportset:[{start:{x:2,y:1},end:{x:1,y:3}},{start:{x:3,y:1},end:{x:2,y:3}},{start:{x:4,y:1},end:{x:3,y:3}},{start:{x:5,y:1},end:{x:4,y:3}}]}
+		function generateMap(height,width) {
+			let mapArray=new Array()
+			for(let i=1;i<=width;i++) {
+				mapArray[i]=new Array()
+				for(let j=1;j<=height;j++) mapArray[i][j]=new Grid(i,j,"Uninitialized")
+			}
+			return mapArray
+		}
 		levelList["Centralia Field 1"]=new Array()
-		levelList["Centralia Field 1"][1]={x:50,y:50,precondition:[],height:6,width:6,coefficient:10,exponent:1.2,goal:6400,initialmap:() => [,[,new Grid(1,1,"Uninitialized"),new Grid(1,2,"Uninitialized"),new Grid(1,3,"Uninitialized"),new Grid(1,4,"Uninitialized"),new Grid(1,5,new Mob("!Rock",3,200),"Existing"),new Grid(1,6,new Mob("!Hornet",1,200),"Existing")],[,new Grid(2,1,"Uninitialized"),new Grid(2,2,"Uninitialized"),new Grid(2,3,"Uninitialized"),new Grid(2,4,"Uninitialized"),new Grid(2,5,new Mob("!Rock",2,100),"Existing"),new Grid(2,6,"Uninitialized")],[,new Grid(3,1,"Uninitialized"),new Grid(3,2,"Uninitialized"),new Grid(3,3,"Uninitialized"),new Grid(3,4,"Uninitialized"),new Grid(3,5,new Mob("!Rock",1,50),"Existing"),new Grid(3,6,"Uninitialized")],[,new Grid(4,1,"Uninitialized"),new Grid(4,2,"Uninitialized"),new Grid(4,3,"Uninitialized"),new Grid(4,4,"Uninitialized"),new Grid(4,5,new Mob("!Rock",1,50),"Existing"),new Grid(4,6,"Uninitialized")],[,new Grid(5,1,"Uninitialized"),new Grid(5,2,"Uninitialized"),new Grid(5,3,"Uninitialized"),new Grid(5,4,"Uninitialized"),new Grid(5,5,new Mob("!Rock",2,100),"Existing"),new Grid(5,6,"Uninitialized")],[,new Grid(6,1,"Uninitialized"),new Grid(6,2,"Uninitialized"),new Grid(6,3,"Uninitialized"),new Grid(6,4,"Uninitialized"),new Grid(6,5,new Mob("!Rock",3,200),"Existing"),new Grid(6,6,new Mob("!Hornet",1,200),"Existing")]],spawner:[[{weight:14,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing","Row"),noinitial:true},{weight:1,result:(x,y) => new Grid(x,y,new Petal("Basic",5),"Existing"),noinitial:true},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing"),noinitial:true},{weight:25,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:25,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")}]],spawnset:"Default",valueset:() => {PetalAttributeList[1].damage=20; MobAttributeList[1].increment=0; MobAttributeList[2].reflect="200%"},valuetext:{petal:"Nerfed Stinger damage: 30->20",mob:"Nerfed Hornet damage increment: 1->0<br>Buffed Missile damage reflect: 50%->200%"}}
-		levelList["Centralia Field 1"][2]={x:30,y:30,precondition:[1],height:7,width:7,coefficient:10,exponent:1.3,goal:6241,initialmap:() => [,[,new Grid(1,1,"Uninitialized"),new Grid(1,2,"Uninitialized"),new Grid(1,3,"Uninitialized"),new Grid(1,4,"Uninitialized"),new Grid(1,5,"Uninitialized"),new Grid(1,6,"Uninitialized"),new Grid(1,7,"Uninitialized")],[,new Grid(2,1,"Uninitialized"),new Grid(2,2,"Uninitialized"),new Grid(2,3,"Uninitialized"),new Grid(2,4,"Uninitialized"),new Grid(2,5,"Uninitialized"),new Grid(2,6,"Uninitialized"),new Grid(2,7,"Uninitialized")],[,new Grid(3,1,"Uninitialized"),new Grid(3,2,"Uninitialized"),new Grid(3,3,"Uninitialized"),new Grid(3,4,new Mob("!Missile",7,{health:6361,damage:50}),"Existing"),new Grid(3,5,"Uninitialized"),new Grid(3,6,"Uninitialized"),new Grid(3,7,"Uninitialized")],[,new Grid(4,1,"Uninitialized"),new Grid(4,2,"Uninitialized"),new Grid(4,3,new Mob("!Missile",7,{health:6361,damage:50}),"Existing"),new Grid(4,4,new Mob("!Hornet",1,{maxhealth:50,actionbar:-300}),"Existing"),new Grid(4,5,new Mob("!Missile",7,{health:6361,damage:50}),"Existing"),new Grid(4,6,"Uninitialized"),new Grid(4,7,"Uninitialized")],[,new Grid(5,1,"Uninitialized"),new Grid(5,2,"Uninitialized"),new Grid(5,3,"Uninitialized"),new Grid(5,4,new Mob("!Missile",7,{health:6361,damage:50}),"Existing"),new Grid(5,5,"Uninitialized"),new Grid(5,6,"Uninitialized"),new Grid(5,7,"Uninitialized")],[,new Grid(6,1,"Uninitialized"),new Grid(6,2,"Uninitialized"),new Grid(6,3,"Uninitialized"),new Grid(6,4,"Uninitialized"),new Grid(6,5,"Uninitialized"),new Grid(6,6,"Uninitialized"),new Grid(6,7,"Uninitialized")],[,new Grid(7,1,"Uninitialized"),new Grid(7,2,"Uninitialized"),new Grid(7,3,"Uninitialized"),new Grid(7,4,"Uninitialized"),new Grid(7,5,"Uninitialized"),new Grid(7,6,"Uninitialized"),new Grid(7,7,"Uninitialized")]],spawner:[[{weight:20,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")}]],spawnset:"Default",valueset:() => {MobAttributeList[2].immune="All"},valuetext:{mob:"Modify Missile: Immunes all damage"}}
-		levelList["Centralia Field 1"][3]={x:30,y:70,precondition:[1],height:8,width:8,coefficient:10,exponent:1.2,goal:6241,initialmap:() => [,[,new Grid(1,1,"Uninitialized"),new Grid(1,2,"Uninitialized"),new Grid(1,3,"Uninitialized"),new Grid(1,4,"Uninitialized"),new Grid(1,5,"Uninitialized"),new Grid(1,6,"Uninitialized"),new Grid(1,7,"Uninitialized"),new Grid(1,8,"Uninitialized")],[,new Grid(2,1),new Grid(2,2,"Uninitialized"),new Grid(2,3,"Uninitialized"),new Grid(2,4,"Uninitialized"),new Grid(2,5,"Uninitialized"),new Grid(2,6,"Uninitialized"),new Grid(2,7,"Uninitialized"),new Grid(2,8,"Uninitialized")],[,new Grid(3,1),new Grid(3,2),new Grid(3,3,"Uninitialized"),new Grid(3,4,"Uninitialized"),new Grid(3,5,"Uninitialized"),new Grid(3,6,"Uninitialized"),new Grid(3,7,"Uninitialized"),new Grid(3,8,"Uninitialized")],[,new Grid(4,1,new Mob("!Hornet",3,{maxhealth:300,actionbar:-500}),"Existing"),new Grid(4,2,new Mob("!Rock",1,10),"Existing"),new Grid(4,3),new Grid(4,4,"Uninitialized"),new Grid(4,5,"Uninitialized"),new Grid(4,6,"Uninitialized"),new Grid(4,7,"Uninitialized"),new Grid(4,8,"Uninitialized")],[,new Grid(5,1,new Mob("!Hornet",3,{maxhealth:300,actionbar:-1000}),"Existing"),new Grid(5,2,new Mob("!Rock",3,100),"Existing"),new Grid(5,3),new Grid(5,4,"Uninitialized"),new Grid(5,5,"Uninitialized"),new Grid(5,6,"Uninitialized"),new Grid(5,7,"Uninitialized"),new Grid(5,8,"Uninitialized")],[,new Grid(6,1),new Grid(6,2),new Grid(6,3,"Uninitialized"),new Grid(6,4,"Uninitialized"),new Grid(6,5,"Uninitialized"),new Grid(6,6,"Uninitialized"),new Grid(6,7,"Uninitialized"),new Grid(6,8,"Uninitialized")],[,new Grid(7,1),new Grid(7,2,"Uninitialized"),new Grid(7,3,"Uninitialized"),new Grid(7,4,"Uninitialized"),new Grid(7,5,"Uninitialized"),new Grid(7,6,"Uninitialized"),new Grid(7,7,"Uninitialized"),new Grid(7,8,"Uninitialized")],[,new Grid(8,1,"Uninitialized"),new Grid(8,2,"Uninitialized"),new Grid(8,3,"Uninitialized"),new Grid(8,4,"Uninitialized"),new Grid(8,5,"Uninitialized"),new Grid(8,6,"Uninitialized"),new Grid(8,7,"Uninitialized"),new Grid(8,8,"Uninitialized")]],spawner:[[{weight:18,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Basic",2),"Existing")},{weight:2,result:(x,y) => new Grid(x,y,new Petal("Basic",3),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Stinger",2),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Rose",2),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Leaf",2),"Existing")}],[{weight:30,result:(x,y) => new Grid(x,y,new Petal("Basic",4),"Existing","Column")},{weight:30,result:(x,y) => new Grid(x,y,new Petal("Basic",4),"Existing","Bomb")},{weight:30,result:(x,y) => new Grid(x,y,new Petal("Stinger",4),"Existing","Row")},{weight:10,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")}]],spawnset:[{x:1,y:1,set:0},{x:8,y:1,set:0},{x:4,y:2,set:1},{x:5,y:2,set:1}],wall:[{x:3,y:2,dir:2,stack:6361},{x:4,y:2,dir:2,stack:6361},{x:5,y:2,dir:2,stack:6361},{x:4,y:3,dir:3,stack:6361},{x:5,y:3,dir:3,stack:6361}],valueset:() => {PetalAttributeList[3].heal=0; PetalAttributeList[4].heal=2; NewValue.damagemult[4]=0; NewValue.healmult[1]=0},valuetext:{petal:"Nerfed Rose heal: 10->0<br>Nefted Leaf heal: 3->2",other:"Nerfed [RAR4] Petal damage multiplier: 8->0<br>Nerfed [RAR1] Petal heal multiplier: 1->0"}}
-		levelList["Centralia Field 1"][4]={x:10,y:50,precondition:[2,3],height:6,width:6,coefficient:10,exponent:1.2,goal:6400,initialmap:() => [,[,new Grid(1,1,new Mob("!Rock",1,30),"Existing"),new Grid(1,2,"Uninitialized"),new Grid(1,3,"Uninitialized"),new Grid(1,4,"Uninitialized"),new Grid(1,5,"Uninitialized"),new Grid(1,6,new Mob("!Hornet",1,80),"Existing")],[,new Grid(2,1,"Uninitialized"),new Grid(2,2,new Mob("!Rock",1,30),"Existing"),new Grid(2,3,"Uninitialized"),new Grid(2,4,"Uninitialized"),new Grid(2,5,new Mob("!Spider",2,150),"Existing"),new Grid(2,6,"Uninitialized")],[,new Grid(3,1,"Uninitialized"),new Grid(3,2,"Uninitialized"),new Grid(3,3,new Mob("!Rock",1,30),"Existing"),new Grid(3,4,new Mob("!Rock",1,30),"Existing"),new Grid(3,5,"Uninitialized"),new Grid(3,6,"Uninitialized")],[,new Grid(4,1,"Uninitialized"),new Grid(4,2,"Uninitialized"),new Grid(4,3,new Mob("!Rock",1,30),"Existing"),new Grid(4,4,new Mob("!Rock",1,30),"Existing"),new Grid(4,5,"Uninitialized"),new Grid(4,6,"Uninitialized")],[,new Grid(5,1,"Uninitialized"),new Grid(5,2,new Mob("!Rock",1,30),"Existing"),new Grid(5,3,"Uninitialized"),new Grid(5,4,"Uninitialized"),new Grid(5,5,new Mob("!Spider",2,150),"Existing"),new Grid(5,6,"Uninitialized")],[,new Grid(6,1,new Mob("!Rock",1,30),"Existing"),new Grid(6,2,"Uninitialized"),new Grid(6,3,"Uninitialized"),new Grid(6,4,"Uninitialized"),new Grid(6,5,"Uninitialized"),new Grid(6,6,new Mob("!Hornet",1,80),"Existing")]],spawner:[[{weight:25,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Leaf",4),"Existing")},{weight:25,result:(x,y) => new Grid(x,y,new Petal("Web",1),"Existing")}]],spawnset:"Default",valueset:() => {MobAttributeList[1].increment=2},valuetext:{mob:"Buffed Hornet damage increment: 1->2"}}
-		levelList["Centralia Field 1"][5]={x:-10,y:30,precondition:[4],height:7,width:6,coefficient:10,exponent:1.2,goal:6000,initialmap:() => [,[,new Grid(1,1,"Uninitialized"),new Grid(1,2,"Uninitialized"),new Grid(1,3,"Uninitialized"),new Grid(1,4,"Uninitialized"),new Grid(1,5,new Mob("!Rock",3,300),"Existing"),new Grid(1,6,new Mob("!Spider",3,300),"Existing"),new Grid(1,7,new Mob("!Hornet",2,200),"Existing")],[,new Grid(2,1,"Uninitialized"),new Grid(2,2,"Uninitialized"),new Grid(2,3,"Uninitialized"),new Grid(2,4,"Uninitialized"),new Grid(2,5,"Uninitialized"),new Grid(2,6,new Mob("!Rock",3,300),"Existing"),new Grid(2,7,"Uninitialized")],[,new Grid(3,1,"Uninitialized"),new Grid(3,2,"Uninitialized"),new Grid(3,3,"Uninitialized"),new Grid(3,4,"Uninitialized"),new Grid(3,5,"Uninitialized"),new Grid(3,6,"Uninitialized"),new Grid(3,7,"Uninitialized")],[,new Grid(4,1,"Uninitialized"),new Grid(4,2,"Uninitialized"),new Grid(4,3,"Uninitialized"),new Grid(4,4,"Uninitialized"),new Grid(4,5,"Uninitialized"),new Grid(4,6,"Uninitialized"),new Grid(4,7,"Uninitialized")],[,new Grid(5,1,"Uninitialized"),new Grid(5,2,"Uninitialized"),new Grid(5,3,"Uninitialized"),new Grid(5,4,"Uninitialized"),new Grid(5,5,"Uninitialized"),new Grid(5,6,new Mob("!Rock",3,300),"Existing"),new Grid(5,7,"Uninitialized")],[,new Grid(6,1,"Uninitialized"),new Grid(6,2,"Uninitialized"),new Grid(6,3,"Uninitialized"),new Grid(6,4,"Uninitialized"),new Grid(6,5,new Mob("!Rock",3,300),"Existing"),new Grid(6,6,new Mob("!Spider",3,300),"Existing"),new Grid(6,7,new Mob("!Hornet",2,200),"Existing")]],spawner:[[{weight:20,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Web",1),"Existing")}]],spawnset:"Default",wall:[{x:2,y:4,dir:2,stack:16},{x:4,y:4,dir:2,stack:16},{x:1,y:3,dir:3,stack:9},{x:2,y:3,dir:3,stack:4},{x:5,y:3,dir:3,stack:4},{x:6,y:3,dir:3,stack:9},{x:3,y:4,dir:3,stack:6},{x:4,y:4,dir:3,stack:6}],valueset:() => {MobAttributeList[3].increment=10},valuetext:{mob:"Buffed Spider damage increment: 0->10"}}
-		levelList["Centralia Field 1"][6]={x:-10,y:70,precondition:[4],height:7,width:7,coefficient:5,exponent:1.15,goal:5200,initialmap:() => [,[,new Grid(1,1,"Uninitialized"),new Grid(1,2,"Uninitialized"),new Grid(1,3,"Uninitialized"),new Grid(1,4,"Uninitialized"),new Grid(1,5,"Uninitialized"),new Grid(1,6,new Item("?Void",9),"Existing"),new Grid(1,7,new Mob("!Hornet",1,50),"Existing")],[,new Grid(2,1,"Uninitialized"),new Grid(2,2,"Uninitialized"),new Grid(2,3,"Uninitialized"),new Grid(2,4,"Uninitialized"),new Grid(2,5,"Uninitialized"),new Grid(2,6,"Uninitialized"),new Grid(2,7,new Petal("Basic",1,{rearrange:"None"}),"Existing")],[,new Grid(3,1,"Uninitialized"),new Grid(3,2,"Uninitialized"),new Grid(3,3,"Uninitialized"),new Grid(3,4,"Uninitialized"),new Grid(3,5,"Uninitialized"),new Grid(3,6,new Item("?Void",9),"Existing"),new Grid(3,7,new Mob("!Spider",2,100),"Existing")],[,new Grid(4,1,"Uninitialized"),new Grid(4,2,"Uninitialized"),new Grid(4,3,"Uninitialized"),new Grid(4,4,"Uninitialized"),new Grid(4,5,"Uninitialized"),new Grid(4,6,"Uninitialized"),new Grid(4,7,new Item("?Void",9),"Existing")],[,new Grid(5,1,"Uninitialized"),new Grid(5,2,"Uninitialized"),new Grid(5,3,"Uninitialized"),new Grid(5,4,"Uninitialized"),new Grid(5,5,"Uninitialized"),new Grid(5,6,new Item("?Void",9),"Existing"),new Grid(5,7,new Mob("!Spider",3,{maxhealth:150,speed:30}),"Existing")],[,new Grid(6,1,"Uninitialized"),new Grid(6,2,"Uninitialized"),new Grid(6,3,"Uninitialized"),new Grid(6,4,"Uninitialized"),new Grid(6,5,"Uninitialized"),new Grid(6,6,"Uninitialized"),new Grid(6,7,new Petal("Basic",1,{rearrange:"None"}),"Existing")],[,new Grid(7,1,"Uninitialized"),new Grid(7,2,"Uninitialized"),new Grid(7,3,"Uninitialized"),new Grid(7,4,"Uninitialized"),new Grid(7,5,"Uninitialized"),new Grid(7,6,new Item("?Void",9),"Existing"),new Grid(7,7,new Mob("!Hornet",1,50),"Existing")]],spawner:[[{weight:10,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:10,result:(x,y) => new Grid(x,y,new Petal("Stinger",2),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:17,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:3,result:(x,y) => new Grid(x,y,new Petal("Rose",6),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Web",1),"Existing")}],[{weight:100,result:(x,y) => new Grid(x,y,new Petal("Rose",3),"Existing","Row")}],[{weight:100,result:(x,y) => new Grid(x,y,new Petal("Basic",1,{rearrange:"None"}),"Existing")}],[{weight:100,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing","Bomb")}]],spawnset:[{x:1,y:1,set:0},{x:2,y:1,set:0},{x:3,y:1,set:0},{x:4,y:1,set:0},{x:5,y:1,set:0},{x:6,y:1,set:0},{x:7,y:1,set:0},{x:1,y:7,set:1},{x:2,y:7,set:2},{x:3,y:7,set:3},{x:5,y:7,set:3},{x:6,y:7,set:2},{x:7,y:7,set:1}],valueset:() => {MobAttributeList[2].reflect=0,MobAttributeList[3].weavestrength=10},valuetext:{mob:"Nerfed Missile damage reflect: 50%->0<br>Nerfed Spider weave strength: 30->10"}}
-		levelList["Centralia Field 1"][7]={x:-30,y:50,precondition:[5,6],height:9,width:9,coefficient:5,exponent:1.1,goal:1,initialmap:() => [,[,new Grid(1,1,"Uninitialized"),new Grid(1,2,"Uninitialized"),new Grid(1,3,new Mob("!Spider",1,79),"Existing"),new Grid(1,4,new Mob("!Hornet",1,1),"Existing"),new Grid(1,5,new Item("?Void",9),"Existing"),new Grid(1,6,"Uninitialized"),new Grid(1,7,new Petal("Web",1,{rearrange:"None"}),"Existing"),new Grid(1,8,new Mob("!Spider",5,{maxhealth:636,actionbar:-500}),"Existing"),new Grid(1,9,new Mob("!Rock",2,10),"Existing")],[,new Grid(2,1,"Uninitialized"),new Grid(2,2,"Uninitialized"),new Grid(2,3,"Uninitialized"),new Grid(2,4,new Mob("!Spider",1,79),"Existing"),new Grid(2,5,new Item("?Void",9),"Existing"),new Grid(2,6,"Uninitialized"),new Grid(2,7,"Uninitialized"),new Grid(2,8,new Petal("Web",1,{rearrange:"None"}),"Existing"),new Grid(2,9,new Mob("!Spider",5,{maxhealth:636,actionbar:-500}),"Existing")],[,new Grid(3,1,"Uninitialized"),new Grid(3,2,"Uninitialized"),new Grid(3,3,"Uninitialized"),new Grid(3,4,"Uninitialized"),new Grid(3,5,new Item("?Void",9),"Existing"),new Grid(3,6,"Uninitialized"),new Grid(3,7,"Uninitialized"),new Grid(3,8,"Uninitialized"),new Grid(3,9,new Petal("Web",1,{rearrange:"None"}),"Existing")],[,new Grid(4,1,"Uninitialized"),new Grid(4,2,"Uninitialized"),new Grid(4,3,"Uninitialized"),new Grid(4,4,"Uninitialized"),new Grid(4,5,new Item("?Void",9),"Existing"),new Grid(4,6,"Uninitialized"),new Grid(4,7,"Uninitialized"),new Grid(4,8,"Uninitialized"),new Grid(4,9,"Uninitialized")],[,new Grid(5,1,new Item("?Void",9),"Existing"),new Grid(5,2,new Item("?Void",9),"Existing"),new Grid(5,3,new Item("?Void",9),"Existing"),new Grid(5,4,new Item("?Void",9),"Existing"),new Grid(5,5,new Item("?Void",9),"Existing"),new Grid(5,6,new Item("?Void",9),"Existing"),new Grid(5,7,new Item("?Void",9),"Existing"),new Grid(5,8,new Item("?Void",9),"Existing"),new Grid(5,9,new Item("?Void",9),"Existing")],[,new Grid(6,1,"Uninitialized"),new Grid(6,2,"Uninitialized"),new Grid(6,3,"Uninitialized"),new Grid(6,4,"Uninitialized"),new Grid(6,5,new Item("?Void",9),"Existing"),new Grid(6,6,"Uninitialized"),new Grid(6,7,"Uninitialized"),new Grid(6,8,"Uninitialized"),new Grid(6,9,"Uninitialized")],[,new Grid(7,1,"Uninitialized"),new Grid(7,2,"Uninitialized"),new Grid(7,3,"Uninitialized"),new Grid(7,4,"Uninitialized"),new Grid(7,5,new Item("?Void",9),"Existing"),new Grid(7,6,"Uninitialized"),new Grid(7,7,"Uninitialized"),new Grid(7,8,"Uninitialized"),new Grid(7,9,"Uninitialized")],[,new Grid(8,1,"Uninitialized"),new Grid(8,2,"Uninitialized"),new Grid(8,3,"Uninitialized"),new Grid(8,4,"Uninitialized"),new Grid(8,5,new Item("?Void",9),"Existing"),new Grid(8,6,"Uninitialized"),new Grid(8,7,"Uninitialized"),new Grid(8,8,"Uninitialized"),new Grid(8,9,"Uninitialized")],[,new Grid(9,1,"Uninitialized"),new Grid(9,2,"Uninitialized"),new Grid(9,3,"Uninitialized"),new Grid(9,4,"Uninitialized"),new Grid(9,5,new Item("?Void",9),"Existing"),new Grid(9,6,"Uninitialized"),new Grid(9,7,"Uninitialized"),new Grid(9,8,"Uninitialized"),new Grid(9,9,"Uninitialized")]],spawner:[[{weight:20,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")}],[{weight:100,result:(x,y) => new Grid(x,y,new Petal("Basic",4,{rearrange:"None"}),"Existing")}],[{weight:50,result:(x,y) => new Grid(x,y,new Petal("Basic",4,{rearrange:"None"}),"Existing","Column")},{weight:50,result:(x,y) => new Grid(x,y,new Petal("Basic",4,{rearrange:"None"}),"Existing","Bomb")}]],spawnset:[{x:6,y:1,set:0},{x:7,y:1,set:0},{x:8,y:1,set:0},{x:9,y:1,set:0},{x:1,y:4,set:1},{x:1,y:9,set:2}],transportset:[{start:{x:1,y:3},end:{x:1,y:6}},{start:{x:2,y:4},end:{x:2,y:6}},{start:{x:3,y:4},end:{x:3,y:6}},{start:{x:4,y:4},end:{x:4,y:6}},{start:{x:6,y:4},end:{x:6,y:6}},{start:{x:7,y:4},end:{x:7,y:6}},{start:{x:8,y:4},end:{x:8,y:6}},{start:{x:9,y:4},end:{x:9,y:6}},{start:{x:6,y:9},end:{x:1,y:1}},{start:{x:7,y:9},end:{x:2,y:1}},{start:{x:8,y:9},end:{x:3,y:1}},{start:{x:9,y:9},end:{x:4,y:1}}],valueset:() => {PetalAttributeList[0].damage=1; PetalAttributeList[1].damage=1; delete PetalAttributeList[1].blast; PetalAttributeList[4].heal=0; MobAttributeList[3].speed=30; MobAttributeList[3].increment=10; MobAttributeList[3].weavestrength=10; NewValue.damagemult[2]=10; NewValue.damagemult[4]=100},valuetext:{petal:"Nerfed Basic damage: 10->1<br>Nerfed Stinger damage: 30->1<br>Modify Stinger: No longer destroys by blast<br>Nerfed Leaf heal: 3->0",mob:"Nerfed Spider speed: 50->30<br>Buffed Spider damage increment: 0->5<br>Nerfed Spider weave strength: 30->10",other:"Buffed [RAR2] Petal damage multiplier: 2->10<br>Buffed [RAR4] Petal damage multiplier: 8->100"}}
+		levelList["Centralia Field 1"][1]={x:50,y:50,precondition:[],height:6,width:6,coefficient:10,exponent:1.2,goal:6400,spawner:[[{weight:14,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing","Row"),noinitial:true},{weight:1,result:(x,y) => new Grid(x,y,new Petal("Basic",5),"Existing"),noinitial:true},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing"),noinitial:true},{weight:25,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:25,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")}]],spawnset:"Default",valueset:() => {PetalAttributeList[1].damage=20; MobAttributeList[1].increment=0; MobAttributeList[2].reflect="200%"},valuetext:{petal:"Nerfed Stinger damage: 30->20",mob:"Nerfed Hornet damage increment: 1->0<br>Buffed Missile damage reflect: 50%->200%"},chvaluetext:{petal:"削弱刺伤害：30->20",mob:"削弱马蜂伤害增量：1->0<br>增强导弹伤害反射：50%->200%"}}
+		levelList["Centralia Field 1"][1].initialmap=function() {
+			let mapArray=generateMap(6,6)
+			mapArray[1][5]=new Grid(1,5,new Mob("!Rock",3,200),"Existing")
+			mapArray[1][6]=new Grid(1,6,new Mob("!Hornet",1,200),"Existing")
+			mapArray[2][5]=new Grid(2,5,new Mob("!Rock",2,100),"Existing")
+			mapArray[3][5]=new Grid(3,5,new Mob("!Rock",1,50),"Existing")
+			mapArray[4][5]=new Grid(4,5,new Mob("!Rock",1,50),"Existing")
+			mapArray[5][5]=new Grid(5,5,new Mob("!Rock",2,100),"Existing")
+			mapArray[6][5]=new Grid(6,5,new Mob("!Rock",3,200),"Existing")
+			mapArray[6][6]=new Grid(6,6,new Mob("!Hornet",1,200),"Existing")
+			return mapArray
+		}
+		levelList["Centralia Field 1"][2]={x:30,y:30,precondition:[1],height:7,width:7,coefficient:10,exponent:1.3,goal:6241,spawner:[[{weight:20,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")}]],spawnset:"Default",valueset:() => {MobAttributeList[2].immune="All"},valuetext:{mob:"Modify Missile: Immunes all damage"},chvaluetext:{mob:"修改导弹：免疫所有伤害"}}
+		levelList["Centralia Field 1"][2].initialmap=function() {
+			let mapArray=generateMap(7,7)
+			mapArray[3][4]=new Grid(3,4,new Mob("!Missile (H)",7,{health:6361,damage:50}),"Existing")
+			mapArray[4][3]=new Grid(4,3,new Mob("!Missile (H)",7,{health:6361,damage:50}),"Existing")
+			mapArray[4][4]=new Grid(4,4,new Mob("!Hornet",1,{maxhealth:50,actionbar:-300}),"Existing")
+			mapArray[4][5]=new Grid(4,5,new Mob("!Missile (H)",7,{health:6361,damage:50}),"Existing")
+			mapArray[5][4]=new Grid(5,4,new Mob("!Missile (H)",7,{health:6361,damage:50}),"Existing")
+			return mapArray
+		}
+		levelList["Centralia Field 1"][3]={x:30,y:70,precondition:[1],height:8,width:8,coefficient:10,exponent:1.2,goal:6241,spawner:[[{weight:18,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Basic",2),"Existing")},{weight:2,result:(x,y) => new Grid(x,y,new Petal("Basic",3),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Stinger",2),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Rose",2),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Leaf",2),"Existing")}],[{weight:30,result:(x,y) => new Grid(x,y,new Petal("Basic",4),"Existing","Column")},{weight:30,result:(x,y) => new Grid(x,y,new Petal("Basic",4),"Existing","Bomb")},{weight:30,result:(x,y) => new Grid(x,y,new Petal("Stinger",4),"Existing","Row")},{weight:10,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")}]],spawnset:[{x:1,y:1,set:0},{x:8,y:1,set:0},{x:4,y:2,set:1},{x:5,y:2,set:1}],wall:[{x:3,y:2,dir:2,stack:6361},{x:4,y:2,dir:2,stack:6361},{x:5,y:2,dir:2,stack:6361},{x:4,y:3,dir:3,stack:6361},{x:5,y:3,dir:3,stack:6361}],valueset:() => {PetalAttributeList[3].heal=0; PetalAttributeList[4].heal=2; NewValue.damagemult[4]=0; NewValue.healmult[1]=0},valuetext:{petal:"Nerfed Rose heal: 10->0<br>Nerfed Leaf heal: 3->2",other:"Nerfed [RAR4] Petal damage multiplier: 8->0<br>Nerfed [RAR1] Petal heal multiplier: 1->0"},chvaluetext:{petal:"削弱玫瑰治疗：10->0<br>削弱叶子治疗：3->2",other:"削弱[RAR4]花瓣伤害乘数：8->0<br>削弱[RAR1]花瓣治疗乘数：1->0"}}
+		levelList["Centralia Field 1"][3].initialmap=function() {
+			let mapArray=generateMap(8,8)
+			mapArray[2][1]=new Grid(2,1)
+			mapArray[3][1]=new Grid(3,1)
+			mapArray[3][2]=new Grid(3,2)
+			mapArray[4][1]=new Grid(4,1,new Mob("!Hornet",3,{maxhealth:300,actionbar:-500}),"Existing")
+			mapArray[4][2]=new Grid(4,2,new Mob("!Rock",1,10),"Existing")
+			mapArray[4][3]=new Grid(4,3)
+			mapArray[5][1]=new Grid(5,1,new Mob("!Hornet",3,{maxhealth:300,actionbar:-1000}),"Existing")
+			mapArray[5][2]=new Grid(5,2,new Mob("!Rock",3,100),"Existing")
+			mapArray[5][3]=new Grid(5,3)
+			mapArray[6][1]=new Grid(6,1)
+			mapArray[6][2]=new Grid(6,2)
+			mapArray[7][1]=new Grid(7,1)
+			return mapArray
+		}
+		levelList["Centralia Field 1"][4]={x:10,y:50,precondition:[2,3],height:6,width:6,coefficient:10,exponent:1.2,goal:6400,spawner:[[{weight:25,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Leaf",4),"Existing")},{weight:25,result:(x,y) => new Grid(x,y,new Petal("Web",1),"Existing")}]],spawnset:"Default",valueset:() => {MobAttributeList[1].increment=2},valuetext:{mob:"Buffed Hornet damage increment: 1->2"},chvaluetext:{mob:"增强马蜂伤害增量：1->2"}}
+		levelList["Centralia Field 1"][4].initialmap=function() {
+			let mapArray=generateMap(6,6)
+			mapArray[1][1]=new Grid(1,1,new Mob("!Rock",1,30),"Existing")
+			mapArray[1][6]=new Grid(1,6,new Mob("!Hornet",1,80),"Existing")
+			mapArray[2][2]=new Grid(2,2,new Mob("!Rock",1,30),"Existing")
+			mapArray[2][5]=new Grid(2,5,new Mob("!Spider",2,150),"Existing")
+			mapArray[3][3]=new Grid(3,3,new Mob("!Rock",1,30),"Existing")
+			mapArray[3][4]=new Grid(3,4,new Mob("!Rock",1,30),"Existing")
+			mapArray[4][3]=new Grid(4,3,new Mob("!Rock",1,30),"Existing")
+			mapArray[4][4]=new Grid(4,4,new Mob("!Rock",1,30),"Existing")
+			mapArray[5][2]=new Grid(5,2,new Mob("!Rock",1,30),"Existing")
+			mapArray[5][5]=new Grid(5,5,new Mob("!Spider",2,150),"Existing")
+			mapArray[6][1]=new Grid(6,1,new Mob("!Rock",1,30),"Existing")
+			mapArray[6][6]=new Grid(6,6,new Mob("!Hornet",1,80),"Existing")
+			return mapArray
+		}
+		levelList["Centralia Field 1"][5]={x:-10,y:30,precondition:[4],height:7,width:6,coefficient:10,exponent:1.2,goal:6000,spawner:[[{weight:20,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Web",1),"Existing")}]],spawnset:"Default",wall:[{x:2,y:4,dir:2,stack:16},{x:4,y:4,dir:2,stack:16},{x:1,y:3,dir:3,stack:9},{x:2,y:3,dir:3,stack:4},{x:5,y:3,dir:3,stack:4},{x:6,y:3,dir:3,stack:9},{x:3,y:4,dir:3,stack:6},{x:4,y:4,dir:3,stack:6}],valueset:() => {MobAttributeList[3].increment=10},valuetext:{mob:"Buffed Spider damage increment: 0->10"},chvaluetext:{mob:"增强蜘蛛伤害增量：0->10"}}
+		levelList["Centralia Field 1"][5].initialmap=function() {
+			let mapArray=generateMap(7,6)
+			mapArray[1][5]=new Grid(1,5,new Mob("!Rock",3,300),"Existing")
+			mapArray[1][6]=new Grid(1,6,new Mob("!Spider",3,300),"Existing")
+			mapArray[1][7]=new Grid(1,7,new Mob("!Hornet",2,200),"Existing")
+			mapArray[2][6]=new Grid(2,6,new Mob("!Rock",3,300),"Existing")
+			mapArray[5][6]=new Grid(5,6,new Mob("!Rock",3,300),"Existing")
+			mapArray[6][5]=new Grid(6,5,new Mob("!Rock",3,300),"Existing")
+			mapArray[6][6]=new Grid(6,6,new Mob("!Spider",3,300),"Existing")
+			mapArray[6][7]=new Grid(6,7,new Mob("!Hornet",2,200),"Existing")
+			return mapArray
+		}
+		levelList["Centralia Field 1"][6]={x:-10,y:70,precondition:[4],height:7,width:7,coefficient:5,exponent:1.15,goal:5200,spawner:[[{weight:10,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:10,result:(x,y) => new Grid(x,y,new Petal("Stinger",2),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:17,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:3,result:(x,y) => new Grid(x,y,new Petal("Rose",6),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Web",1),"Existing")}],[{weight:100,result:(x,y) => new Grid(x,y,new Petal("Rose",3),"Existing","Row")}],[{weight:100,result:(x,y) => new Grid(x,y,new Petal("Basic",1,{rearrange:"None"}),"Existing")}],[{weight:100,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing","Bomb")}]],spawnset:[{x:1,y:1,set:0},{x:2,y:1,set:0},{x:3,y:1,set:0},{x:4,y:1,set:0},{x:5,y:1,set:0},{x:6,y:1,set:0},{x:7,y:1,set:0},{x:1,y:7,set:1},{x:2,y:7,set:2},{x:3,y:7,set:3},{x:5,y:7,set:3},{x:6,y:7,set:2},{x:7,y:7,set:1}],valueset:() => {MobAttributeList[2].reflect=0,MobAttributeList[3].weavestrength=10},valuetext:{mob:"Nerfed Missile damage reflect: 50%->0<br>Nerfed Spider weave strength: 30->10"},chvaluetext:{mob:"削弱导弹伤害反射：50%->0<br>削弱蜘蛛织网强度：30->10"}}
+		levelList["Centralia Field 1"][6].initialmap=function() {
+			let mapArray=generateMap(7,7)
+			mapArray[1][6]=new Grid(1,6,new Item("?Void",9),"Existing")
+			mapArray[1][7]=new Grid(1,7,new Mob("!Hornet",1,50),"Existing")
+			mapArray[2][7]=new Grid(2,7,new Petal("Basic",1,{rearrange:"None"}),"Existing")
+			mapArray[3][6]=new Grid(3,6,new Item("?Void",9),"Existing")
+			mapArray[3][7]=new Grid(3,7,new Mob("!Spider",2,100),"Existing")
+			mapArray[4][7]=new Grid(4,7,new Item("?Void",9),"Existing")
+			mapArray[5][6]=new Grid(5,6,new Item("?Void",9),"Existing")
+			mapArray[5][7]=new Grid(5,7,new Mob("!Spider",3,{maxhealth:150,speed:30}),"Existing")
+			mapArray[6][7]=new Grid(6,7,new Petal("Basic",1,{rearrange:"None"}),"Existing")
+			mapArray[7][6]=new Grid(7,6,new Item("?Void",9),"Existing")
+			mapArray[7][7]=new Grid(7,7,new Mob("!Hornet",1,50),"Existing")
+			return mapArray
+		}
+		levelList["Centralia Field 1"][7]={x:-30,y:50,precondition:[5,6],height:9,width:9,coefficient:5,exponent:1.1,goal:1,spawner:[[{weight:20,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")}],[{weight:100,result:(x,y) => new Grid(x,y,new Petal("Basic",4,{rearrange:"None"}),"Existing")}],[{weight:50,result:(x,y) => new Grid(x,y,new Petal("Basic",4,{rearrange:"None"}),"Existing","Column")},{weight:50,result:(x,y) => new Grid(x,y,new Petal("Basic",4,{rearrange:"None"}),"Existing","Bomb")}]],spawnset:[{x:6,y:1,set:0},{x:7,y:1,set:0},{x:8,y:1,set:0},{x:9,y:1,set:0},{x:1,y:4,set:1},{x:1,y:9,set:2}],transportset:[{start:{x:1,y:3},end:{x:1,y:6}},{start:{x:2,y:4},end:{x:2,y:6}},{start:{x:3,y:4},end:{x:3,y:6}},{start:{x:4,y:4},end:{x:4,y:6}},{start:{x:6,y:4},end:{x:6,y:6}},{start:{x:7,y:4},end:{x:7,y:6}},{start:{x:8,y:4},end:{x:8,y:6}},{start:{x:9,y:4},end:{x:9,y:6}},{start:{x:6,y:9},end:{x:1,y:1}},{start:{x:7,y:9},end:{x:2,y:1}},{start:{x:8,y:9},end:{x:3,y:1}},{start:{x:9,y:9},end:{x:4,y:1}}],valueset:() => {PetalAttributeList[0].damage=1; PetalAttributeList[1].damage=1; delete PetalAttributeList[1].blast; PetalAttributeList[4].heal=0; MobAttributeList[3].speed=30; MobAttributeList[3].increment=10; MobAttributeList[3].weavestrength=10; NewValue.damagemult[2]=10; NewValue.damagemult[4]=100},valuetext:{petal:"Nerfed Basic damage: 10->1<br>Nerfed Stinger damage: 30->1<br>Modify Stinger: No longer destroys by blast<br>Nerfed Leaf heal: 3->0",mob:"Nerfed Spider speed: 50->30<br>Buffed Spider damage increment: 0->5<br>Nerfed Spider weave strength: 30->10",other:"Buffed [RAR2] Petal damage multiplier: 2->10<br>Buffed [RAR4] Petal damage multiplier: 8->100"},chvaluetext:{petal:"削弱基本伤害：10->1<br>削弱刺伤害：30->1<br>修改刺：不再被冲击波摧毁<br>削弱叶子治疗：3->0",mob:"削弱蜘蛛速度：50->30<br>增强蜘蛛伤害增量：0->5<br>削弱蜘蛛织网强度：30->10",other:"增强[RAR2]花瓣伤害乘数：2->10<br>增强[RAR4]花瓣伤害乘数：8->100"}}
+		levelList["Centralia Field 1"][7].initialmap=function() {
+			let mapArray=generateMap(9,9)
+			for(let i=1;i<=9;i++) mapArray[i][5]=new Grid(i,5,new Item("?Void",9),"Existing")
+			for(let i=1;i<=9;i++) mapArray[5][i]=new Grid(5,i,new Item("?Void",9),"Existing")
+			mapArray[1][3]=new Grid(1,3,new Mob("!Spider",1,79),"Existing")
+			mapArray[1][4]=new Grid(1,4,new Mob("!Hornet",1,1),"Existing")
+			mapArray[1][7]=new Grid(1,7,new Petal("Web",1,{rearrange:"None"}),"Existing")
+			mapArray[1][8]=new Grid(1,8,new Mob("!Spider",5,{maxhealth:636,actionbar:-500}),"Existing")
+			mapArray[1][9]=new Grid(1,9,new Mob("!Rock",2,10),"Existing")
+			mapArray[2][4]=new Grid(2,4,new Mob("!Spider",1,79),"Existing")
+			mapArray[2][8]=new Grid(2,8,new Petal("Web",1,{rearrange:"None"}),"Existing")
+			mapArray[2][9]=new Grid(2,9,new Mob("!Spider",5,{maxhealth:636,actionbar:-500}),"Existing")
+			mapArray[3][9]=new Grid(3,9,new Petal("Web",1,{rearrange:"None"}),"Existing")
+			return mapArray
+		}
+		levelList["South Desert 1"]=new Array()
+		levelList["South Desert 1"][1]={x:50,y:50,precondition:[],height:7,width:7,coefficient:10,exponent:1.2,goal:6400,spawner:[[{weight:15,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing"),noinitial:true},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Basic",2),"Existing"),noinitial:true},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing"),noinitial:true},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Stinger",2),"Existing"),noinitial:true},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")}]],spawnset:"Default",valueset:() => {MobAttributeList[5].increment=0},valuetext:{mob:"Nerfed Scorpion damage increment: 1->0"},chvaluetext:{mob:"削弱蝎子伤害增量：1->0"}}
+		levelList["South Desert 1"][1].initialmap=function() {
+			let mapArray=generateMap(7,7)
+			mapArray[3][5]=new Grid(3,5,new Mob("!Cactus",1,100),"Existing")
+			mapArray[3][6]=new Grid(3,6,new Mob("!Cactus",1,100),"Existing")
+			mapArray[3][7]=new Grid(3,7,new Mob("!Scorpion",1,200),"Existing")
+			mapArray[5][5]=new Grid(5,5,new Mob("!Cactus",1,100),"Existing")
+			mapArray[5][6]=new Grid(5,6,new Mob("!Cactus",1,100),"Existing")
+			mapArray[5][7]=new Grid(5,7,new Mob("!Scorpion",1,200),"Existing")
+			return mapArray
+		}
 		let mapList=new Array()
 		mapList[0]={name:"Training Ground",x:50,y:50,color:"#bfbfbf",precondition:[],cost:79}
 		mapList[1]={name:"Centralia Field 1",x:30,y:50,color:"#bfffbf",precondition:[0],cost:27}
+		mapList[2]={name:"South Desert 1",x:50,y:70,color:"#ffff7f",precondition:[0],cost:27}
 		for(let i in mapList) for(let j in levelList[mapList[i].name]) if(levelList[mapList[i].name][j].spawnset==="Default") {
 			levelList[mapList[i].name][j].spawnset=new Array()
 			for(let k=1;k<=levelList[mapList[i].name][j].width;k++) levelList[mapList[i].name][j].spawnset.push({x:k,y:1,set:0})
@@ -1666,11 +1896,11 @@
 			mouseX=mouse.clientX
 			mouseY=mouse.clientY
 		} )
-		const version=20260321,acceptedVersion=20260313
+		const version=20260803,acceptedVersion=20260321
 		const svgNS="http://www.w3.org/2000/svg"
-		const dx=[0,0,1,0,-1],dy=[0,-1,0,1,0],dx5=[0,1,2,2,1,-1,-2,-2,-1],dy5=[0,-2,-1,1,2,2,1,-1,-2]
+		const dx=[0,0,1,0,-1],dy=[0,-1,0,1,0],dx2=[0,1,1,-1,-1],dy2=[0,-1,1,1,-1],dx5=[0,1,2,2,1,-1,-2,-2,-1],dy5=[0,-2,-1,1,2,2,1,-1,-2]
 		let rarityColor=["#000000","#7eef6d","#ffe65d","#4d52e3","#861fde","#de1f1f","#1fdbde","#ff2b75","#2bffa3","#555555"]
-		let rarityColorEP=["#000000","#7eef6d","#ffe65d; filter: brightness(90%)","#4d52e3","#861fde","#de1f1f","#1fdbde","#ff2b75","#2bffa3; filter: brightness(90%)","#555555"]
+		let rarityColorEP=["#000000","#7eef6d; filter: brightness(90%)","#ffe65d; filter: brightness(80%)","#4d52e3","#861fde","#de1f1f","#1fdbde","#ff2b75","#2bffa3; filter: brightness(80%)","#555555"]
 		let rarityName=["None","Common","Unusual","Rare","Epic","Legendary","Mythic","Ultra","Super","Unique"]
 		let userVersion=JSON.parse(localStorage.getItem("PETALCRUSHuserVersion"))
 		function setVersion() {
@@ -1678,6 +1908,7 @@
 		}
 		if(!userVersion) userVersion=version
 		setVersion()
+		let versionAnnouncement="<h2>Announcement</h2><span>This game was updated again when you left!</span><span>Do you want to perform a <span class='bold'>hard reset</span> before starting the game?</span><br><span>The last update was on 2026/8/3,</span><span>which updated language settings, also updated desert.</span><br><span>The last update before was on 2026/3/21,</span><span>which updated 2 levels. Centralia 1 completed.</span><br><span>The last important update before was on 2026/3/13,</span><span>which created Petal Crush Rewritten.</span><br><button type='button' tabindex='-1' id='version3' onclick='updateVersion(false)'>No, just update the version.</button><br><button type='button' tabindex='-1' id='version4' onclick='updateVersion(true)'>Yes, hard reset before starting.</button>"
 		let player=JSON.parse(localStorage.getItem("PETALCRUSHplayer"))
 		let game=JSON.parse(localStorage.getItem("PETALCRUSHgame"))
 		function setPlayer() {
@@ -1689,6 +1920,7 @@
 		if(!player) player=new Object()
 		if(!game) game=new Object()
 		if(!player.hasOwnProperty("settings")) player.settings=new Object()
+		player.savesettings=structuredClone(player.settings)
 		if(!player.hasOwnProperty("book")) player.book=["Flower Game Guide"]
 		if(!player.hasOwnProperty("bookreading")) player.bookreading=0
 		if(!player.hasOwnProperty("PFLF")) player.PFLF=new Object()
@@ -1796,9 +2028,9 @@
 			if(100*Math.random()<=chance) result=true
 			if(log) {
 				if(result) {
-					addLog("[Determine] True ("+betterFloor(chance)+"%)"+logText,"#3f3f3f")
+					addLog("[Determine] "+translateText("True ")+"("+betterFloor(chance)+"%)"+translateText(logText),"#3f3f3f")
 				} else {
-					addLog("[Determine] False ("+(100-betterFloor(chance))+"%)"+logText,"#3f3f3f")
+					addLog("[Determine] "+translateText("False ")+"("+(100-betterFloor(chance))+"%)"+translateText(logText),"#3f3f3f")
 				}
 			}
 			return result
@@ -1867,7 +2099,7 @@
 			}
 			if(text==="Recover") newGrid.innerHTML="<svg viewBox='0 0 100 100' class='lgreen-bg in-svg'><path class='dgreen-path' d='M35 45L65 45M50 30L50 60M20 72L36 72M28 64L28 80M64 72L80 72M72 64L72 80'/><span style='display: none'>Recover</span>"
 			if(text==="Poison") newGrid.innerHTML="<svg viewBox='0 0 100 100' class='lred-bg in-svg'><path class='dpurple-path rcap' d='M50 80L50 20M50 80L30 60M50 80L70 60'/><span style='display: none'>Poison</span>"
-			if(text==="Empty") newGrid.innerHTML="<span class='mid lgrey text3'>Empty</span>"
+			if(text==="Empty") newGrid.innerHTML="<span class='mid lgrey text3'>"+translateText("Empty")+"</span>"
 			if(text==="Space") newGrid.innerHTML="<svg viewBox='0 0 100 100' class='in-svg'><path d='M0 20L0 0L20 0M80 0L100 0L100 20M100 80L100 100L80 100M20 100L0 100L0 80'/></svg><span class='mid lgrey text3'>Space</span>"
 			if(typeof(text)==="number" && text!==0) newGrid.innerHTML="<svg viewBox='0 0 100 100' class='in-svg'><path d='M50 10L90 50L50 90L10 50Z'/></svg><span class='mid'>"+text+"</span>"
 			if(typeof(text)==="string" && text.startsWith("Text")) newGrid.innerHTML="<span class='mid'>"+text.slice(5)+"</span>"
@@ -1969,10 +2201,11 @@
 		bookHTML["Flower Game Guide"]="<h2>Flower Game Guide</h2><div class='white-bg inner-box'><span style='color: #008000'>#include&lt;PFLFtools.h&gt;</span><span><span style='font-weight: bold'>using namespace</span> std<span style='color: #ff0000; font-weight: bold'>;</span></span><span><span style='font-weight: bold'>int</span> main<span style='color: #ff0000; font-weight: bold'>()</span></span><span style='color: #ff0000; font-weight: bold'>{</span><span style='margin-left: 2em'>system<span style='color: #ff0000; font-weight: bold'>(</span><span style='color: #0000ff; font-weight: bold'>\"cls\"</span><span style='color: #ff0000; font-weight: bold'>);</span></span><span style='margin-left: 2em'>slowprint<span style='color: #ff0000; font-weight: bold'>(</span><span style='color: #0000ff; font-weight: bold'>\"↓MORE GAME (CLICK!)↓\"</span><span style='color: #ff0000; font-weight: bold'>,</span><span style='color: #800080'>50</span><span style='color: #ff0000; font-weight: bold'>);</span></span><span style='margin-left: 2em'>slowprint<span style='color: #ff0000; font-weight: bold'>(</span><a href='https://6triple6single.github.io/Florroom' target='_blank' style='color: #0000ff; font-weight: bold; text-decoration: none'>\"FLORROOM\"</a><span style='color: #ff0000; font-weight: bold'>,</span><span style='color: #800080'>50</span><span style='color: #ff0000; font-weight: bold'>);</span></span><span style='margin-left: 2em'>slowprint<span style='color: #ff0000; font-weight: bold'>(</span><a href='https://6triple6single.github.io/PFLF' target='_blank' style='color: #0000ff; font-weight: bold; text-decoration: none'>\"PFLF\"</a><span style='color: #ff0000; font-weight: bold'>,</span><span style='color: #800080'>50</span><span style='color: #ff0000; font-weight: bold'>);</span></span><span style='margin-left: 2em'>slowprint<span style='color: #ff0000; font-weight: bold'>(</span><a href='https://6triple6single.github.io/Virus1' target='_blank' style='color: #0000ff; font-weight: bold; text-decoration: none'>\"VIRUS 1\"</a><span style='color: #ff0000; font-weight: bold'>,</span><span style='color: #800080'>50</span><span style='color: #ff0000; font-weight: bold'>);</span></span><span style='margin-left: 2em'><span style='font-weight: bold'>return</span> <span style='color: #800080'>0</span><span style='color: #ff0000; font-weight: bold'>;</span></span><span style='color: #ff0000; font-weight: bold'>}</span></div>"
 		bookHTML["Petal Crafter Tutorial"]="<h2>Petal Crafter Tutorial</h2><span>You combined 3 petals into a line, then they crushed and crafted a new one! You have already seen how powerful it is. The Rock is instantly destroyed.</span><span>Maybe you will need to try something new. For example, crafting 4 or more petals, combining petals with different rarity... Anyway, this is a great starting, go on!</span><br><span>Oh, you are confused about how does damage work? Well, when you combine damaging petals together, all of them will do damage to a certain mob nearby (if exist). Then, each petal does damage to mobs around it. So actually <span class='bold'>you have dealt 30+10 damage to the Rock</span>! That's so powerful!</span><br><span>Oh, you also want to ask what is score? Score drops over turn. It determines how good your work is. Remember try to get as much score as you can.</span><br><span>Don't turn the [Resource] Log Display off in settings, you will be notified when you have new things to learn!</span>"
 		bookHTML["Various Petal Collection"]="<h2>Various Petal Collection</h2><span>Craft a special petal with special type by your own!</span><br><span>The Row Type: It has an icon consisting of a horizontal line and two outward pointing arrows. It releases a blast when crushed. The blast will destroy all petals in the same row and also damage mobs.</span><span>The Column Type: It has an icon consisting of a vertical line and two outward pointing arrows. It also releases a blast when crushed. The blast affects things in the same column instead.</span><span>The Bomb Type: It has an icon with two diagonal lines and four outward pointing arrows on the corners. It also releases a blast when crushed. The blast affects things within <span class='bold'>sqrt(5)</span> distance instead.</span><span>The Kaleidoscope Type: It has a regular pentagon icon. When crushed, it collects petals of the same type instead of releasing blast. <span class='bold'>This will not destroy petals which destroys by blast</span>.</span><h3>How to get</h3><span>The Row Type: Combine 4 petals in a column. Only created if Bomb or Kaleidoscope type can't be created.</span><span>The Column Type: Combine 4 petals in a row. Same condition as above.</span><span>The Bomb Type: Creates whenever there is a cross (which means a petal is both crushed in row and column) but Kaleidoscope can not be created.</span><span>The Kaleidoscope Type: Combine 5 petals in a row or a column. Has the highest priority.</span><br><span>An area can only create one special type of petal. If there is only one rarity in an area, all petals will be combined into a higher rarity one, but it has the lowest priority. If there is no place to create, nothing will happen, AND this has nothing to do with energy loss.</span>"
+		let bookHTMLTrans=structuredClone(bookHTML)
 		function book(modify) {
 			if(modify===-1 && player.bookreading>0) player.bookreading--
 			if(modify===1 && player.bookreading<player.book.length-1) player.bookreading++
-			document.getElementById("book-content").innerHTML=bookHTML[player.book[player.bookreading]]
+			document.getElementById("book-content").innerHTML=bookHTMLTrans[player.book[player.bookreading]]
 			setPlayer()
 		}
 		let logDisplay=true,cleanerDegree=0
@@ -1991,6 +2224,7 @@
 			if(text.startsWith("[Flower]") && player.settings.closeflowerlog===true) return
 			if(text.startsWith("[Determine]") && player.settings.closedeterminelog===true) return
 			if(text.startsWith("[Resource]") && player.settings.closeresourcelog===true) return
+			text=text.replace(/(?<=^\[).+?(?=\])/,(content)=>translateText(content))
 			let logElement=document.createElement("div")
 			logElement.setAttribute("class","lcmargin")
 			if(color) logElement.style.color=color
@@ -2030,12 +2264,21 @@
 				let validCommand=false
 				if(commandInput==="help") {
 					validCommand=true
-					addLog("[Help] Help: Print list of all available commands. (Format: .help)","#bf7fbf")
-					addLog("[Help] PFLFstart: Play PFLF with bot#7976. (Format: .PFLFstart)","#bf7fbf")
-					addLog("[Help] PFLFend: End PFLF game. (Format: .PFLFend)","#bf7fbf")
-					addLog("[Help] Claim: Claim number in PFLF. (Format: .claim [number])","#bf7fbf")
-					addLog("[Help] PFLFget: Print PFLF state. (Format: .PFLFget)","#bf7fbf")
-					addLog("[Help] PFLFhighscore: Print PFLF highscore. (Format: .PFLFhighscore)","#bf7fbf")
+					if(player.savesettings.language!=="Chinese") {
+						addLog("[Help] Help: Print list of all available commands. (Format: .help)","#bf7fbf")
+						addLog("[Help] PFLFstart: Play PFLF with bot#7976. (Format: .PFLFstart)","#bf7fbf")
+						addLog("[Help] PFLFend: End PFLF game. (Format: .PFLFend)","#bf7fbf")
+						addLog("[Help] Claim: Claim number in PFLF. (Format: .claim [number])","#bf7fbf")
+						addLog("[Help] PFLFget: Print PFLF state. (Format: .PFLFget)","#bf7fbf")
+						addLog("[Help] PFLFhighscore: Print PFLF highscore. (Format: .PFLFhighscore)","#bf7fbf")
+					} else {
+						addLog("[Help] Help: 打印所有可用指令。 (格式: .help)","#bf7fbf")
+						addLog("[Help] PFLFstart: 和机器人7976玩PFLF。 (格式: .PFLFstart)","#bf7fbf")
+						addLog("[Help] PFLFend: 结束PFLF游戏。 (格式: .PFLFend)","#bf7fbf")
+						addLog("[Help] Claim: 在PFLF中收取数字。 (格式: .claim [数字])","#bf7fbf")
+						addLog("[Help] PFLFget: 打印PFLF状态。 (格式: .PFLFget)","#bf7fbf")
+						addLog("[Help] PFLFhighscore: 打印PFLF高分记录。 (格式: .PFLFhighscore)","#bf7fbf")
+					}
 				}
 				if(commandInput==="PFLFstart" && player.PFLF.active===false) {
 					validCommand=true
@@ -2045,12 +2288,12 @@
 					player.PFLF.clear=-1
 					player.PFLF.dice=0
 					commandInput="claim 0"
-					addLog("[bot#7976] PFLF started!","#7f7fff")
+					addLog("[bot#7976] "+translateText("PFLF started!"),"#7f7fff")
 				}
 				if(commandInput==="PFLFend" && player.PFLF.active===true) {
 					validCommand=true
 					player.PFLF.active=false
-					addLog("[bot#7976] PFLF ended!","#7f7fff")
+					addLog("[bot#7976] "+translateText("PFLF ended!"),"#7f7fff")
 				}
 				if(commandInput.startsWith("claim ") && player.PFLF.active===true) {
 					let testValid=true,claimNum=commandInput.slice(6).match(/^\d+/)
@@ -2086,7 +2329,7 @@
 								player.PFLF.highscoreturn=player.PFLF.turn
 								player.PFLF.highscoreclear=player.PFLF.clear
 							}
-							addLog("[bot#7976] Final Turn: "+player.PFLF.turn+", Score: "+player.PFLF.score+", Clear: "+player.PFLF.clear,"#7f7fff")
+							addLog("[bot#7976] "+translateText("Final Turn")+": "+player.PFLF.turn+", "+translateText("Score")+": "+player.PFLF.score+", "+translateText("Clear")+": "+player.PFLF.clear,"#7f7fff")
 							player.PFLF.active=false
 						}  else {
 							player.PFLF.turn++
@@ -2098,19 +2341,21 @@
 				}
 				if(commandInput==="PFLFget" && player.PFLF.active===true) {
 					validCommand=true
-					addLog("[bot#7976] Turn: "+player.PFLF.turn+", Score: "+player.PFLF.score+", Clear: "+player.PFLF.clear+", Dice: "+player.PFLF.dice,"#7f7fff")
+					addLog("[bot#7976] "+translateText("Turn")+": "+player.PFLF.turn+", "+translateText("Score")+": "+player.PFLF.score+", "+translateText("Clear")+": "+player.PFLF.clear+", "+translateText("Dice")+": "+player.PFLF.dice,"#7f7fff")
 				}
 				if(commandInput==="PFLFhighscore") {
 					validCommand=true
-					addLog("[bot#7976] Highest Score: "+player.PFLF.highscore+", Achieved with Turn "+player.PFLF.highscoreturn+" and Clear "+player.PFLF.highscoreclear+".","#7f7fff")
+					addLog("[bot#7976] "+translateText("Highest Score")+": "+player.PFLF.highscore+", "+translateText("Achieved with Turn ","EN")+translateText("以","CH")+player.PFLF.highscoreturn+translateText(" and Clear ","EN")+translateText("回合和","CH")+player.PFLF.highscoreclear+translateText("清场数达成","CH")+translateText("."),"#7f7fff")
 				}
-				if(validCommand===false) addLog("[Command] Invalid command. (Command not exist or available)","#bf7f3f")
+				if(validCommand===false) addLog("[Command] "+translateText("Invalid command. (Command not exist or available)"),"#bf7f3f")
 			} else {
-				addLog("[Chat] Traveler: "+commandInput.replaceAll("<","&lt;"))
+				addLog("[Chat] "+translateText("Traveler")+": "+commandInput.replaceAll("<","&lt;"))
 			}
 		}
 		let dialogRemain="",dialogPrint=false
 		async function dialog(title,maintext,speed,bgColor="#ffffff",textColor="#000000") {
+			if(cornerDisplay()) return
+			if(player.savesettings.language==="Chinese") player.settings.dialog="Skip"
 			document.getElementById("end1").style["pointer-events"]="unset"
 			if(title==="Skip") {
 				if(dialogRemain.length) {
@@ -2159,7 +2404,7 @@
 					player.dialog.startdialog="Completed"
 					document.getElementById("dialog").style.display="none"
 					player.book.push("Petal Crafter Tutorial")
-					addLog("[Resource] You received Petal Crafter Tutorial.","#7fff7f")
+					addLog("[Resource] "+translateText("You received ")+translateText("Petal Crafter Tutorial")+".","#7fff7f")
 					setPlayer()
 					animation=false
 					document.getElementById("end1").style["pointer-events"]="none"
@@ -2222,7 +2467,7 @@
 					if(player.dialog.petaltype[2]===1) {
 						await dialog("Garden Watcher","Fine. I have one available.","Unset","#dfffdf")
 						player.book.push("Various Petal Collection")
-						addLog("[Resource] You received Various Petal Collection.","#7fff7f")
+						addLog("[Resource] "+translateText("You received ")+translateText("Various Petal Collection")+".","#7fff7f")
 						player.dialog.petaltypedialog=2
 						return
 					}
@@ -2291,7 +2536,7 @@
 				if(player.dialog.tutorialfinishdialog===4) {
 					await dialog("Garden Watcher","Just another guide. If you are still not sure how does these work, it should be helpful.","Unset","#dfffdf")
 					player.book.push("Advanced Crafter Guide")
-					addLog("[Resource] You received Advanced Crafter Guide.","#7fff7f")
+					addLog("[Resource] "+translateText("You received ")+translateText("Advanced Crafter Guide")+".","#7fff7f")
 					player.dialog.tutorialfinishdialog=5
 					return
 				}
@@ -2380,9 +2625,9 @@
 			closeAll()
 			selectedGrid.select=false
 			closeGridInfo()
-			document.getElementById("settings").innerHTML="<h2>Settings</h2><span class='nowrap'>🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲</span><br><span>REC means recommended</span>"
+			document.getElementById("settings").innerHTML="<h2>"+translateText("Settings")+"</h2><span class='nowrap'>🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲</span>"+translateText("<br><span>REC means recommended</span>","EN")
 			let logDisplayTitle=document.createElement("h3")
-			logDisplayTitle.innerHTML="Log Display"
+			logDisplayTitle.innerHTML=translateText("Log Display")
 			document.getElementById("settings").appendChild(logDisplayTitle)
 			let logDisplay=document.createElement("div")
 			if(!player.settings.hasOwnProperty("closehelplog")) {
@@ -2450,7 +2695,7 @@
 			}
 			document.getElementById("settings").appendChild(logDisplay)
 			let dialogDisplayTitle=document.createElement("h3")
-			dialogDisplayTitle.innerHTML="Dialog Display"
+			dialogDisplayTitle.innerHTML=translateText("Dialog Display")
 			document.getElementById("settings").appendChild(dialogDisplayTitle)
 			let dialogDisplay=document.createElement("div")
 			if(player.settings.dialog==="Slow") {
@@ -2467,43 +2712,55 @@
 				dialogDisplay.appendChild(addButton)
 			}
 			document.getElementById("settings").appendChild(dialogDisplay)
+			let themeTitle=document.createElement("h3")
+			themeTitle.innerHTML=translateText("Theme (Requires Refresh)")
+			document.getElementById("settings").appendChild(themeTitle)
+			let themeDisplay=document.createElement("div")
+			if(player.settings.language==="Chinese") {
+				let addButton=settingButton(1,3,"Chinese")
+				themeDisplay.appendChild(addButton)
+			} else {
+				let addButton=settingButton(1,3,"English")
+				themeDisplay.appendChild(addButton)
+			}
+			document.getElementById("settings").appendChild(themeDisplay)
 			let qolTitle=document.createElement("h3")
-			qolTitle.innerHTML="Quality of Life"
+			qolTitle.innerHTML=translateText("Quality of Life")
 			document.getElementById("settings").appendChild(qolTitle)
 			let qolDisplay=document.createElement("div")
 			if(!player.settings.hasOwnProperty("alwaysscroll")) {
-				let addButton=settingButton(1,3,"Off")
+				let addButton=settingButton(1,4,"Off")
 				qolDisplay.appendChild(addButton)
 			} else {
-				let addButton=settingButton(1,3,"On")
+				let addButton=settingButton(1,4,"On")
 				qolDisplay.appendChild(addButton)
 			}
 			if(!player.settings.hasOwnProperty("enablemenu")) {
-				let addButton=settingButton(2,3,"Off")
+				let addButton=settingButton(2,4,"Off")
 				qolDisplay.appendChild(addButton)
 			} else {
-				let addButton=settingButton(2,3,"On")
+				let addButton=settingButton(2,4,"On")
 				qolDisplay.appendChild(addButton)
 			}
 			if(!player.settings.hasOwnProperty("transparentinfo")) {
-				let addButton=settingButton(3,3,"Off")
+				let addButton=settingButton(3,4,"Off")
 				qolDisplay.appendChild(addButton)
 			} else {
-				let addButton=settingButton(3,3,"On")
+				let addButton=settingButton(3,4,"On")
 				qolDisplay.appendChild(addButton)
 			}
 			if(!player.settings.hasOwnProperty("skipanimation")) {
-				let addButton=settingButton(4,3,"Off")
+				let addButton=settingButton(4,4,"Off")
 				qolDisplay.appendChild(addButton)
 			} else {
-				let addButton=settingButton(4,3,"On")
+				let addButton=settingButton(4,4,"On")
 				qolDisplay.appendChild(addButton)
 			}
 			if(!player.settings.hasOwnProperty("forcemobile")) {
-				let addButton=settingButton(5,3,"Off")
+				let addButton=settingButton(5,4,"Off")
 				qolDisplay.appendChild(addButton)
 			} else {
-				let addButton=settingButton(5,3,"On")
+				let addButton=settingButton(5,4,"On")
 				qolDisplay.appendChild(addButton)
 			}
 			document.getElementById("settings").appendChild(qolDisplay)
@@ -2514,131 +2771,139 @@
 		function settingButton(setX,setY,state) {
 			let addButton
 			if(setX===1 && setY===1 && state==="On") {
-				addButton=createGrid(5,setX,setY,"Text_Help",2)
+				addButton=createGrid(5,setX,setY,"Text_"+translateText("Help"),2)
 				addButton.classList.add("green-bg")
 			}
 			if(setX===1 && setY===1 && state==="Off") {
-				addButton=createGrid(5,setX,setY,"Text_Help<br><span class='text5'>REC=On</span>",2)
+				addButton=createGrid(5,setX,setY,"Text_"+translateText("Help")+"<br><span class='text5'>"+translateText("REC=On")+"</span>",2)
 				addButton.classList.add("red-bg")
 			}
 			if(setX===2 && setY===1 && state==="On") {
-				addButton=createGrid(5,setX,setY,"Text_Command",2)
+				addButton=createGrid(5,setX,setY,"Text_"+translateText("Command"),2)
 				addButton.classList.add("green-bg")
 			}
 			if(setX===2 && setY===1 && state==="Off") {
-				addButton=createGrid(5,setX,setY,"Text_Command",2)
+				addButton=createGrid(5,setX,setY,"Text_"+translateText("Command"),2)
 				addButton.classList.add("red-bg")
 			}
 			if(setX===3 && setY===1 && state==="On") {
-				addButton=createGrid(5,setX,setY,"Text_Chat",2)
+				addButton=createGrid(5,setX,setY,"Text_"+translateText("Chat"),2)
 				addButton.classList.add("green-bg")
 			}
 			if(setX===3 && setY===1 && state==="Off") {
-				addButton=createGrid(5,setX,setY,"Text_Chat",2)
+				addButton=createGrid(5,setX,setY,"Text_"+translateText("Chat"),2)
 				addButton.classList.add("red-bg")
 			}
 			if(setX===4 && setY===1 && state==="On") {
-				addButton=createGrid(5,setX,setY,"Text_Bot",2)
+				addButton=createGrid(5,setX,setY,"Text_"+translateText("Bot"),2)
 				addButton.classList.add("green-bg")
 			}
 			if(setX==4 && setY===1 && state==="Off") {
-				addButton=createGrid(5,setX,setY,"Text_Bot",2)
+				addButton=createGrid(5,setX,setY,"Text_"+translateText("Bot"),2)
 				addButton.classList.add("red-bg")
 			}
 			if(setX===5 && setY===1 && state==="On") {
-				addButton=createGrid(5,setX,setY,"Text_Petal",2)
+				addButton=createGrid(5,setX,setY,"Text_"+translateText("Petal"),2)
 				addButton.classList.add("green-bg")
 			}
 			if(setX===5 && setY===1 && state==="Off") {
-				addButton=createGrid(5,setX,setY,"Text_Petal",2)
+				addButton=createGrid(5,setX,setY,"Text_"+translateText("Petal"),2)
 				addButton.classList.add("red-bg")
 			}
 			if(setX===6 && setY===1 && state==="On") {
-				addButton=createGrid(5,setX,setY,"Text_Mob",2)
+				addButton=createGrid(5,setX,setY,"Text_"+translateText("Mob"),2)
 				addButton.classList.add("green-bg")
 			}
 			if(setX===6 && setY===1 && state==="Off") {
-				addButton=createGrid(5,setX,setY,"Text_Mob",2)
+				addButton=createGrid(5,setX,setY,"Text_"+translateText("Mob"),2)
 				addButton.classList.add("red-bg")
 			}
 			if(setX===7 && setY===1 && state==="On") {
-				addButton=createGrid(5,setX,setY,"Text_Flower",2)
+				addButton=createGrid(5,setX,setY,"Text_"+translateText("Flower"),2)
 				addButton.classList.add("green-bg")
 			}
 			if(setX===7 && setY===1 && state==="Off") {
-				addButton=createGrid(5,setX,setY,"Text_Flower",2)
+				addButton=createGrid(5,setX,setY,"Text_"+translateText("Flower"),2)
 				addButton.classList.add("red-bg")
 			}
 			if(setX===8 && setY===1 && state==="On") {
-				addButton=createGrid(5,setX,setY,"Text_Determine<br><span class='text5'>REC=Off</span>",2)
+				addButton=createGrid(5,setX,setY,"Text_"+translateText("Determine")+"<br><span class='text5'>"+translateText("REC=Off")+"</span>",2)
 				addButton.classList.add("green-bg")
 			}
 			if(setX===8 && setY===1 && state==="Off") {
-				addButton=createGrid(5,setX,setY,"Text_Determine",2)
+				addButton=createGrid(5,setX,setY,"Text_"+translateText("Determine"),2)
 				addButton.classList.add("red-bg")
 			}
 			if(setX===9 && setY===1 && state==="On") {
-				addButton=createGrid(5,setX,setY,"Text_Resource",2)
+				addButton=createGrid(5,setX,setY,"Text_"+translateText("Resource"),2)
 				addButton.classList.add("green-bg")
 			}
 			if(setX===9 && setY===1 && state==="Off") {
-				addButton=createGrid(5,setX,setY,"Text_Resource",2)
+				addButton=createGrid(5,setX,setY,"Text_"+translateText("Resource"),2)
 				addButton.classList.add("red-bg")
 			}
 			if(setX===1 && setY===2 && state==="Slow") {
-				addButton=createGrid(5,setX,setY,"Text_Speed<br><br>Slow<br><span class='text5'>REC=Skip</span>",2)
+				addButton=createGrid(5,setX,setY,"Text_"+translateText("Speed")+"<br><br>"+translateText("Slow")+"<br><span class='text5'>"+translateText("REC=Skip")+"</span>",2)
 				addButton.classList.add("blue-bg")
 			}
 			if(setX===1 && setY===2 && state==="Middle") {
-				addButton=createGrid(5,setX,setY,"Text_Speed<br><br>Middle<br><span class='text5'>REC=Skip</span>",2)
+				addButton=createGrid(5,setX,setY,"Text_"+translateText("Speed")+"<br><br>"+translateText("Middle")+"<br><span class='text5'>"+translateText("REC=Skip")+"</span>",2)
 				addButton.classList.add("green-bg")
 			}
 			if(setX===1 && setY===2 && state==="Fast") {
-				addButton=createGrid(5,setX,setY,"Text_Speed<br><br>Fast<br><span class='text5'>REC=Skip</span>",2)
+				addButton=createGrid(5,setX,setY,"Text_"+translateText("Speed")+"<br><br>"+translateText("Fast")+"<br><span class='text5'>"+translateText("REC=Skip")+"</span>",2)
 				addButton.classList.add("yellow-bg")
 			}
 			if(setX===1 && setY===2 && state==="Skip") {
-				addButton=createGrid(5,setX,setY,"Text_Speed<br><br>Skip",2)
+				addButton=createGrid(5,setX,setY,"Text_"+translateText("Speed")+"<br><br>"+translateText("Skip"),2)
 				addButton.classList.add("red-bg")
 			}
-			if(setX===1 && setY===3 && state==="On") {
-				addButton=createGrid(5,setX,setY,"Text_Always<br>scroll<br>before<br>display",2)
+			if(setX===1 && setY===3 && state==="English") {
+				addButton=createGrid(5,setX,setY,"Text_"+translateText("Language")+"<br><br>"+translateText("English"),2)
+				addButton.classList.add("white-bg","llmargin")
+			}
+			if(setX===1 && setY===3 && state==="Chinese") {
+				addButton=createGrid(5,setX,setY,"Text_"+translateText("Language")+"<br><br>"+translateText("Chinese"),2)
+				addButton.classList.add("white-bg","llmargin")
+			}
+			if(setX===1 && setY===4 && state==="On") {
+				addButton=createGrid(5,setX,setY,"Text_"+translateText("Always<br>scroll<br>before<br>display"),2)
 				addButton.classList.add("green-bg")
 			}
-			if(setX===1 && setY===3 && state==="Off") {
-				addButton=createGrid(5,setX,setY,"Text_Always<br>scroll<br>before<br>display",2)
+			if(setX===1 && setY===4 && state==="Off") {
+				addButton=createGrid(5,setX,setY,"Text_"+translateText("Always<br>scroll<br>before<br>display"),2)
 				addButton.classList.add("red-bg")
 			}
-			if(setX===2 && setY===3 && state==="On") {
-				addButton=createGrid(5,setX,setY,"Text_Enable<br>right<br>click<br>menu",2)
+			if(setX===2 && setY===4 && state==="On") {
+				addButton=createGrid(5,setX,setY,"Text_"+translateText("Enable<br>right<br>click<br>menu"),2)
 				addButton.classList.add("green-bg")
 			}
-			if(setX===2 && setY===3 && state==="Off") {
-				addButton=createGrid(5,setX,setY,"Text_Enable<br>right<br>click<br>menu",2)
+			if(setX===2 && setY===4 && state==="Off") {
+				addButton=createGrid(5,setX,setY,"Text_"+translateText("Enable<br>right<br>click<br>menu"),2)
 				addButton.classList.add("red-bg")
 			}
-			if(setX===3 && setY===3 && state==="On") {
-				addButton=createGrid(5,setX,setY,"Text_Low<br>opacity<br>grid<br>info",2)
+			if(setX===3 && setY===4 && state==="On") {
+				addButton=createGrid(5,setX,setY,"Text_"+translateText("Low<br>opacity<br>grid<br>info"),2)
 				addButton.classList.add("green-bg")
 			}
-			if(setX===3 && setY===3 && state==="Off") {
-				addButton=createGrid(5,setX,setY,"Text_Low<br>opacity<br>grid<br>info",2)
+			if(setX===3 && setY===4 && state==="Off") {
+				addButton=createGrid(5,setX,setY,"Text_"+translateText("Low<br>opacity<br>grid<br>info"),2)
 				addButton.classList.add("red-bg")
 			}
-			if(setX===4 && setY===3 && state==="On") {
-				addButton=createGrid(5,setX,setY,"Text_Skip<br>all<br>animation<br><span class='text5'>REC=Off</span>",2)
+			if(setX===4 && setY===4 && state==="On") {
+				addButton=createGrid(5,setX,setY,"Text_"+translateText("Skip<br>all<br>animation")+"<br><span class='text5'>"+translateText("REC=Off")+"</span>",2)
 				addButton.classList.add("green-bg")
 			}
-			if(setX===4 && setY===3 && state==="Off") {
-				addButton=createGrid(5,setX,setY,"Text_Skip<br>all<br>animation",2)
+			if(setX===4 && setY===4 && state==="Off") {
+				addButton=createGrid(5,setX,setY,"Text_"+translateText("Skip<br>all<br>animation"),2)
 				addButton.classList.add("red-bg")
 			}
-			if(setX===5 && setY===3 && state==="On") {
-				addButton=createGrid(5,setX,setY,"Text_Force<br>map<br>translate<br>button",2)
+			if(setX===5 && setY===4 && state==="On") {
+				addButton=createGrid(5,setX,setY,"Text_"+translateText("Force<br>map<br>translate<br>button"),2)
 				addButton.classList.add("green-bg")
 			}
-			if(setX===5 && setY===3 && state==="Off") {
-				addButton=createGrid(5,setX,setY,"Text_Force<br>map<br>translate<br>button",2)
+			if(setX===5 && setY===4 && state==="Off") {
+				addButton=createGrid(5,setX,setY,"Text_"+translateText("Force<br>map<br>translate<br>button"),2)
 				addButton.classList.add("red-bg")
 			}
 			addButton.classList.add("llmargin")
@@ -2764,6 +3029,16 @@
 				}
 			}
 			if(setX===1 && setY===3) {
+				if(!player.settings.hasOwnProperty("language")) player.settings.language="English"
+				if(player.settings.language==="English") {
+					player.settings.language="Chinese"
+					getGrid(5,setX,setY).replaceWith(settingButton(setX,setY,"Chinese"))
+				} else {
+					player.settings.language="English"
+					getGrid(5,setX,setY).replaceWith(settingButton(setX,setY,"English"))
+				}
+			}
+			if(setX===1 && setY===4) {
 				if(!player.settings.hasOwnProperty("alwaysscroll")) {
 					player.settings.alwaysscroll=true
 					getGrid(5,setX,setY).replaceWith(settingButton(setX,setY,"On"))
@@ -2772,7 +3047,7 @@
 					getGrid(5,setX,setY).replaceWith(settingButton(setX,setY,"Off"))
 				}
 			}
-			if(setX===2 && setY===3) {
+			if(setX===2 && setY===4) {
 				if(!player.settings.hasOwnProperty("enablemenu")) {
 					player.settings.enablemenu=true
 					getGrid(5,setX,setY).replaceWith(settingButton(setX,setY,"On"))
@@ -2781,7 +3056,7 @@
 					getGrid(5,setX,setY).replaceWith(settingButton(setX,setY,"Off"))
 				}
 			}
-			if(setX===3 && setY===3) {
+			if(setX===3 && setY===4) {
 				if(!player.settings.hasOwnProperty("transparentinfo")) {
 					player.settings.transparentinfo=true
 					document.getElementById("gridinfo").style.opacity=0.5
@@ -2792,7 +3067,7 @@
 					getGrid(5,setX,setY).replaceWith(settingButton(setX,setY,"Off"))
 				}
 			}
-			if(setX===4 && setY===3) {
+			if(setX===4 && setY===4) {
 				if(!player.settings.hasOwnProperty("skipanimation")) {
 					player.settings.skipanimation=true
 					document.getElementById("gridinfo").style.opacity=0.5
@@ -2803,7 +3078,7 @@
 					getGrid(5,setX,setY).replaceWith(settingButton(setX,setY,"Off"))
 				}
 			}
-			if(setX===5 && setY===3) {
+			if(setX===5 && setY===4) {
 				if(!player.settings.hasOwnProperty("forcemobile")) {
 					player.settings.forcemobile=true
 					document.getElementById("map-btn").classList.remove("mobile")
@@ -2891,45 +3166,46 @@
 			closeAll()
 			selectedGrid.select=false
 			closeGridInfo()
-			let editingLevelHTML="<h2>Level Summary</h2><span class='nowrap'>🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲</span>"
-			editingLevelHTML+="<h3>Score Subtractor</h3><span>It is equivalent to floor(coefficient*(turn^exponent)) in total.</span><br>"
-			editingLevelHTML+="<span>This level has a coefficient of <span class='purple bold'>"+levelList[player.biomename][game.level].coefficient+"</span> and an exponent of <span class='cyan bold'>"+levelList[player.biomename][game.level].exponent+"</span>.</span><br>"
+			let editingLevelHTML="<h2>"+translateText("Level Summary")+"</h2><span class='nowrap'>🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲</span>"
+			editingLevelHTML+="<h3>"+translateText("Score Subtractor")+"</h3><span>"+translateText("It is equivalent to floor(coefficient*(turn^exponent)) in total.")+"</span><br>"
+			editingLevelHTML+="<span>"+translateText("This level has a coefficient of ")+"<span class='purple bold'>"+levelList[player.biomename][game.level].coefficient+"</span>"+translateText(" and an exponent of ")+"<span class='cyan bold'>"+levelList[player.biomename][game.level].exponent+"</span>"+translateText(".")+"</span><br>"
 			let scoreSubtractor=betterFloor(levelList[player.biomename][game.level].coefficient*((game.turn+1)**levelList[player.biomename][game.level].exponent))-betterFloor(levelList[player.biomename][game.level].coefficient*(game.turn**levelList[player.biomename][game.level].exponent))
-			editingLevelHTML+="<span>You have used <span class='grey bold'>"+game.turn+"</span> turn. The next move will get your score subtracted by <span class='dbrown bold'>"+scoreSubtractor+"</span>.</span><br>"
+			editingLevelHTML+="<span>"+translateText("You have used ")+"<span class='grey bold'>"+game.turn+"</span>"+translateText(" turn. The next move will get your score subtracted by ")+"<span class='dbrown bold'>"+scoreSubtractor+"</span>"+translateText(".")+"</span><br>"
 			if(levelList[player.biomename][game.level].hasOwnProperty("spawner")) {
-				editingLevelHTML+="<h3>Spawner</h3>"
+				editingLevelHTML+="<h3>"+translateText("Spawner")+"</h3>"
 				for(let i=0;i<levelList[player.biomename][game.level].spawner.length;i++) {
 					if(i===0) {
-						editingLevelHTML+="<span>The Default Spawner: It spawns petal to grid with \"=0=\" symbol and generates initial map.</span><br>"
+						editingLevelHTML+="<span>"+translateText("The Default Spawner")+": "+translateText("It spawns petal to grid with ")+"\"=0=\""+translateText(" symbol and generates initial map.")+"</span><br>"
 					} else {
-						editingLevelHTML+="<span>Spawner "+i+": It spawns petal to grid with \"="+i+"=\" symbol.</span><br>"
+						editingLevelHTML+="<span>"+translateText("Spawner ")+i+": "+translateText("It spawns petal to grid with ")+"\"="+i+"=\""+translateText(" symbol.")+"</span><br>"
 					}
 					let editingSpawner=levelList[player.biomename][game.level].spawner[i]
 					for(let j=0;j<editingSpawner.length;j++) {
 						let testResult=editingSpawner[j].result(0,0)
-						editingLevelHTML+="<span>Weight "+editingSpawner[j].weight+":"
-						editingLevelHTML+="<span class='bold' style='color: "+rarityColorEP[testResult.content.rarity]+"'>"+testResult.content.name+"</span>"
-						if(testResult.type!=="Normal") editingLevelHTML+=", with a special type of <span class='bold'>"+testResult.type+"</span>"
-						if(editingSpawner[j].noinitial===true) editingLevelHTML+=", but can not generate in initial map"
+						editingLevelHTML+="<span>"+translateText("Weight ")+editingSpawner[j].weight+": "
+						editingLevelHTML+="<span class='bold' style='color: "+rarityColorEP[testResult.content.rarity]+"'>"+translateText(testResult.content.name)+"</span>"
+						if(testResult.type!=="Normal") editingLevelHTML+=translateText(", with a special type of ")+"<span class='bold'>"+translateText(testResult.type)+"</span>"
+						if(editingSpawner[j].noinitial===true) editingLevelHTML+=translateText(", but can not generate in initial map")
 						editingLevelHTML+="</span>"
 					}
 					editingLevelHTML+="<br>"
 				}
 			}
 			if(levelList[player.biomename][game.level].hasOwnProperty("valueset")) {
-				editingLevelHTML+="<h3>Value Adjustment</h3>"
+				editingLevelHTML+="<h3>"+translateText("Value Adjustment")+"</h3>"
 				let editingValueHTML=""
 				let adjustText=levelList[player.biomename][game.level].valuetext
+				if(player.savesettings.language==="Chinese") adjustText=levelList[player.biomename][game.level].chvaluetext
 				if(adjustText.hasOwnProperty("petal")) {
-					editingValueHTML+="<span class='lcmargin'>Petal Adjustment</span><span style='color: #9f9fdf'>"+adjustText.petal+"</span><br>"
+					editingValueHTML+="<span class='lcmargin'>"+translateText("Petal Adjustment")+"</span><span style='color: #9f9fdf'>"+adjustText.petal+"</span><br>"
 				}
 				if(adjustText.hasOwnProperty("mob")) {
-					editingValueHTML+="<span class='lcmargin'>Mob Adjustment</span><span style='color: #bfbf00'>"+adjustText.mob+"</span><br>"
+					editingValueHTML+="<span class='lcmargin'>"+translateText("Mob Adjustment")+"</span><span style='color: #bfbf00'>"+adjustText.mob+"</span><br>"
 				}
 				if(adjustText.hasOwnProperty("other")) {
-					editingValueHTML+="<span class='lcmargin'>Other Adjustment</span><span style='color: #00bfbf'>"+adjustText.other+"</span><br>"
+					editingValueHTML+="<span class='lcmargin'>"+translateText("Other Adjustment")+"</span><span style='color: #00bfbf'>"+adjustText.other+"</span><br>"
 				}
-				editingValueHTML=editingValueHTML.replaceAll(/\[RAR(\d)\]/g,(match,rarity) => ("<span class='bold' style='color: "+rarityColorEP[rarity]+"'>"+rarityName[rarity]+"</span>"))
+				editingValueHTML=editingValueHTML.replaceAll(/\[RAR(\d)\]/g,(match,rarity) => ("<span class='bold' style='color: "+rarityColorEP[rarity]+"'>"+translateText(rarityName[rarity])+"</span>"))
 				editingLevelHTML+=editingValueHTML
 			}
 			document.getElementById("level").innerHTML=editingLevelHTML
@@ -2997,7 +3273,7 @@
 						location.reload()
 					} catch {
 						document.body.removeChild(fileInput)
-						alert("Error: Memory incomplete")
+						alert(translateText("Error: Memory incomplete"))
 					}
 				}
 				reader.readAsText(savefile)
@@ -3014,14 +3290,14 @@
 			downloadElement.href=URL.createObjectURL(blob)
 			downloadElement.download="memory.txt"
 			downloadElement.click()
-			document.getElementById("export-btn").innerHTML="Memories Stored!"
+			document.getElementById("export-btn").innerHTML=translateText("Memories Stored!")
 			await delay(1000)
-			document.getElementById("export-btn").innerHTML="Store Memories"
+			document.getElementById("export-btn").innerHTML=translateText("Store Memories")
 			animation=false
 		}
 		async function hardReset() {
 			if(animation) return
-			let getResetSentence=prompt("Are you sure to reset the game and lost all process?\nType 'The game is perfect, there are no bugs' to confirm.")
+			let getResetSentence=prompt(translateText("Are you sure to reset the game and lost all process?\nType 'The game is perfect, there are no bugs' to confirm."))
 			if(getResetSentence!=="The game is perfect, there are no bugs") return
 			document.getElementById("end1").style["pointer-events"]="unset"
 			clearAllInterval()
@@ -3033,11 +3309,12 @@
 			player=new Object()
 			player.settings=saveSettings
 			setPlayer()
+			player.savesettings=structuredClone(player.settings)
 			game=new Object()
 			setGame()
 			userVersion=version
 			setVersion()
-			document.getElementById("end2").innerText="The new planet is sprouting..."
+			document.getElementById("end2").innerText=translateText("The new planet is sprouting...")
 			for(let i=0;i<=20;i++) {
 				document.getElementById("end2").style.opacity=i/20
 				await delay(100)
@@ -3053,7 +3330,7 @@
 		function updateVersion(reset) {
 			if(reset===false) {
 				if(userVersion<acceptedVersion) {
-					document.getElementById("version3").innerHTML="Your version is too outdated..."
+					document.getElementById("version3").innerHTML=translateText("Your version is too outdated...")
 					return
 				}
 				userVersion=version
@@ -3117,12 +3394,16 @@
 			clearInterval(intervalMap)
 		}
 		window.onload=async function() {
+			if(player.settings.language==="Chinese") {
+				translateAll()
+			}
 			document.getElementById("end1").style["pointer-events"]="unset"
 			document.getElementById("version1").style.display="none"
 			document.getElementById("version2").style.display="none"
 			document.getElementById("endgame1").style.display="none"
 			document.getElementById("endgame2").style.display="none"
 			if(userVersion!==version) {
+				document.getElementById("version2").innerHTML=versionAnnouncement
 				document.getElementById("version1").style.display="unset"
 				document.getElementById("version2").style.display="flex"
 				for(let i=0;i<=10;i++) {
@@ -3176,7 +3457,7 @@
 			if(game.active===false) document.getElementById("pause-btn").classList.add("llred-bg")
 			if(game.active===false && !player.hasOwnProperty("biome")) document.getElementById("level-btn").classList.add("llred-bg")
 			animation=true
-			document.getElementById("end2").innerText="Welcome to Petal Crush!"
+			document.getElementById("end2").innerText=translateText("Welcome to Petal Crush!")
 			for(let i=0;i<=10;i++) {
 				document.getElementById("end2").style.opacity=i/10
 				await delay(100)
@@ -3194,7 +3475,12 @@
 			document.getElementById("end1").style["pointer-events"]="none"
 			animation=false
 			updateFlowerState()
-			addLog("Use .help for command information!")
+			if(player.savesettings.language!=="Chinese") {
+				addLog("Use .help for command information!")
+			} else {
+				addLog("使用.help查看指令信息！")
+				addLog("注：中文模式下，部分游戏内容（如剧情）不可用，但不影响正常游玩。")
+			}
 			if(player.dialog.startdialog===0) dialog("Skip")
 			if(player.dialog.petaltypedialog===0) dialog("Skip")
 		}
@@ -3303,13 +3589,13 @@
 			document.getElementById("mapinfo").style.setProperty("--transform2","translate(0%,-50%)")
 			document.getElementById("mapinfo").style.top=spot.getBoundingClientRect().top-15+"px"
 			document.getElementById("mapinfo").style.left=spot.getBoundingClientRect().left+spot.getBoundingClientRect().width/2+"px"
-			let editingMapHTML="<h3 style='color: "+mapList[spotValue].color+"'>"+mapList[spotValue].name+"</h3>"
+			let editingMapHTML="<h3 style='color: "+mapList[spotValue].color+"'>"+translateText(mapList[spotValue].name)+"</h3>"
 			if(player.world[spotValue].purchased===true) {
-				editingMapHTML+="<span class='dgreen'>You have purchased this world.</span><br><span class='dgreen'>Click on the spot to enter.</span><br>"
+				editingMapHTML+="<span class='dgreen'>"+translateText("You have purchased this world.")+"</span><br><span class='dgreen'>"+translateText("Click on the spot to enter.")+"</span><br>"
 			} else if(remainingStar()>=mapList[spotValue].cost) {
-				editingMapHTML+="<span class='grey'>World cost: "+mapList[spotValue].cost+"</span><br><span class='dgreen'>Your star: "+remainingStar()+"</span><br><span class='dgreen'>Click on the spot to purchase this world.</span><br><span class='red'>The purchase is not refundable.</span><br>"
+				editingMapHTML+="<span class='grey'>"+translateText("World cost: ")+mapList[spotValue].cost+"</span><br><span class='dgreen'>"+translateText("Your star: ")+remainingStar()+"</span><br><span class='dgreen'>"+translateText("Click on the spot to purchase this world.")+"</span><br><span class='red'>"+translateText("The purchase is not refundable.")+"</span><br>"
 			} else {
-				editingMapHTML+="<span class='grey'>World cost: "+mapList[spotValue].cost+"</span><br><span class='red'>Your star: "+remainingStar()+"</span><br>"
+				editingMapHTML+="<span class='grey'>"+translateText("World cost: ")+mapList[spotValue].cost+"</span><br><span class='red'>"+translateText("Your star: ")+remainingStar()+"</span><br>"
 			}
 			document.getElementById("mapinfo").innerHTML=editingMapHTML
 			document.getElementById("mapinfo").style.display="flex"
@@ -3320,14 +3606,14 @@
 			document.getElementById("mapinfo").style.setProperty("--transform2","translate(0%,-50%)")
 			document.getElementById("mapinfo").style.top=spot.getBoundingClientRect().top-15+"px"
 			document.getElementById("mapinfo").style.left=spot.getBoundingClientRect().left+spot.getBoundingClientRect().width/2+"px"
-			let editingLevelHTML="<h3 style='color: "+mapList[player.biome].color+"'>Level "+spotValue+"</h3>"
-			editingLevelHTML+="<span class='dgreen'>Goal: "+levelList[player.biomename][spotValue].goal+"</span><br>"
+			let editingLevelHTML="<h3 style='color: "+mapList[player.biome].color+"'>"+translateText("Level ")+spotValue+"</h3>"
+			editingLevelHTML+="<span class='dgreen'>"+translateText("Goal: ")+levelList[player.biomename][spotValue].goal+"</span><br>"
 			if(!player.explore[player.biomename].highscore.hasOwnProperty(spotValue)) {
-				editingLevelHTML+="<span class='red'>Not completed yet</span><br>"
+				editingLevelHTML+="<span class='red'>"+translateText("Not completed yet")+"</span><br>"
 			} else if(player.explore[player.biomename].highscore[spotValue]>=levelList[player.biomename][spotValue].goal) {
-				editingLevelHTML+="<span class='dgreen'>Highscore: "+player.explore[player.biomename].highscore[spotValue]+"</span><br>"
+				editingLevelHTML+="<span class='dgreen'>"+translateText("Highscore: ")+player.explore[player.biomename].highscore[spotValue]+"</span><br>"
 			} else {
-				editingLevelHTML+="<span class='dcyan'>Highscore: "+player.explore[player.biomename].highscore[spotValue]+"</span><br>"
+				editingLevelHTML+="<span class='dcyan'>"+translateText("Highscore: ")+player.explore[player.biomename].highscore[spotValue]+"</span><br>"
 			}
 			document.getElementById("mapinfo").innerHTML=editingLevelHTML
 			document.getElementById("mapinfo").style.display="flex"
@@ -3364,6 +3650,45 @@
 			document.getElementById("pause-btn").classList.remove("llred-bg")
 		}
 		function petalAttributeText(attributeName,attributeValue,petal) {
+			if(player.savesettings.language==="Chinese") {
+				if(attributeName==="damage") {
+					let pendingText="<span style='color: #ff7f7f'>消除时对相邻生物造成<span class='bold'>"+attributeValue+"</span>伤害。</span>"
+					return pendingText
+				}
+				if(attributeName==="weavestrength") {
+					let pendingText="<span style='color: #7fdfdf'>消除时以<span class='bold'>"+attributeValue+"%</span>概率困住相邻生物。</span>"
+					return pendingText
+				}
+				if(attributeName==="knockback") {
+					let pendingText="<span style='color: #9f9f5f'>消除时对相邻生物造成<span class='bold'>"+attributeValue+"</span>击退。</span>"
+					return pendingText
+				}
+				if(attributeName==="heal") {
+					if(petal.attribute.hasOwnProperty("duration")) {
+						let pendingText="<span style='color: #5fbf5f'>消除时持续治疗花朵<span class='bold'>"+attributeValue+"</span>，持续<span class='bold'>"+petal.attribute.duration+"</span>回合。</span>"
+						return pendingText
+					}
+					let pendingText="<span style='color: #5fbf5f'>消除时治疗花朵<span class='bold'>"+attributeValue+"</span>。</span>"
+					return pendingText
+				}
+				if(attributeName==="duration") {
+					if(petal.attribute.hasOwnProperty("heal")) return ""
+					let pendingText="<span style='color: #5fbfbf'>影响持续<span class='bold'>"+attributeValue+"</span>回合。</span>"
+					return pendingText
+				}
+				if(attributeName==="craft" && attributeValue==="Disabled") {
+					let pendingText="<span style='color: #ff5f5f'>不会被合成。</span>"
+					return pendingText
+				}
+				if(attributeName==="blast" && attributeValue==="Destroy") {
+					let pendingText="<span style='color: #ff5f5f'>被冲击波（行/列/炸弹）消除时失去影响。</span>"
+					return pendingText
+				}
+				if(attributeName==="rearrange" && attributeValue==="None") {
+					let pendingText="<span style='color: #ff5f9f'>不会被重排。</span>"
+					return pendingText
+				}
+			}
 			if(attributeName==="damage") {
 				let pendingText="<span style='color: #ff7f7f'>Deals <span class='bold'>"+attributeValue+"</span> damage to nearby mobs when crushed.</span>"
 				return pendingText
@@ -3404,6 +3729,136 @@
 			return "<span>"+attributeName+": "+attributeValue+"</span>"
 		}
 		function mobAttributeText(attributeName,attributeValue,mob) {
+			if(player.savesettings.language==="Chinese") {
+				if(attributeName==="action" && attributeValue==="None") {
+					let pendingText="<span style='color: #7f7f7f'>没有行动。</span>"
+					return pendingText
+				}
+				if(attributeName==="action" && attributeValue==="Default") {
+					let pendingText=""
+					if(mob.name==="!Hornet") {
+						pendingText="<span style='color: #bfbf00'>积聚导弹或者全部发射。</span>"
+					}
+					if(mob.name==="!Missile (H)") {
+						pendingText="<span style='color: #bfbf00'>没有行动，但可以被马蜂发射。</span>"
+					}
+					if(mob.name==="!Spider") {
+						pendingText="<span style='color: #bfbf00'>织网或者叮咬。</span>"
+					}
+					if(mob.name==="!Cactus") {
+						pendingText="<span style='color: #bfbf00'>使周围花瓣失去能力。</span>"
+					}
+					if(mob.name==="!Scorpion") {
+						pendingText="<span style='color: #bfbf00'>积聚导弹或者全部发射。</span>"
+					}
+					if(mob.name==="!Missile (S)") {
+						pendingText="<span style='color: #bfbf00'>没有行动，但可以被蝎子发射。</span>"
+					}
+					if(mob.name==="!Beetle") {
+						pendingText="<span style='color: #bfbf00'>吃或者向最近食物移动</span>"
+					}
+					return pendingText
+				}
+				if(attributeName==="actionbar") {
+					return ""
+				}
+				if(attributeName==="cost") {
+					if(mob.attribute.hasOwnProperty("speed")) {
+						let pendingText="<span><span style='color: #bf7fff'>获得<span class='bold'>"+mob.attribute.speed+"</span>行动条</span>，<span style='color: #bfbf00'>消耗<span class='bold'>"+attributeValue+"</span>行动条行动。</span></span>"
+						return pendingText
+					}
+					let pendingText="<span style='color: #bfbf00'>行动消耗<span class='bold'>"+attributeValue+"</span>行动条。</span>"
+					return pendingText
+				}
+				if(attributeName==="speed") {
+					if(mob.attribute.hasOwnProperty("cost")) return ""
+					let pendingText="<span style='color: #bf7fff'>每回合获得<span class='bold'>"+attributeValue+"</span>行动条。</span>"
+					return pendingText
+				}
+				if(attributeName==="connect") {
+					let pendingText=""
+					if(attributeValue.hasOwnProperty("knockback")) {
+						if(attributeValue.knockback.match("Rarity")!==null) {
+							pendingText+="<span style='color: #5f5f5f'>击退与稀有度<span class='bold' style='color: "+rarityColorEP[mob.rarity]+"'>"+mob.rarity+"</span>的<span class='bold'>"+translateText(attributeValue.knockback.match(/(?<=\s).+/)[0])+"</span>生物链接。</span>"
+						}
+					}
+					return pendingText
+				}
+				if(attributeName==="summon") {
+					let pendingText="<span style='color: #bfbf00'>召唤<span class='bold'>"+attributeValue+"</span>生命值的导弹。</span>"
+					return pendingText
+				}
+				if(attributeName==="eat") {
+					let pendingText="<span style='color: #bfbf00'>食用<span class='bold'>"+translateText(attributeValue)+"</span>花瓣。</span>"
+					return pendingText
+				}
+				if(attributeName==="damage") {
+					if(mob.attribute.hasOwnProperty("duration") && mob.attribute.hasOwnProperty("increment")) {
+						let pendingText="<span style='color: #ff7f7f'>具有<span class='bold'>"+attributeValue+"</span>剧毒伤害，持续<span class='bold'>"+mob.attribute.duration+"</span>回合，每次增加<span class='bold'>"+mob.attribute.increment+"</span>。</span>"
+						return pendingText
+					}
+					if(mob.attribute.hasOwnProperty("duration")) {
+						let pendingText="<span style='color: #ff7f7f'>具有<span class='bold'>"+attributeValue+"</span>剧毒伤害，持续<span class='bold'>"+mob.attribute.duration+"</span>回合。</span>"
+						return pendingText
+					}
+					if(mob.attribute.hasOwnProperty("increment")) {
+						let pendingText="<span style='color: #ff7f7f'>具有<span class='bold'>"+attributeValue+"</span>伤害，每次增加<span class='bold'>"+mob.attribute.increment+"</span>。</span>"
+						return pendingText
+					}
+					let pendingText="<span style='color: #ff7f7f'>具有<span class='bold'>"+attributeValue+"</span>伤害。</span>"
+					return pendingText
+				}
+				if(attributeName==="duration") {
+					if(mob.attribute.hasOwnProperty("damage")) return ""
+					let pendingText="<span style='color: #5fbfbf'>影响持续<span class='bold'>"+attributeValue+"</span>回合。</span>"
+					return pendingText
+				}
+				if(attributeName==="increment") {
+					if(mob.attribute.hasOwnProperty("damage")) return ""
+					let pendingText="<span style='color: #ff7f7f'>在攻击后，伤害增加<span class='bold'>"+attributeValue+"</span>。</span>"
+					return pendingText
+				}
+				if(attributeName==="shoot") {
+					let pendingText="<span style='color: #7fdfdf'>以<span class='bold'>"+attributeValue+"%</span>概率发射所有导弹。</span>"
+					return pendingText
+				}
+				if(attributeName==="reflect") {
+					let pendingText="<span style='color: #7fdfdf'>摧毁时对周围生物造成<span class='bold'>"+attributeValue+"</span>伤害。</span>"
+					return pendingText
+				}
+				if(attributeName==="weavestrength") {
+					let pendingText="<span style='color: #7fdfdf'>织强度<span class='bold'>"+attributeValue+"%</span>的网。</span>"
+					return pendingText
+				}
+				if(attributeName==="health") {
+					if(mob.attribute.hasOwnProperty("maxhealth")) {
+						let pendingText="<span style='color: #5fbf5f'>具有<span class='bold'>"+attributeValue+"</span>生命值，上限为<span class='bold'>"+mob.attribute.maxhealth+"</span>。</span>"
+						return pendingText
+					}
+					let pendingText="<span style='color: #5fbf5f'>当前具有<span class='bold'>"+attributeValue+"</span>生命值。</span>"
+					return pendingText
+				}
+				if(attributeName==="maxhealth") {
+					if(mob.attribute.hasOwnProperty("health")) return ""
+					let pendingText="<span style='color: #7fdf7f'>具有<span class='bold'>"+attributeValue+"</span>最大生命值。</span>"
+					return pendingText
+				}
+				if(attributeName==="drop" && attributeValue==="Disabled") {
+					let pendingText="<span style='color: #ff5f5f'>不会掉落。</span>"
+					return pendingText
+				}
+				if(attributeName==="move" && attributeValue==="Disabled") {
+					let pendingText="<span style='color: #ff5f5f'>不可被交换。</span>"
+					return pendingText
+				}
+				if(attributeName==="immune") {
+					let pendingText
+					if(attributeValue==="All") {
+						pendingText="<span style='color: #ff00ff'>免疫所有伤害。</span>"
+					}
+					return pendingText
+				}
+			}
 			if(attributeName==="action" && attributeValue==="None") {
 				let pendingText="<span style='color: #7f7f7f'>Has no action.</span>"
 				return pendingText
@@ -3413,11 +3868,23 @@
 				if(mob.name==="!Hornet") {
 					pendingText="<span style='color: #bfbf00'>Accumulates missile or shoots all.</span>"
 				}
-				if(mob.name==="!Missile") {
+				if(mob.name==="!Missile (H)") {
 					pendingText="<span style='color: #bfbf00'>Has no action but can be shot by Hornet.</span>"
 				}
 				if(mob.name==="!Spider") {
 					pendingText="<span style='color: #bfbf00'>Weaves web or bites.</span>"
+				}
+				if(mob.name==="!Cactus") {
+					pendingText="<span style='color: #bfbf00'>Disables petals nearby.</span>"
+				}
+				if(mob.name==="!Scorpion") {
+					pendingText="<span style='color: #bfbf00'>Accumulates missile or shoots all.</span>"
+				}
+				if(mob.name==="!Missile (S)") {
+					pendingText="<span style='color: #bfbf00'>Has no action but can be shot by Scorpion.</span>"
+				}
+				if(mob.name==="!Beetle") {
+					pendingText="<span style='color: #bfbf00'>Eats or moves to nearest food.</span>"
 				}
 				return pendingText
 			}
@@ -3448,6 +3915,10 @@
 			}
 			if(attributeName==="summon") {
 				let pendingText="<span style='color: #bfbf00'>Summons missile with <span class='bold'>"+attributeValue+"</span> health.</span>"
+				return pendingText
+			}
+			if(attributeName==="eat") {
+				let pendingText="<span style='color: #bfbf00'>Eats <span class='bold'>"+attributeValue+"</span> petal.</span>"
 				return pendingText
 			}
 			if(attributeName==="damage") {
@@ -3519,6 +3990,16 @@
 			return "<span>"+attributeName+": "+attributeValue+"</span>"
 		}
 		function itemAttributeText(attributeName,attributeValue) {
+			if(player.savesettings.language==="Chinese") {
+				if(attributeName==="drop" && attributeValue==="Disabled") {
+					let pendingText="<span style='color: #ff5f5f'>不会掉落。</span>"
+					return pendingText
+				}
+				if(attributeName==="move" && attributeValue==="Disabled") {
+					let pendingText="<span style='color: #ff5f5f'>不可被交换。</span>"
+					return pendingText
+				}
+			}
 			if(attributeName==="drop" && attributeValue==="Disabled") {
 				let pendingText="<span style='color: #ff5f5f'>Does not drop.</span>"
 				return pendingText
@@ -3541,8 +4022,8 @@
 				document.getElementById("gridinfo").style.left=grid.getBoundingClientRect().left+(gridSize/2)+"px"
 				let editingGridHTML,gridContent=game.board[gridX][gridY].content
 				if(isPetal(gridContent)) {
-					editingGridHTML="<h3 style='color: "+rarityColorEP[gridContent.rarity]+"'>"+gridContent.name+"</h3>"
-					editingGridHTML+="<span>"+PetalDescriptionList[gridContent.id]+"</span><br>"
+					editingGridHTML="<h3 style='color: "+rarityColorEP[gridContent.rarity]+"'>"+translateText(gridContent.name)+"</h3>"
+					editingGridHTML+="<span>"+PetalDescriptionListTrans[gridContent.id]+"</span><br>"
 					if(JSON.stringify(gridContent.attribute)!=="{}") {
 						let pendingText=""
 						for(let i in gridContent.attribute) pendingText+=petalAttributeText(i,gridContent.attribute[i],gridContent)
@@ -3550,20 +4031,20 @@
 					}
 				}
 				if(isMob(gridContent)) {
-					editingGridHTML="<h3 style='color: "+rarityColorEP[gridContent.rarity]+"'>"+gridContent.name+"</h3>"
-					editingGridHTML+="<span>"+MobDescriptionList[gridContent.id]+"</span><br>"
+					editingGridHTML="<h3 style='color: "+rarityColorEP[gridContent.rarity]+"'>"+translateText(gridContent.name)+"</h3>"
+					editingGridHTML+="<span>"+MobDescriptionListTrans[gridContent.id]+"</span><br>"
 					if(JSON.stringify(gridContent.attribute)!=="{}") {
 						let pendingText=""
 						if(gridContent.attribute.action!=="None") {
-							pendingText+="<span style='color: #bf7fff'>Actionbar: "+gridContent.attribute.actionbar+"/"+NewValue.upperlimit+"</span>"
+							pendingText+="<span style='color: #bf7fff'>"+translateText("Actionbar")+": "+gridContent.attribute.actionbar+"/"+NewValue.upperlimit+"</span>"
 						}
 						for(let i in gridContent.attribute) pendingText+=mobAttributeText(i,gridContent.attribute[i],gridContent)
 						editingGridHTML+=pendingText+"<br>"
 					}
 				}
 				if(isItem(gridContent)) {
-					editingGridHTML="<h3 style='color: "+rarityColorEP[gridContent.rarity]+"'>"+gridContent.name+"</h3>"
-					editingGridHTML+="<span>"+ItemDescriptionList[gridContent.id]+"</span><br>"
+					editingGridHTML="<h3 style='color: "+rarityColorEP[gridContent.rarity]+"'>"+translateText(gridContent.name)+"</h3>"
+					editingGridHTML+="<span>"+ItemDescriptionListTrans[gridContent.id]+"</span><br>"
 					if(JSON.stringify(gridContent.attribute)!=="{}") {
 						let pendingText=""
 						for(let i in gridContent.attribute) pendingText+=itemAttributeText(i,gridContent.attribute[i])
@@ -3578,6 +4059,32 @@
 				}
 			}
 			if(gridValue===2) {
+				if(player.savesettings.language==="Chinese") {
+					if(gridX===1 && gridY===1) {
+						document.getElementById("gridinfo").style.setProperty("--transform2","translate(0%,-50%)")
+						document.getElementById("gridinfo").style.top=grid.getBoundingClientRect().top-10+"px"
+						document.getElementById("gridinfo").style.left=grid.getBoundingClientRect().left+20+"px"
+						let editingGridEffectHTML="<h3 class='dgreen'>加成：痊愈</h3>"
+						editingGridEffectHTML+="<span>你在回合结束时受到治疗。</span><br>"
+						editingGridEffectHTML+="<span style='color: #5fdf5f'>被动治疗："+game.flower.effect.recover[0]+"（对于下回合）</span>"
+						editingGridEffectHTML+="<span style='color: #3fbf3f'>剩余回合数："+game.flower.effect.recover.length+"</span><br>"
+						document.getElementById("gridinfo").innerHTML=editingGridEffectHTML
+						document.getElementById("gridinfo").style.display="flex"
+						return
+					}
+					if(gridX===1 && gridY===2) {
+						document.getElementById("gridinfo").style.setProperty("--transform2","translate(0%,-50%)")
+						document.getElementById("gridinfo").style.top=grid.getBoundingClientRect().top-10+"px"
+						document.getElementById("gridinfo").style.left=grid.getBoundingClientRect().left+20+"px"
+						let editingGridEffectHTML="<h3 class='dpurple'>减益：中毒</h3>"
+						editingGridEffectHTML+="<span>你在回合结束时受到剧毒伤害。</span><br>"
+						editingGridEffectHTML+="<span style='color: #bf3fff'>剧毒伤害："+game.flower.effect.poison[0]+"（对于下回合）</span>"
+						editingGridEffectHTML+="<span style='color: #bf3f3f'>剩余回合数："+game.flower.effect.poison.length+"</span><br>"
+						document.getElementById("gridinfo").innerHTML=editingGridEffectHTML
+						document.getElementById("gridinfo").style.display="flex"
+						return
+					}
+				}
 				if(gridX===1 && gridY===1) {
 					document.getElementById("gridinfo").style.setProperty("--transform2","translate(0%,-50%)")
 					document.getElementById("gridinfo").style.top=grid.getBoundingClientRect().top-10+"px"
@@ -3676,7 +4183,11 @@
 		function endGame(win) {
 			if(animation) return
 			if(win===true) {
-				addLog("Cleared "+player.biomename+" Level "+game.level+" in "+game.turn+" turn with "+game.score+" score.")
+				if(player.savesettings.language==="Chinese") {
+					addLog("在"+game.turn+"回合内以"+game.score+"分完成了对"+translateText(player.biomename)+"关卡"+game.level+"的清理。")
+				} else {
+					addLog("Cleared "+player.biomename+" Level "+game.level+" in "+game.turn+" turn with "+game.score+" score.")
+				}
 				if(!player.explore[player.biomename].highscore.hasOwnProperty(game.level)) player.explore[player.biomename].highscore[game.level]=-1
 				if(player.biomename==="Training Ground" && game.level===1 && player.explore[player.biomename].highscore[game.level]===-1) {
 					player.dialog.startdialog=0
@@ -3695,7 +4206,11 @@
 				}
 				if(game.score>player.explore[player.biomename].highscore[game.level]) player.explore[player.biomename].highscore[game.level]=game.score
 			} else {
-				addLog("Retreated from "+player.biomename+" Level "+game.level+".")
+				if(player.savesettings.language==="Chinese") {
+					addLog("已从"+translateText(player.biomename)+"关卡"+game.level+"撤离。")
+				} else {
+					addLog("Retreated from "+player.biomename+" Level "+game.level+".")
+				}
 			}
 			game.active=false
 			setGame()
@@ -3787,8 +4302,8 @@
 					document.getElementById("bar-health").style.width="12%"
 					document.getElementById("bar-health").style.opacity=barPercentage/12
 				}
-				document.getElementById("flower-health").innerHTML="Health: "+game.flower.health+"/"+game.flower.maxhealth
-				document.getElementById("game-state").innerHTML="<span class='lmargin' style='color: "+mapList[player.biome].color+"'>"+player.biomename+"</span><span class='blue lmargin'>Level "+game.level+"</span><span id='score-tracker' class='dcyan lmargin'>Score: "+game.score+"/"+levelList[player.biomename][game.level].goal+"</span>"
+				document.getElementById("flower-health").innerHTML=translateText("Health: ")+game.flower.health+"/"+game.flower.maxhealth
+				document.getElementById("game-state").innerHTML="<span class='lmargin' style='color: "+mapList[player.biome].color+"'>"+translateText(player.biomename)+"</span><span class='blue lmargin'>"+translateText("Level ")+game.level+"</span><span id='score-tracker' class='dcyan lmargin'>"+translateText("Score: ")+game.score+"/"+levelList[player.biomename][game.level].goal+"</span>"
 				if(game.score>=levelList[player.biomename][game.level].goal) {
 					document.getElementById("score-tracker").classList.replace("dcyan","dgreen")
 				}
@@ -3814,9 +4329,9 @@
 				}
 			} else {
 				if(!player.hasOwnProperty("biome")) {
-					document.getElementById("game-state").innerHTML="<span class='blue'>You are on the planet: Azalea</span>"
+					document.getElementById("game-state").innerHTML="<span class='blue'>"+translateText("You are on the planet: Azalea")+"</span>"
 				} else {
-					document.getElementById("game-state").innerHTML="<span class='dgreen'>You are in the biome: <span style='color: "+mapList[player.biome].color+"'>"+player.biomename+"</span></span>"
+					document.getElementById("game-state").innerHTML="<span class='dgreen'>"+translateText("You are in the biome: ")+"<span style='color: "+mapList[player.biome].color+"'>"+translateText(player.biomename)+"</span></span>"
 				}
 				document.getElementById("flower-state-inside").style.display="none"
 				document.getElementById("flower-state-outside").style.display="flex"
@@ -3827,8 +4342,8 @@
 					document.getElementById("currency").style.display="none"
 					document.getElementById("total-currency").style.display="unset"
 				}
-				document.getElementById("currency").innerHTML="Your currency: <span class='text2'>"+remainingStar()+"</span>★"
-				document.getElementById("total-currency").innerHTML="Your total currency: <span class='text2'>"+totalStar()+"</span>★"
+				document.getElementById("currency").innerHTML=translateText("Your currency")+": <span class='text2'>"+remainingStar()+"</span>★"
+				document.getElementById("total-currency").innerHTML=translateText("Your total currency")+": <span class='text2'>"+totalStar()+"</span>★"
 			}
 		}
 		function switchCurrency() {
@@ -3845,13 +4360,25 @@
 		}
 		function flowerInjure(mob) {
 			if(game.flower.health===0) return
-			if(mob.name==="!Missile") {
+			if(mob.name==="!Missile (H)") {
 				let pendingDamage=mob.attribute.damage
 				if(pendingDamage>game.flower.health) pendingDamage=game.flower.health
 				game.flower.health-=pendingDamage
-				addLog("[Flower] Flower received "+pendingDamage+" damage from <span style='color: "+rarityColorEP[mob.rarity]+"'>"+mob.name+"</span>, "+game.flower.health+" health remaining.","#00bfbf")
+				if(player.savesettings.language==="Chinese") {
+					addLog("[Flower] 花朵受到了<span style='color: "+rarityColorEP[mob.rarity]+"'>"+translateText(mob.name)+"</span>造成的"+pendingDamage+"伤害，剩余"+game.flower.health+"生命值。","#00bfbf")
+				} else {
+					addLog("[Flower] Flower received "+pendingDamage+" damage from <span style='color: "+rarityColorEP[mob.rarity]+"'>"+mob.name+"</span>, "+game.flower.health+" health remaining.","#00bfbf")
+				}
 			}
 			if(mob.name==="!Spider") {
+				let pendingDamage=mob.attribute.damage,effectTurn=mob.attribute.duration
+				if(!game.flower.effect.hasOwnProperty("poison")) game.flower.effect.poison=new Array()
+				for(let i=0;i<effectTurn;i++) {
+					if(!game.flower.effect.poison.hasOwnProperty(i)) game.flower.effect.poison[i]=0
+					game.flower.effect.poison[i]+=pendingDamage
+				}
+			}
+			if(mob.name==="!Missile (S)") {
 				let pendingDamage=mob.attribute.damage,effectTurn=mob.attribute.duration
 				if(!game.flower.effect.hasOwnProperty("poison")) game.flower.effect.poison=new Array()
 				for(let i=0;i<effectTurn;i++) {
@@ -3868,7 +4395,11 @@
 				let pendingHeal=petal.attribute.heal
 				if(pendingHeal>game.flower.maxhealth-game.flower.health) pendingHeal=game.flower.maxhealth-game.flower.health
 				game.flower.health+=pendingHeal
-				addLog("[Flower] Flower received "+pendingHeal+" heal from <span style='color: "+rarityColorEP[petal.rarity]+"'>"+petal.name+"</span>, "+game.flower.health+" health remaining.","#00bfbf")
+				if(player.savesettings.language==="Chinese") {
+					addLog("[Flower] 花朵受到了<span style='color: "+rarityColorEP[petal.rarity]+"'>"+translateText(petal.name)+"</span>造成的"+pendingHeal+"治疗，剩余"+game.flower.health+"生命值。","#00bfbf")
+				} else {
+					addLog("[Flower] Flower received "+pendingHeal+" heal from <span style='color: "+rarityColorEP[petal.rarity]+"'>"+petal.name+"</span>, "+game.flower.health+" health remaining.","#00bfbf")
+				}
 			}
 			if(petal.name==="Leaf") {
 				let pendingHeal=petal.attribute.heal,effectTurn=petal.attribute.duration
@@ -4245,49 +4776,30 @@
 				firstCrush=false
 			}
 			await delay(200)
-			let mobCheck=false
-			for(let i=1;i<=game.height;i++) for(let j=1;j<=game.width;j++) {
-				if(isMob(game.board[j][i].content) && game.board[j][i].content.name==="!Hornet") {
-					mobCheck=true
-					await game.board[j][i].content.progress(j,i)
+			let mobCheck,actionOrder=["!Hornet","!Spider","!Cactus","!Scorpion","!Beetle"]
+			for(let actionName of actionOrder) {
+				mobCheck=false
+				for(let i=1;i<=game.height;i++) for(let j=1;j<=game.width;j++) {
+					if(isMob(game.board[j][i].content) && game.board[j][i].content.name===actionName) {
+						mobCheck=true
+						await game.board[j][i].content.progress(j,i)
+					}
 				}
-			}
-			if(mobCheck) {
-				while(dropFlag) await dropAll()
-				while(mapCrushCheck()) {
-					crushSign=0
-					blastGrid=new Array()
-					setMatch()
-					for(let i=1;i<=crushSign;i++) await matchResult(i)
-					while(blastGrid.length>0) await blastAll()
-					for(let i=1;i<=game.width;i++) for(let j=1;j<=game.height;j++) game.board[i][j].crush="None"
-					dropFlag=true
+				if(mobCheck) {
 					while(dropFlag) await dropAll()
-					firstCrush=false
+					while(mapCrushCheck()) {
+						crushSign=0
+						blastGrid=new Array()
+						setMatch()
+						for(let i=1;i<=crushSign;i++) await matchResult(i)
+						while(blastGrid.length>0) await blastAll()
+						for(let i=1;i<=game.width;i++) for(let j=1;j<=game.height;j++) game.board[i][j].crush="None"
+						dropFlag=true
+						while(dropFlag) await dropAll()
+						firstCrush=false
+					}
+					await delay(200)
 				}
-				await delay(200)
-			}
-			mobCheck=false
-			for(let i=1;i<=game.height;i++) for(let j=1;j<=game.width;j++) {
-				if(isMob(game.board[j][i].content) && game.board[j][i].content.name==="!Spider") {
-					mobCheck=true
-					await game.board[j][i].content.progress(j,i)
-				}
-			}
-			if(mobCheck) {
-				while(dropFlag) await dropAll()
-				while(mapCrushCheck()) {
-					crushSign=0
-					blastGrid=new Array()
-					setMatch()
-					for(let i=1;i<=crushSign;i++) await matchResult(i)
-					while(blastGrid.length>0) await blastAll()
-					for(let i=1;i<=game.width;i++) for(let j=1;j<=game.height;j++) game.board[i][j].crush="None"
-					dropFlag=true
-					while(dropFlag) await dropAll()
-					firstCrush=false
-				}
-				await delay(200)
 			}
 			let scoreElement=document.createElement("span"),scoreAdd=crushCombo**3,scoreMinus=betterFloor(levelList[player.biomename][game.level].coefficient*((game.turn+1)**levelList[player.biomename][game.level].exponent))-betterFloor(levelList[player.biomename][game.level].coefficient*(game.turn**levelList[player.biomename][game.level].exponent))
 			scoreElement.classList.add("apos","text3-c")
@@ -4377,8 +4889,20 @@
 			if(endTurnEffect>game.flower.maxhealth-game.flower.health) endTurnEffect=game.flower.maxhealth-game.flower.health
 			if(endTurnEffect<-game.flower.health) endTurnEffect=-game.flower.health
 			game.flower.health+=endTurnEffect
-			if(endTurnEffect>0) addLog("[Flower] Flower received "+endTurnEffect+" heal from recover.","#00bfbf")
-			if(endTurnEffect<0) addLog("[Flower] Flower received "+(-endTurnEffect)+" damage from poison.","#00bfbf")
+			if(endTurnEffect>0) {
+				if(player.savesettings.language==="Chinese") {
+					addLog("[Flower] 花朵受到了痊愈造成的"+endTurnEffect+"治疗。","#00bfbf")
+				} else {
+					addLog("[Flower] Flower received "+endTurnEffect+" heal from recover.","#00bfbf")
+				}
+			}
+			if(endTurnEffect<0) {
+				if(player.savesettings.language==="Chinese") {
+					addLog("[Flower] 花朵受到了剧毒造成的"+(-endTurnEffect)+"伤害。","#00bfbf")
+				} else {
+					addLog("[Flower] Flower received "+(-endTurnEffect)+" damage from poison.","#00bfbf")
+				}
+			}
 			updateFlowerState()
 			if(game.flower.health===0) {
 				document.getElementById("end1").style["pointer-events"]="unset"
@@ -4579,6 +5103,177 @@
 		const perfectGame="The game is perfect, there are no bugs"
 		console.log(perfectGame)
 	</script>
+	<script>
+		function translateText(text,detail) {
+			if(player.savesettings.language==="Chinese" && detail==="EN") return ""
+			if(player.savesettings.language!=="Chinese" && detail==="CH") return ""
+			if(player.savesettings.language!=="Chinese") return text
+			if(text.startsWith("!")) return "!"+translateText(text.slice(1))
+			if(text.startsWith("?")) return "?"+translateText(text.slice(1))
+			switch(text) {
+				case ".": return "。"
+				case "The game is perfect, there are no bugs": return "这个（定冠词）游戏（名词）是（系动词）完美的（形容词），存在（副词）有（系动词）零（Clear! Score+1000）漏洞（名词）"
+				case "Help": return "帮助"
+				case "Command": return "指令"
+				case "Chat": return "聊天"
+				case "Bot": return "机器人"
+				case "bot#7976": return "机器人7976"
+				case "Petal": return "花瓣"
+				case "Mob": return "生物"
+				case "Flower": return "花朵"
+				case "Determine": return "判定"
+				case "Resource": return "资源"
+				case "Traveler": return "旅行者"
+				case "PFLF started!": return "PFLF开始了！"
+				case "PFLF ended!": return "PFLF结束了！"
+				case "Turn": return "回合"
+				case "Score": return "分数"
+				case "Clear": return "清场数"
+				case "Dice": return "骰子"
+				case "Final Turn": return "最终回合"
+				case "Highest Score": return "最高分"
+				case "Play PFLF here!": return "在这里玩PFLF！"
+				case "Invalid command. (Command not exist or available)": return "无效指令。 （指令不存在或不可用）"
+				case "None": return "无"
+				case "Actionbar": return "行动条"
+				case "Common": return "普通"
+				case "Unusual": return "罕见"
+				case "Rare": return "稀有"
+				case "Epic": return "史诗"
+				case "Legendary": return "传奇"
+				case "Mythic": return "神话"
+				case "Ultra": return "究极"
+				case "Super": return "超级"
+				case "Unique": return "唯一"
+				case "Basic": return "基本"
+				case "Stinger": return "刺"
+				case "Air": return "空气"
+				case "Rose": return "玫瑰"
+				case "Leaf": return "叶子"
+				case "Web": return "网"
+				case "Shell": return "贝壳"
+				case "Cotton": return "棉花"
+				case "Coin": return "硬币"
+				case "Jelly": return "果冻"
+				case "Rock": return "岩石"
+				case "Hornet": return "马蜂"
+				case "Missile (H)": return "导弹（黄蜂）"
+				case "Spider": return "蜘蛛"
+				case "Cactus": return "仙人掌"
+				case "Scorpion": return "蝎子"
+				case "Missile (S)": return "导弹（蝎子）"
+				case "Beetle": return "甲虫"
+				case "Void": return "虚无"
+				case "Trader": return "商人"
+				case "Hornets": return "马蜂类"
+				case "Scorpions": return "蝎子类"
+				case "Row": return "行"
+				case "Column": return "列"
+				case "Bomb": return "炸弹"
+				case "Kaleidoscope": return "万花筒"
+				case "Training Ground": return "训练场"
+				case "Centralia Field 1": return "花园1"
+				case "South Desert 1": return "沙漠1"
+				case "Welcome to Petal Crush!": return "欢迎来到花瓣粉碎！"
+				case "The new planet is sprouting...": return "新的行星已经发芽..."
+				case "Your version is too outdated...": return "你的版本过时太久了..."
+				case "Error: Memory incomplete": return "错误：不完整的记忆"
+				case "Memories Stored!": return "记忆存储！"
+				case "Store Memories": return "存储记忆"
+				case "Are you sure to reset the game and lost all process?\nType 'The game is perfect, there are no bugs' to confirm.": return "你确定要重置游戏并丢失所有进度吗？\n输入'The game is perfect, there are no bugs'以确认。(注意，这是英文逗号加空格)"
+				case "Empty": return "空位"
+				case "Settings": return "设置"
+				case "Log Display": return "日志显示"
+				case "Dialog Display": return "对话显示"
+				case "Theme (Requires Refresh)": return "场景（需要刷新）"
+				case "Quality of Life": return "生活质量"
+				case "REC=On": return "[推荐开启]"
+				case "REC=Off": return "[推荐关闭]"
+				case "REC=Skip": return "[推荐跳过]"
+				case "Speed": return "速度"
+				case "Slow": return "慢"
+				case "Middle": return "中"
+				case "Fast": return "快"
+				case "Skip": return "跳过"
+				case "Language": return "语言"
+				case "English": return "英语"
+				case "Chinese": return "中文"
+				case "Theme": return "场景"
+				case "Classic": return "经典"
+				case "Rarity": return "稀有度"
+				case "Normal": return "正常"
+				case "Prefixed": return "前缀"
+				case "Inverted": return "倒转"
+				case "Always<br>scroll<br>before<br>display": return "总在滚动<br>之后展示"
+				case "Enable<br>right<br>click<br>menu": return "右键单击<br>启用菜单"
+				case "Low<br>opacity<br>grid<br>info": return "低可见度<br>格内信息"
+				case "Skip<br>all<br>animation": return "跳过所有<br>动画效果"
+				case "Force<br>map<br>translate<br>button": return "强制地图<br>平移按钮"
+				case "Level Summary": return "关卡信息"
+				case "Score Subtractor": return "回合减分"
+				case "It is equivalent to floor(coefficient*(turn^exponent)) in total.": return "总减分等于floor(系数*(回合^指数))。"
+				case "This level has a coefficient of ": return "这个关卡具有系数"
+				case " and an exponent of ": return "和指数"
+				case "You have used ": return "你使用了"
+				case " turn. The next move will get your score subtracted by ": return "回合。下次移动会使你的分数减少"
+				case "Spawner": return "生成器"
+				case "Spawner ": return "生成器"
+				case "The Default Spawner": return "默认生成器"
+				case "It spawns petal to grid with ": return "它在具有标识"
+				case " symbol and generates initial map.": return "的格生成花瓣，并产生初始地图。"
+				case " symbol.": return "的格生成花瓣。"
+				case "Weight ": return "权重"
+				case ", with a special type of ": return "，生成为特殊类型"
+				case ", but can not generate in initial map": return "，但不在初始地图产生"
+				case "Value Adjustment": return "数值调整"
+				case "Petal Adjustment": return "花瓣调整"
+				case "Mob Adjustment": return "生物调整"
+				case "Other Adjustment": return "其它调整"
+				case "Your currency": return "你的货币"
+				case "Your total currency": return "你的总货币"
+				case "You are on the planet: Azalea": return "你正位于行星：杜鹃花"
+				case "You are in the biome: ": return "你正处于场景："
+				case "You have purchased this world.": return "你已经购买了这个世界。"
+				case "Click on the spot to enter.": return "点击地点进入。"
+				case "World cost: ": return "世界价格："
+				case "Your star: ": return "你的星星："
+				case "Click on the spot to purchase this world.": return "点击地点购买世界。"
+				case "The purchase is not refundable.": return "恕不退款。"
+				case "Level ": return "关卡"
+				case "Goal: ": return "目标："
+				case "Not completed yet": return "未完成"
+				case "Highscore: ": return "最高分："
+				case "Health: ": return "生命值："
+				case "Score: ": return "分数："
+				case "You received ": return "你收到了"
+				case "Advanced Crafter Guide": return "进阶合成指南"
+				case "Flower Game Guide": return "花朵游戏指南"
+				case "Petal Crafter Tutorial": return "花瓣合成教程"
+				case "Various Petal Collection": return "花瓣种类收集"
+				case "True ": return "结果为真"
+				case "False ": return "结果为假"
+				case " for trap": return "对于受困"
+				case " for shoot": return "对于射击"
+				case " for lift": return "对于脱困"
+				default: return text
+			}
+		}
+		function translateAll() {
+			if(player.savesettings.language!=="Chinese") return
+			PetalDescriptionListTrans=["基本中的基本。","被这玩意打很疼，但是很脆。","空无一物。","惊人的治疗物。","光合作用以持续治疗。","困住敌人。","施加衰减的护盾。","临时吸收伤害。","有价值的物品。","造成高额击退。"]
+			MobDescriptionListTrans=["什么也不做。","积聚导弹并发射。","被马蜂召唤。","织网。","损伤周围的花瓣。","它会蜇人。","被蝎子召唤。","吃花瓣。"]
+			ItemDescriptionListTrans=["真正空无一物。","如果你有货物。"]
+			bookHTMLTrans["Advanced Crafter Guide"]="<h2>进阶合成指南</h2><span>你是否为特殊实体感到困惑？这是一本对于它们的指南！</span><br><span>你已经发现了，有限的花瓣并不足以应对无尽的生物。生成器可以持续创造新花瓣，它们在特定格上用记号标注，符号是\"=x=\"。你可以在关卡信息（在右下角，<span class='bold'>同时用以离开场景</span>）知道它们会生成什么。</span><br><span>你也发现了，对一个有大量空格的棋盘，你需要传送器传送花瓣。它们也会在特定格上用记号标注，符号是\"x,y\"，这是它传送起始格的坐标。</span><br><span>墙壁会阻止你交换花瓣。墙壁边消除的花瓣会固定对墙壁造成1点伤害。如果墙壁两边的花瓣同时被消除，<span class='bold'>伤害叠加</span>。</span>"
+			bookHTMLTrans["Flower Game Guide"]="<h2>花朵游戏指南</h2><div class='white-bg inner-box'><span style='color: #008000'>#包含&lt;游玩PFLF的工具.h&gt;</span><span><span style='font-weight: bold'>正在使用 命名空间</span> std<span style='color: #ff0000; font-weight: bold'>;</span></span><span><span style='font-weight: bold'>整数</span> 主要<span style='color: #ff0000; font-weight: bold'>()</span></span><span style='color: #ff0000; font-weight: bold'>{</span><span style='margin-left: 2em'>系统<span style='color: #ff0000; font-weight: bold'>(</span><span style='color: #0000ff; font-weight: bold'>\"cls\"</span><span style='color: #ff0000; font-weight: bold'>);</span></span><span style='margin-left: 2em'>缓慢输出<span style='color: #ff0000; font-weight: bold'>(</span><span style='color: #0000ff; font-weight: bold'>\"↓更多 游戏 (点击!)↓\"</span><span style='color: #ff0000; font-weight: bold'>,</span><span style='color: #800080'>50</span><span style='color: #ff0000; font-weight: bold'>);</span></span><span style='margin-left: 2em'>缓慢输出<span style='color: #ff0000; font-weight: bold'>(</span><a href='https://6triple6single.github.io/Florroom' target='_blank' style='color: #0000ff; font-weight: bold; text-decoration: none'>\"花室\"</a><span style='color: #ff0000; font-weight: bold'>,</span><span style='color: #800080'>50</span><span style='color: #ff0000; font-weight: bold'>);</span></span><span style='margin-left: 2em'>缓慢输出<span style='color: #ff0000; font-weight: bold'>(</span><a href='https://6triple6single.github.io/PFLF' target='_blank' style='color: #0000ff; font-weight: bold; text-decoration: none'>\"PFLF\"</a><span style='color: #ff0000; font-weight: bold'>,</span><span style='color: #800080'>50</span><span style='color: #ff0000; font-weight: bold'>);</span></span><span style='margin-left: 2em'>缓慢输出<span style='color: #ff0000; font-weight: bold'>(</span><a href='https://6triple6single.github.io/Virus1' target='_blank' style='color: #0000ff; font-weight: bold; text-decoration: none'>\"病毒 1\"</a><span style='color: #ff0000; font-weight: bold'>,</span><span style='color: #800080'>50</span><span style='color: #ff0000; font-weight: bold'>);</span></span><span style='margin-left: 2em'><span style='font-weight: bold'>返回</span> <span style='color: #800080'>0</span><span style='color: #ff0000; font-weight: bold'>;</span></span><span style='color: #ff0000; font-weight: bold'>}</span></div>"
+			bookHTMLTrans["Petal Crafter Tutorial"]="<h2>花瓣合成教程</h2><span>你将3个花瓣组成一条线，它们随即粉碎，并合成了新的花瓣！你已经见识到它的力量了，石头在瞬间被你摧毁。</span><span>也许你还需要进行一些新尝试，比如合成4个或更多花瓣，合成不同稀有度的花瓣...无论如何，这是一个好的开始，继续下去！</span><br><span>啊，你不知道伤害怎么工作？好吧，当你合成花瓣时，如果有相邻生物，所有花瓣会对同一个随机的相邻生物造成伤害。随后，每个花瓣对所有和它自身相邻的生物造成伤害。所以，事实上<span class='bold'>你对岩石造成了30+10伤害</span>！真是强大的力量！</span><br><span>啊，你还想知道分数是什么？分数随回合数降低，这代表你的表现有多出色，记住拿到尽可能高的分数。</span><br><span>不要在设置中把[资源]日志的显示关掉，这样你就会在有新东西要学习时获得通知！</span>"
+			bookHTMLTrans["Various Petal Collection"]="<h2>花瓣种类收集</h2><span>你可以自己合成特殊种类的特殊花瓣！</span><br><span>行类型：它有横线和两个向外箭头的图标。它在消除时释放冲击波，摧毁一横排的花瓣，并对生物造成伤害。</span><span>列类型：它有竖线和两个向外箭头的图标。它也在消除时释放冲击波，只不过作为替代，影响的是整列的物体。</span><span>炸弹类型：它有两条对角线和四个向外箭头的图标。它在消除时释放冲击波，作为替代，冲击波影响的是<span class='bold'>sqrt(5)</span>距离内的物体。</span><span>万花筒类型：它有一个正五边形图标。消除时，它会收集所有同类花瓣，而不是发射冲击波。<span class='bold'>这不会摧毁可被冲击波摧毁的花瓣</span>。</span><h3>如何获取</h3><span>行类型：在一列组合4个花瓣，只在炸弹和万花筒不能被创造时创造。</span><span>列类型：在一行组合4个花瓣，条件同上。</span><span>炸弹类型：在有任何交叉（即有花瓣同时在行和列上消除），并且万花筒不能被创造时创造。</span><span>万花筒类型：在一行或一列组合5个花瓣，具有最高优先级。</span><br><span>一个区域只能创造一个特殊种类的花瓣。如果区域内只有同一种稀有度，所有花瓣会合成一个稀有度更高的，但这的优先级最低。如果没有地方创造新花瓣，什么也不会发生[[并且]]这和能量流失毫无关联。</span>"
+			versionAnnouncement="<h2>公告</h2><span>在你离开期间，这个游戏已经更新了79次！</span><span>在开始游戏前。你想要进行<span class='bold'>硬重置</span>吗？</span><br><span>上次更新在2026/8/3，</span><span>更新了语言设置，以及沙漠。</span><br><span>上上次更新在2026/3/21，</span><span>更新了2关，花园1完成。</span><br><span>上次大更新在2026/3/13，</span><span>创建了花瓣粉碎重制版。</span><br><button type='button' tabindex='-1' id='version3' onclick='updateVersion(false)'>不，直接更新版本号。</button><br><button type='button' tabindex='-1' id='version4' onclick='updateVersion(true)'>好，先硬重置了再说。</button>"
+			document.getElementById("pause-title").innerHTML="已暂停"
+			document.getElementById("import-btn").innerHTML="取回记忆"
+			document.getElementById("restart-btn").innerHTML="重启宇宙"
+			document.getElementById("export-btn").innerHTML="存储记忆"
+		}
+	</script>
 </head>
 <body>
 	<div class="tl">
@@ -4640,7 +5335,7 @@
 		<br>
 	</div>
 	<div id="pause" class="mid lblue-bg box highestz nd">
-		<h2>Paused</h2>
+		<h2 id="pause-title">Paused</h2>
 		<span class="nowrap">🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲🎲</span>
 		<div class="cmargin">
 			<button type="button" tabindex="-1" onclick="pauseGame(false)" class="green-bg bgrid lmargin" title="Resume">
@@ -4658,8 +5353,8 @@
 	</div>
 	<div id="level" class="mid lyellow-bg box highz hsize nd"></div>
 	<div class="cmargin text3-c">
-		<button type="button" tabindex="-1" onclick="importSave()" class="lmargin lblue-bg recbtn pointer" title="Import Save">Retrieve Memories</button>
-		<button type="button" tabindex="-1" onclick="hardReset()" class="lmargin lred-bg recbtn forbidden" title="HARD RESET">Restart the Universe</button>
+		<button type="button" tabindex="-1" id="import-btn" onclick="importSave()" class="lmargin lblue-bg recbtn pointer" title="Import Save">Retrieve Memories</button>
+		<button type="button" tabindex="-1" id="restart-btn" onclick="hardReset()" class="lmargin lred-bg recbtn forbidden" title="HARD RESET">Restart the Universe</button>
 		<button type="button" tabindex="-1" id="export-btn" onclick="exportSave()" class="lmargin lyellow-bg recbtn pointer" title="Export Save">Store Memories</button>
 	</div>
 	<div id="game-state" class="cmargin rmid text2-c nowrap"></div>
@@ -4724,24 +5419,7 @@
 		<div id="flower-effect-debuff" class="apos nlh"></div>
 	</div>
 	<div id="version1"></div>
-	<div id="version2">
-		<h2>Announcement</h2>
-		<span>This game was updated again when you left!</span>
-		<span>Do you want to perform a <span class="bold">hard reset</span> before starting the game?</span>
-		<br>
-		<span>The last update was on 2026/3/21,</span>
-		<span>which updated 2 levels. Centralia 1 completed.</span>
-		<br>
-		<span>The last update before was on 2026/3/18,</span>
-		<span>which updated 1 level.</span>
-		<br>
-		<span>The last important update before was on 2026/3/13,</span>
-		<span>which created Petal Crush Rewritten.</span>
-		<br>
-		<button type="button" tabindex="-1" id="version3" onclick="updateVersion(false)">No, just update the version.</button>
-		<br>
-		<button type="button" tabindex="-1" id="version4" onclick="updateVersion(true)">Yes, hard reset before starting.</button>
-	</div>
+	<div id="version2"></div>
 	<div id="endgame1"></div>
 	<div id="endgame2"></div>
 	<div id="end1"></div>
