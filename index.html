@@ -63,39 +63,6 @@
 			height: 30px;
 			width: 200px;
 		}
-		#endgame1 {
-			position: absolute;
-			top: 0px;
-			left: 0px;
-			background-color: #7f7fbf;
-			height: 100%;
-			width: 100%;
-			pointer-events: none;
-			z-index: 7000;
-		}
-		#endgame2 {
-			display: flex;
-			flex-direction: column;
-			position: absolute;
-			top: 50%;
-			left: 50%;
-			background-color: #7fbf7f;
-			width: 50%;
-			transform: translate(-50%,-50%);
-			border: 2px solid;
-			padding-bottom: 50px;
-			overflow-x: hidden;
-			overflow-y: auto;
-			align-items: center;
-			z-index: 7744;
-		}
-		#endgame3 {
-			border: 1.5px solid;
-			outline: none;
-			background-color: #7fffff;
-			height: 30px;
-			width: 200px;
-		}
 		#end1 {
 			position: absolute;
 			top: 0px;
@@ -117,6 +84,17 @@
 			opacity: 0;
 			pointer-events: none;
 			z-index: 7979;
+		}
+		#globalfilter {
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			background: none;
+			height: 100%;
+			width: 100%;
+			opacity: 0.3;
+			pointer-events: none;
+			z-index: 6859;
 		}
 		.tl {
 			position: absolute;
@@ -936,7 +914,7 @@
 			z-index: 8000;
 		}
 		.wider {
-			stroke-width: 6px;
+			stroke-width: 8px;
 		}
 		.wide {
 			stroke-width: 3px;
@@ -1072,10 +1050,10 @@
 		PetalSVGArray.Cotton=PetalSVGArray.Basic
 		PetalSVGArray.Coin=PetalSVGArray.Basic
 		PetalSVGArray.Jelly=PetalSVGArray.Basic
-		const MobNameList=["!Rock","!Hornet","!Missile (H)","!Spider","!Cactus","!Scorpion","!Missile (S)","!Beetle"]
-		const MobDefaultAttributeList=[{action:"None",drop:"Disabled",move:"Disabled",immune:"Poison"},{action:"Default",cost:50,speed:50,connect:{knockback:"Rarity Hornets"},summon:"10%",damage:10,increment:1,shoot:20,drop:"Disabled",move:"Disabled"},{action:"Default",connect:{knockback:"Rarity Hornets"},reflect:"50%",drop:"Disabled",move:"Disabled",immune:"Poison"},{action:"Default",cost:"Default",speed:50,damage:20,increment:0,duration:5,weavestrength:30,drop:"Disabled",move:"Disabled"},{action:"Default",cost:"Default",speed:50,drop:"Disabled",move:"Disabled"},{action:"Default",cost:"Default",speed:50,summon:"20%",damage:20,increment:1,duration:3,drop:"Disabled",move:"Disabled"},{action:"Default",drop:"Disabled",move:"Disabled",immune:"Poison"},{action:"Default",cost:100,speed:50,eat:"Leaf",damage:30,increment:5}]
+		const MobNameList=["!Rock","!Hornet","!Missile (H)","!Spider","!Cactus","!Scorpion","!Missile (S)","!Beetle","!Sponge","!Crab","!Starfish"]
+		const MobDefaultAttributeList=[{action:"None",drop:"Disabled",move:"Disabled",immune:"Poison"},{action:"Default",cost:50,speed:50,connect:{knockback:"Rarity Hornets"},summon:"10%",damage:10,increment:1,shoot:20,drop:"Disabled",move:"Disabled"},{action:"Default",connect:{knockback:"Rarity Hornets"},reflect:"50%",drop:"Disabled",move:"Disabled",immune:"Poison"},{action:"Default",cost:"Default",speed:50,damage:20,increment:0,duration:5,weavestrength:30,drop:"Disabled",move:"Disabled"},{action:"Default",cost:"Default",speed:50,drop:"Disabled",move:"Disabled"},{action:"Default",cost:"Default",speed:50,summon:"20%",damage:20,increment:1,duration:3,drop:"Disabled",move:"Disabled"},{action:"Default",drop:"Disabled",move:"Disabled",immune:"Poison"},{action:"Default",cost:100,speed:50,eat:"Leaf",damage:30,increment:5},{action:"None",absorb:90,reduction:75,drop:"Disabled",move:"Disabled",immune:"Poison"},{action:"Default",cost:50,speed:75,dir:0,damage:40,increment:2,step:0,interval:5,drop:"Disabled"},{action:"Default",cost:"Variant",speed:50,damage:40,increment:10,drop:"Disabled",immune:"Poison"}]
 		let MobAttributeList=structuredClone(MobDefaultAttributeList)
-		const MobDescriptionList=["It does nothing.","Accumulates missiles and shoots.","Summoned by Hornet.","Weaves webs.","Hurts petals around.","It stings.","Summoned by Scorpion.","Eats petals."]
+		const MobDescriptionList=["It does nothing.","Accumulates missiles and shoots.","Summoned by Hornet.","Weaves webs.","Hurts petals around.","It stings.","Summoned by Scorpion.","Eats petals.","Absorbs damage.","Left. Left. Right. Right.","Spinning red star."]
 		let MobDescriptionListTrans=structuredClone(MobDescriptionList)
 		const MobSVGArray=new Object()
 		MobSVGArray["!Rock"]="<svg viewBox='0 0 100 100' class='in-svg'><path class='fblack-path ns' fill-opacity='0.2' d='M8 100A8 8 0 0 1 0 92L0 8A8 8 0 0 1 8 0L92 0A8 8 0 0 1 100 8L100 92A8 8 0 0 1 92 100L92 8L8 8ZM8 92L92 92L92 100L8 100Z'/><g><path class='fgrey-path ns' d='M32 38L54 30L64 38L70 54L56 68L40 68L32 52Z'/><path class='grey-path' d='M32 38L54 30L64 38L70 54L56 68L40 68L32 52Z' style='filter: brightness(90%)'/></g></svg>"
@@ -1085,17 +1063,21 @@
 		MobSVGArray["!Cactus"]="<svg viewBox='0 0 100 100' class='in-svg'><path class='fblack-path ns' fill-opacity='0.2' d='M8 100A8 8 0 0 1 0 92L0 8A8 8 0 0 1 8 0L92 0A8 8 0 0 1 100 8L100 92A8 8 0 0 1 92 100L92 8L8 8ZM8 92L92 92L92 100L8 100Z'/><g><path class='fgreen-path ns' d='M50 26A11 11 0 0 0 67 33A11 11 0 0 0 74 50A11 11 0 0 0 67 67A11 11 0 0 0 50 74A11 11 0 0 0 33 67A11 11 0 0 0 26 50A11 11 0 0 0 33 33A11 11 0 0 0 50 26Z'/><path class='green-path wide rcap' d='M50 26A11 11 0 0 0 67 33A11 11 0 0 0 74 50A11 11 0 0 0 67 67A11 11 0 0 0 50 74A11 11 0 0 0 33 67A11 11 0 0 0 26 50A11 11 0 0 0 33 33A11 11 0 0 0 50 26Z' style='filter: brightness(80%)'/><path class='flgreen-path ns' d='M50 38A12 12 0 0 0 50 62A12 12 0 0 0 50 38Z'/></g></svg>"
 		MobSVGArray["!Scorpion"]="<svg viewBox='0 0 100 100' class='in-svg'><path class='fblack-path ns' fill-opacity='0.2' d='M8 100A8 8 0 0 1 0 92L0 8A8 8 0 0 1 8 0L92 0A8 8 0 0 1 100 8L100 92A8 8 0 0 1 92 100L92 8L8 8ZM8 92L92 92L92 100L8 100Z'/><g><path class='wide rcap' d='M45 30L47 23M55 30L53 23M40 38L36 37M38 43L34 43M38 50L34 51M60 38L64 37M62 43L66 43M62 50L66 51'/><path class='fyellow-path ns' d='M55 30A30 18 60 0 1 50 68A30 18 120 0 1 45 30A10 7 90 0 1 55 30Z' style='filter: brightness(90%)'/><path class='yellow-path wide rcap' d='M55 30A30 18 60 0 1 50 68A30 18 120 0 1 45 30A10 7 90 0 1 55 30ZM46 36L54 36M44 44L56 44M42 52L58 52M45 60L55 60' style='filter: brightness(80%)'/><path class='fyellow-path ns' d='M50 64A6 6 0 0 1 54 71A6 6 0 0 1 46 71A6 6 0 0 1 50 64Z' style='filter: brightness(90%)'/><path class='yellow-path mwidth rcap' d='M50 64A6 6 0 0 1 54 71A6 6 0 0 1 46 71A6 6 0 0 1 50 64Z' style='filter: brightness(80%)'/><path class='fblack-path narrow rcap' d='M50 62L54 66L46 66Z'/></g></svg>"
 		MobSVGArray["!Missile (S)"]="<svg viewBox='0 0 100 100' class='in-svg'><path class='fblack-path ns' fill-opacity='0.2' d='M8 100A8 8 0 0 1 0 92L0 8A8 8 0 0 1 8 0L92 0A8 8 0 0 1 100 8L100 92A8 8 0 0 1 92 100L92 8L8 8ZM8 92L92 92L92 100L8 100Z'/><g><path class='fblack-path wide rcap' d='M50 44L60 54L40 54Z'/></g></svg>"
-		MobSVGArray["!Beetle"]="<svg viewBox='0 0 100 100' class='in-svg'><path class='fblack-path ns' fill-opacity='0.2' d='M8 100A8 8 0 0 1 0 92L0 8A8 8 0 0 1 8 0L92 0A8 8 0 0 1 100 8L100 92A8 8 0 0 1 92 100L92 8L8 8ZM8 92L92 92L92 100L8 100Z'/><g><path class='wider rcap' d='M41 35A20 20 0 0 1 43 20M59 35A20 20 0 0 0 57 20'/><path class='fdpurple-path ns' d='M34 42A14 14 0 0 1 44 32A24 24 0 0 1 56 32A14 14 0 0 1 66 42A48 48 0 0 1 66 66A14 14 0 0 1 56 76A24 24 0 0 1 44 76A14 14 0 0 1 34 66A48 48 0 0 1 34 42Z'/><path class='dpurple-path rcap' d='M34 42A14 14 0 0 1 44 32A24 24 0 0 1 56 32A14 14 0 0 1 66 42A48 48 0 0 1 66 66A14 14 0 0 1 56 76A24 24 0 0 1 44 76A14 14 0 0 1 34 66A48 48 0 0 1 34 42ZM50 42L50 66' style='filter: brightness(90%)'/><path class='fdpurple-path ns' d='M41 39A4 4 0 0 0 41 47A4 4 0 0 0 41 39ZM41 50A4 4 0 0 0 41 58A4 4 0 0 0 41 50ZM41 61A4 4 0 0 0 41 69A4 4 0 0 0 41 61ZM59 39A4 4 0 0 0 59 47A4 4 0 0 0 59 39ZM59 50A4 4 0 0 0 59 58A4 4 0 0 0 59 50ZM59 61A4 4 0 0 0 59 69A4 4 0 0 0 59 61Z' style='filter: brightness(80%)'></g></svg>"
-		const ItemNameList=["?Void","?Trader"]
-		const ItemDefaultAttributeList=[{drop:"Disabled",move:"Disabled"},{convert:"Coin",drop:"Disabled",move:"Disabled"}]
+		MobSVGArray["!Beetle"]="<svg viewBox='0 0 100 100' class='in-svg'><path class='fblack-path ns' fill-opacity='0.2' d='M8 100A8 8 0 0 1 0 92L0 8A8 8 0 0 1 8 0L92 0A8 8 0 0 1 100 8L100 92A8 8 0 0 1 92 100L92 8L8 8ZM8 92L92 92L92 100L8 100Z'/><g><path class='rcap' d='M41 35A20 20 0 0 1 43 20M59 35A20 20 0 0 0 57 20'/><path class='fdpurple-path ns' d='M34 42A14 14 0 0 1 44 32A24 24 0 0 1 56 32A14 14 0 0 1 66 42A48 48 0 0 1 66 66A14 14 0 0 1 56 76A24 24 0 0 1 44 76A14 14 0 0 1 34 66A48 48 0 0 1 34 42Z'/><path class='dpurple-path rcap' d='M34 42A14 14 0 0 1 44 32A24 24 0 0 1 56 32A14 14 0 0 1 66 42A48 48 0 0 1 66 66A14 14 0 0 1 56 76A24 24 0 0 1 44 76A14 14 0 0 1 34 66A48 48 0 0 1 34 42ZM50 42L50 66' style='filter: brightness(90%)'/><path class='fdpurple-path ns' d='M41 39A4 4 0 0 0 41 47A4 4 0 0 0 41 39ZM41 50A4 4 0 0 0 41 58A4 4 0 0 0 41 50ZM41 61A4 4 0 0 0 41 69A4 4 0 0 0 41 61ZM59 39A4 4 0 0 0 59 47A4 4 0 0 0 59 39ZM59 50A4 4 0 0 0 59 58A4 4 0 0 0 59 50ZM59 61A4 4 0 0 0 59 69A4 4 0 0 0 59 61Z' style='filter: brightness(80%)'></g></svg>"
+		MobSVGArray["!Sponge"]="<svg viewBox='0 0 100 100' class='in-svg'><path class='fblack-path ns' fill-opacity='0.2' d='M8 100A8 8 0 0 1 0 92L0 8A8 8 0 0 1 8 0L92 0A8 8 0 0 1 100 8L100 92A8 8 0 0 1 92 100L92 8L8 8ZM8 92L92 92L92 100L8 100Z'/><g><path class='fyellow-path ns' d='M50 25A25 25 0 0 0 50 75A25 25 0 0 0 50 25'/><path class='yellow-path' d='M50 25A25 25 0 0 0 50 75A25 25 0 0 0 50 25' style='filter: brightness(90%)'/><path class='fyellow-path ns' d='M38 34A4 4 0 0 0 38 42A4 4 0 0 0 38 34M45 41.5A3.5 3.5 0 0 0 45 48.5A3.5 3.5 0 0 0 45 41.5M62 34A4 4 0 0 0 62 42A4 4 0 0 0 62 34M55 41.5A3.5 3.5 0 0 0 55 48.5A3.5 3.5 0 0 0 55 41.5M62 58A4 4 0 0 0 62 66A4 4 0 0 0 62 58M55 51.5A3.5 3.5 0 0 0 55 58.5A3.5 3.5 0 0 0 55 51.5M38 58A4 4 0 0 0 38 66A4 4 0 0 0 38 58M45 51.5A3.5 3.5 0 0 0 45 58.5A3.5 3.5 0 0 0 45 51.5' style='filter: brightness(80%)'/></g></svg>"
+		MobSVGArray["!Crab"]="<svg viewBox='0 0 100 100' class='in-svg'><path class='fblack-path ns' fill-opacity='0.2' d='M8 100A8 8 0 0 1 0 92L0 8A8 8 0 0 1 8 0L92 0A8 8 0 0 1 100 8L100 92A8 8 0 0 1 92 100L92 8L8 8ZM8 92L92 92L92 100L8 100Z'/><g><path class='wide rcap' d='M42 35L30 30L44 28M31 42L21 39M28 47L18 46M27 52L17 53M29 57L19 60M58 35L70 30L56 28M69 42L79 39M72 47L82 46M73 52L83 53M71 57L81 60'/><path class='fdbrown-path ns' d='M50 36A20 14 0 0 0 50 64A20 14 0 0 0 50 36'/><path class='dbrown-path' d='M50 36A20 14 0 0 0 50 64A20 14 0 0 0 50 36' style='filter: brightness(90%)'/></g></svg>"
+		MobSVGArray["!Starfish"]="<svg viewBox='0 0 100 100' class='in-svg'><path class='fblack-path ns' fill-opacity='0.2' d='M8 100A8 8 0 0 1 0 92L0 8A8 8 0 0 1 8 0L92 0A8 8 0 0 1 100 8L100 92A8 8 0 0 1 92 100L92 8L8 8ZM8 92L92 92L92 100L8 100Z'/><g><path class='red-path wider' d='M41 50L47 26A9 5 90 0 1 53 26L59 50Z' style='filter: brightness(90%)'/><path class='red-path rot72 wider' d='M41 50L47 26A9 5 90 0 1 53 26L59 50Z' style='filter: brightness(90%)'/><path class='red-path rot144 wider' d='M41 50L47 26A9 5 90 0 1 53 26L59 50Z' style='filter: brightness(90%)'/><path class='red-path rot216 wider' d='M41 50L47 26A9 5 90 0 1 53 26L59 50Z' style='filter: brightness(90%)'/><path class='red-path rot288 wider' d='M41 50L47 26A9 5 90 0 1 53 26L59 50Z' style='filter: brightness(90%)'/><path class='fred-path ns' d='M41 50L47 26A9 5 90 0 1 53 26L59 50Z'/><path class='fred-path rot72 ns' d='M41 50L47 26A9 5 90 0 1 53 26L59 50Z'/><path class='fred-path rot144 ns' d='M41 50L47 26A9 5 90 0 1 53 26L59 50Z'/><path class='fred-path rot216 ns' d='M41 50L47 26A9 5 90 0 1 53 26L59 50Z'/><path class='fred-path rot288 ns' d='M41 50L47 26A9 5 90 0 1 53 26L59 50Z'/><path class='fwhite-path ns' fill-opacity='0.8' d='M50 29A3 3 0 0 0 50 35A3 3 0 0 0 50 29M50 37A4 4 0 0 0 50 45A4 4 0 0 0 50 37'/><path class='fdbrown-path rot288 ns' fill-opacity='0.4' d='M50 29A3 3 0 0 0 50 35A3 3 0 0 0 50 29M50 37A4 4 0 0 0 50 45A4 4 0 0 0 50 37'/><path class='fyellow-path rot216 ns' fill-opacity='0.2' d='M50 29A3 3 0 0 0 50 35A3 3 0 0 0 50 29M50 37A4 4 0 0 0 50 45A4 4 0 0 0 50 37'/><path class='fgreen-path rot144 ns' fill-opacity='0.1' d='M50 29A3 3 0 0 0 50 35A3 3 0 0 0 50 29M50 37A4 4 0 0 0 50 45A4 4 0 0 0 50 37'/><path class='fgreen-path rot72 ns' fill-opacity='0.1' d='M50 29A3 3 0 0 0 50 35A3 3 0 0 0 50 29M50 37A4 4 0 0 0 50 45A4 4 0 0 0 50 37'/></g></svg>"
+		const ItemNameList=["?Void","?Vortex"]
+		const ItemDefaultAttributeList=[{drop:"Disabled",move:"Disabled"},{drop:"Disabled",move:"Disabled",period:[1,0],state:0}]
 		let ItemAttributeList=structuredClone(ItemDefaultAttributeList)
-		const ItemDescriptionList=["Truly nothing.","If you have wares."]
+		const ItemDescriptionList=["Truly nothing.","Graceful conveyer belt."]
 		let ItemDescriptionListTrans=structuredClone(ItemDescriptionList)
 		const ItemSVGArray=new Object()
 		ItemSVGArray["?Void"]="<svg viewBox='0 0 100 100' class='in-svg'></svg>"
-		ItemSVGArray["?Trader"]=ItemSVGArray["?Void"]
+		ItemSVGArray["?Vortex"]="<svg viewBox='0 0 100 100' class='in-svg'><path class='blue-path diag wide rcap' d='M50 47A6 6 0 0 0 50 59A12 12 0 0 0 50 35A18 18 0 0 0 50 71A24 24 0 0 0 50 23M50 53A6 6 0 0 0 50 41A12 12 0 0 0 50 65A18 18 0 0 0 50 29A24 24 0 0 0 50 77'/></svg>"
 		const DefaultValue={knockback:50,cost:200,maxhealth:200,upperlimit:200,lowerlimit:0,maxrarity:7,damagemult:[0,1,2,4,8,16,32,64],healmult:[0,1,2,3,5,8,13,21]}
 		let NewValue=structuredClone(DefaultValue)
+		let actionCheck=false
 		function resetDefault() {
 			PetalAttributeList=structuredClone(PetalDefaultAttributeList)
 			MobAttributeList=structuredClone(MobDefaultAttributeList)
@@ -1179,20 +1161,32 @@
 			return Object.assign(new Mob(),structuredClone(this))
 		}
 		Mob.prototype.print=function(gridX,gridY) {
-			let pendingGrid=createGrid(0,gridX,gridY,"Mob_"+this.name,1,this.rarity)
-			let editingPath=pendingGrid.children[0].children[0]
+			let baseGrid=createGrid(0,gridX,gridY,"Mob_"+this.name,1,this.rarity)
+			let editingMob=baseGrid.children[0].children[1]
+			if(this.name==="!Crab" && this.attribute.action==="Default") {
+				if(this.attribute.step===this.attribute.interval) {
+					editingMob.innerHTML+="<path class='red-path wide' d='M50 38L50 54'/><path class='fred-path ns' d='M50 58A2 2 0 0 0 50 62A2 2 0 0 0 50 58'/>"
+				} else if(this.attribute.dir===2) {
+					editingMob.innerHTML+="<path class='purple-path wide rcap' d='M66 50L34 50M66 50L60 44M66 50L60 56'/>"
+				} else if(this.attribute.dir===4) {
+					editingMob.innerHTML+="<path class='purple-path wide rcap' d='M34 50L66 50M34 50L40 44M34 50L40 56'/>"
+				}
+			}
+			let editingPath=baseGrid.children[0].children[0]
 			let actionProgress=this.attribute.actionbar/NewValue.upperlimit,healthP=this.attribute.health/this.attribute.maxhealth
 			if(isNaN(healthP)) healthP=1
 			if(isNaN(actionProgress)) actionProgress=0
 			if(actionProgress>1) actionProgress=1
 			if(actionProgress<0) actionProgress=0
 			editingPath.setAttribute("d","M8 100A8 8 0 0 1 0 92L0 8A8 8 0 0 1 8 0L92 0A8 8 0 0 1 100 8L100 92A8 8 0 0 1 92 100L92 8L8 8ZM8 92L92 92L92 100L8 100L8 97L"+(8+84*actionProgress)+" 97L"+(8+84*actionProgress)+" 95L8 95ZM8 8L92 8L92 "+(92-84*healthP)+"L8 "+(92-84*healthP)+"Z")
-			return pendingGrid
+			return baseGrid
 		}
 		Mob.prototype.progress=async function(actionX,actionY) {
 			if(this.attribute.action==="None") return
 			if(this.name==="!Missile (H)" && this.attribute.action==="Default") return
+			if(this.name==="!Missile (S)" && this.attribute.action==="Default") return
 			this.progressed=true
+			actionCheck=true
 			this.attribute.actionbar+=this.attribute.speed
 			if(this.attribute.actionbar>NewValue.upperlimit) this.attribute.actionbar=NewValue.upperlimit
 			game.board[actionX][actionY].print()
@@ -1282,7 +1276,6 @@
 						game.board[missileX][missileY].print()
 						await delay(100)
 					}
-					dropFlag=true
 					await delay(100)
 				}
 				game.board[actionX][actionY].print()
@@ -1401,7 +1394,6 @@
 						game.board[missileX][missileY].print()
 						await delay(100)
 					}
-					dropFlag=true
 					await delay(100)
 				}
 				game.board[actionX][actionY].print()
@@ -1474,6 +1466,82 @@
 				}
 				return
 			}
+			if(this.name==="!Crab" && this.attribute.action==="Default") {
+				this.attribute.actionbar=NewValue.upperlimit
+				if(player.savesettings.language==="Chinese") {
+					addLog("[Mob] 位于("+actionX+","+actionY+")的"+translateText(this.name)+"的行动...","#bfbf00")
+				} else {
+					addLog("[Mob] Action of "+this.name+" at ("+actionX+","+actionY+")...","#bfbf00")
+				}
+				this.attribute.actionbar-=this.attribute.cost
+				if(this.attribute.step===this.attribute.interval) {
+					if(!player.settings.hasOwnProperty("skipanimation")) {
+						for(let i=0;i<=20;i++) {
+							getGrid(0,actionX,actionY).children[0].children[1].style.transform="translate(0px,"+i+"px)"
+							await delay(20)
+						}
+						for(let i=1;i<=10;i++) {
+							getGrid(0,actionX,actionY).children[0].children[1].style.transform="translate(0px,"+(20-4*i)+"px)"
+							await delay(20)
+						}
+					}
+					flowerInjure(this)
+					this.attribute.damage+=this.attribute.increment
+					if(!player.settings.hasOwnProperty("skipanimation")) {
+						for(let i=1;i<=20;i++) {
+							getGrid(0,actionX,actionY).children[0].children[1].style.transform="translate(0px,"+(i-20)+"px)"
+							await delay(20)
+						}
+					}
+					this.attribute.step=0
+					this.attribute.actionbar=0
+					game.board[actionX][actionY].print()
+					return
+				}
+				if(this.attribute.dir && actionX+dx[this.attribute.dir]>=1 && actionX+dx[this.attribute.dir]<=game.width && game.wall[actionX][actionY][this.attribute.dir]===0 && ((isPetal(game.board[actionX+dx[this.attribute.dir]][actionY].content) && game.board[actionX+dx[this.attribute.dir]][actionY].state==="Existing") || game.board[actionX+dx[this.attribute.dir]][actionY].state==="Empty")) {
+					if(!player.settings.hasOwnProperty("skipanimation")) {
+						for(let i=0;i<=40;i++) {
+							getGrid(0,actionX,actionY).style.scale=1.3-0.015*Math.abs(i-20)
+							await delay(20)
+						}
+					}
+					this.attribute.step++
+					if(game.board[actionX+dx[this.attribute.dir]][actionY].state==="Empty") {
+						let resultX=actionX+dx[this.attribute.dir]
+						game.board[resultX][actionY]=new Grid(resultX,actionY,this,"Existing")
+						game.board[resultX][actionY].print()
+						game.board[actionX][actionY].empty()
+						game.board[actionX][actionY].print()
+					} else {
+						let resultX=actionX+dx[this.attribute.dir],saveContent=game.board[resultX][actionY].content,saveType=game.board[resultX][actionY].type
+						game.board[resultX][actionY]=new Grid(resultX,actionY,this,"Existing")
+						game.board[resultX][actionY].print()
+						game.board[actionX][actionY]=new Grid(actionX,actionY,saveContent,"Existing",saveType)
+						game.board[actionX][actionY].print()
+					}
+					dropFlag=true
+					return
+				}
+				if(!player.settings.hasOwnProperty("skipanimation")) {
+					let clockwise=3-this.attribute.dir
+					if(this.attribute.dir===0) clockwise=2*roll(0,1)-1
+					for(let i=0;i<=10;i++) {
+						getGrid(0,actionX,actionY).children[0].children[1].style.transform="rotate("+(clockwise*(4*i))+"deg)"
+						await delay(20)
+					}
+					for(let i=1;i<=20;i++) {
+						getGrid(0,actionX,actionY).children[0].children[1].style.transform="rotate("+(clockwise*(40-4*i))+"deg)"
+						await delay(20)
+					}
+					for(let i=1;i<=10;i++) {
+						getGrid(0,actionX,actionY).children[0].children[1].style.transform="rotate("+(clockwise*(4*i-40))+"deg)"
+						await delay(20)
+					}
+				}
+				this.attribute.dir=2+2*roll(0,1)
+				game.board[actionX][actionY].print()
+				return
+			}
 		}
 		Mob.prototype.defeat=function(defeatX,defeatY) {
 			if(this.attribute.reflect>0) for(let i=1;i<=4;i++) if(defeatX+dx[i]>=1 && defeatX+dx[i]<=game.width && defeatY+dy[i]>=1 && defeatY+dy[i]<=game.height && isMob(game.board[defeatX+dx[i]][defeatY+dy[i]].content) && game.board[defeatX+dx[i]][defeatY+dy[i]].content.attribute.health>0) {
@@ -1519,6 +1587,17 @@
 					addLog("[Mob] <span style='color: "+rarityColorEP[this.rarity]+"'>"+this.name+"</span> received "+pendingDamage+" damage from Reflection, "+this.attribute.health+" health remaining.","#bfbf00")
 				}
 			}
+			if(petal.name==="Absorption") {
+				pendingDamage=petal.damage
+				if(this.attribute.hasOwnProperty("reduction")) pendingDamage-=approx(this.attribute.reduction/100*pendingDamage)
+				if(pendingDamage>this.attribute.health) pendingDamage=this.attribute.health
+				this.attribute.health-=pendingDamage
+				if(player.savesettings.language==="Chinese") {
+					addLog("[Mob] <span style='color: "+rarityColorEP[this.rarity]+"'>"+translateText(this.name)+"</span>受到了吸收造成的"+pendingDamage+"伤害，剩余"+this.attribute.health+"生命值。","#bfbf00")
+				} else {
+					addLog("[Mob] <span style='color: "+rarityColorEP[this.rarity]+"'>"+this.name+"</span> received "+pendingDamage+" damage from Absorption, "+this.attribute.health+" health remaining.","#bfbf00")
+				}
+			}
 			if(petal.name==="Poison") {
 				pendingDamage=petal.damage
 				if(pendingDamage>this.attribute.health) pendingDamage=this.attribute.health
@@ -1531,6 +1610,12 @@
 			}
 			if(isPetal(petal)) {
 				pendingDamage=petal.attribute.damage
+				for(let i=1;i<=4;i++) if(pendingDamage>0 && mobX+dx[i]>=1 && mobX+dx[i]<=game.width && mobY+dy[i]>=1 && mobY+dy[i]<=game.height && isMob(game.board[mobX+dx[i]][mobY+dy[i]].content) && game.board[mobX+dx[i]][mobY+dy[i]].content.name==="!Sponge" && game.board[mobX+dx[i]][mobY+dy[i]].content.attribute.health>0 && game.board[mobX+dx[i]][mobY+dy[i]].content.attribute.hasOwnProperty("absorb")) {
+					let absorbDamage=approx(game.board[mobX+dx[i]][mobY+dy[i]].content.attribute.absorb/100*pendingDamage)
+					game.board[mobX+dx[i]][mobY+dy[i]].content.injure(mobX+dx[i],mobY+dy[i],{name:"Absorption",damage:absorbDamage})
+					if(game.board[mobX+dx[i]][mobY+dy[i]].content.attribute.health===0) defeatedMob.push({x:mobX+dx[i],y:mobY+dy[i]})
+					pendingDamage-=absorbDamage
+				}
 				if(pendingDamage>this.attribute.health) pendingDamage=this.attribute.health
 				this.attribute.health-=pendingDamage
 				if(player.savesettings.language==="Chinese") {
@@ -1572,6 +1657,18 @@
 				game.score+=pendingDamage
 				updateFlowerState()
 			}
+			if(this.name==="!Sponge" && petal.name!=="Absorption") {
+				game.score+=pendingDamage
+				updateFlowerState()
+			}
+			if(this.name==="!Crab") {
+				game.score+=pendingDamage
+				updateFlowerState()
+			}
+			if(this.name==="!Starfish") {
+				game.score+=approx(pendingDamage/2)
+				updateFlowerState()
+			}
 		}
 		Mob.prototype.repulse=function(mobX,mobY,petal) {
 			if(this.attribute.action==="None") return
@@ -1586,6 +1683,7 @@
 				} else {
 					addLog("[Mob] <span style='color: "+rarityColorEP[this.rarity]+"'>"+this.name+"</span> received "+pendingKnockback+" knockback from Connection.","#bfbf00")
 				}
+				if(this.name==="!Crab" && this.attribute.step===this.attribute.interval) this.attribute.step=0
 				game.board[mobX][mobY].print()
 				return
 			}
@@ -1604,6 +1702,7 @@
 				} else {
 					addLog("[Petal] <span style='color: "+rarityColorEP[petal.rarity]+"'>"+petal.name+"</span> dealt "+pendingKnockback+" knockback to <span style='color: "+rarityColorEP[this.rarity]+"'>"+this.name+"</span>.","#9f9fdf")
 				}
+				if(this.name==="!Crab" && this.attribute.step===this.attribute.interval) this.attribute.step=0
 				game.board[mobX][mobY].print()
 			}
 		}
@@ -1612,7 +1711,7 @@
 			this.id=id,this.rarity=rarity
 			if(typeof(this.id)==="string") this.id=ItemNameList.indexOf(this.id)
 			this.name=ItemNameList[this.id]
-			this.attribute=ItemAttributeList[this.id]
+			this.attribute=structuredClone(ItemAttributeList[this.id])
 			Object.assign(this.attribute,other)
 		}
 		function isItem(potentialItem) {
@@ -1623,6 +1722,104 @@
 		}
 		Item.prototype.print=function(gridX,gridY) {
 			return createGrid(0,gridX,gridY,"Item_"+this.name,1,this.rarity)
+		}
+		Item.prototype.progress=async function(actionX,actionY) {
+			if(this.name==="?Vortex") {
+				let vortexGroup=[{x:actionX,y:actionY}],groupUpdate=0,affected=new Array()
+				while(groupUpdate<vortexGroup.length) {
+					let v=vortexGroup[groupUpdate]
+					for(let i=1;i<=8;i++) if(v.x+dx2i[i]>=1 && v.x+dx2i[i]<=game.width && v.y+dy2i[i]>=1 && v.y+dy2i[i]<=game.height) {
+						let nearX=v.x+dx2i[i],nearY=v.y+dy2i[i]
+						if(game.board[nearX][nearY].state==="Empty") {
+							let repeatFlag=false
+							for(let j of affected) if(j.x===nearX && j.y===nearY) repeatFlag=true
+							if(!repeatFlag) affected.push({x:nearX,y:nearY})
+						}
+						if(isPetal(game.board[nearX][nearY].content) && game.board[nearX][nearY].state==="Existing") {
+							let repeatFlag=false
+							for(let j of affected) if(j.x===nearX && j.y===nearY) repeatFlag=true
+							if(!repeatFlag) affected.push({x:nearX,y:nearY})
+						}
+						if(isMob(game.board[nearX][nearY].content) && game.board[nearX][nearY].content.attribute.move!=="Disabled") {
+							let repeatFlag=false
+							for(let j of affected) if(j.x===nearX && j.y===nearY) repeatFlag=true
+							if(!repeatFlag) affected.push({x:nearX,y:nearY})
+						}
+						if(isItem(game.board[nearX][nearY].content) && game.board[nearX][nearY].content.name==="?Vortex") {
+							let repeatFlag=false
+							for(let j of vortexGroup) if(j.x===nearX && j.y===nearY) repeatFlag=true
+							if(!repeatFlag) vortexGroup.push({x:nearX,y:nearY})
+						}
+					}
+					groupUpdate++
+				}
+				while(affected.length>0) {
+					let affectGroup=affected.splice(0,1),affectUpdate=0,affectValid=true
+					while(affectUpdate<affectGroup.length) {
+						for(let i=affected.length-1;i>=0;i--) if(Math.abs(affected[i].x-affectGroup[affectUpdate].x)+Math.abs(affected[i].y-affectGroup[affectUpdate].y)===1) affectGroup.push(affected.splice(i,1)[0])
+						affectUpdate++
+					}
+					for(let i of affectGroup) {
+						let pathCount=0
+						for(let j of affectGroup) if(Math.abs(j.x-i.x)+Math.abs(j.y-i.y)===1) pathCount++
+						if(pathCount!==2) affectValid=false
+					}
+					if(affectValid) {
+						let finalOrder=new Array(),gridClone=new Array()
+						for(let i of vortexGroup) for(let j=1;j<=8;j++) if(finalOrder.length===0) {
+							let find1=-1,find2=-1
+							for(let k in affectGroup) if(affectGroup[k].x===i.x+dx2i[j] && affectGroup[k].y===i.y+dy2i[j]) {
+								find1=k
+								break
+							}
+							for(let k in affectGroup) if(affectGroup[k].x===i.x+dx2i[j%8+1] && affectGroup[k].y===i.y+dy2i[j%8+1]) {
+								find2=k
+								break
+							}
+							if(find1!==-1 && find2!==-1) {
+								finalOrder.push(affectGroup.splice(find1,1)[0])
+								if(find2>find1) find2--
+								finalOrder.push(affectGroup.splice(find2,1)[0])
+							}
+						}
+						while(affectGroup.length>0) {
+							for(let i in affectGroup) if(Math.abs(affectGroup[i].x-finalOrder[finalOrder.length-1].x)+Math.abs(affectGroup[i].y-finalOrder[finalOrder.length-1].y)===1) {
+								finalOrder.push(affectGroup.splice(i,1)[0])
+								break
+							}
+						}
+						for(let i of finalOrder) gridClone.push(game.board[i.x][i.y].clone())
+						for(let i in finalOrder) {
+							game.board[finalOrder[i].x][finalOrder[i].y].empty()
+							game.board[finalOrder[i].x][finalOrder[i].y].print()
+						}
+						if(!player.settings.hasOwnProperty("skipanimation")) {
+							for(let i in finalOrder) {
+								let tempGrid,postSpin=(parseInt(i)+this.attribute.period[this.attribute.state]%finalOrder.length+finalOrder.length)%finalOrder.length
+								if(isPetal(gridClone[i].content)) tempGrid=createGrid(79,0,0,"Petal_"+gridClone[i].content.name,1,gridClone[i].content.rarity)
+								if(isMob(gridClone[i].content)) tempGrid=createGrid(79,0,0,"Mob_"+gridClone[i].content.name,1,gridClone[i].content.rarity)
+								if(tempGrid) {
+									addTempMovingGrid(tempGrid,finalOrder[i].x,finalOrder[i].y,finalOrder[postSpin].x,finalOrder[postSpin].y,500,[0.9,0.9],1)
+								}
+							}
+							await delay(500)
+						}
+						for(let i in finalOrder) {
+							let postSpin=finalOrder[(parseInt(i)+this.attribute.period[this.attribute.state]%finalOrder.length+finalOrder.length)%finalOrder.length]
+							game.board[postSpin.x][postSpin.y]=gridClone[i].clone(postSpin.x,postSpin.y)
+							game.board[postSpin.x][postSpin.y].print()
+						}
+						actionCheck=true
+						dropFlag=true
+					}
+				}
+				for(let i of vortexGroup) {
+					let vortex=game.board[i.x][i.y].content
+					vortex.attribute.state=(vortex.attribute.state+1)%vortex.attribute.period.length
+					vortex.progressed=true
+				}
+				return
+			}
 		}
 		function repair(brokenObject) {
 			if(!brokenObject.hasOwnProperty("proto")) return
@@ -2093,10 +2290,56 @@
 			mapArray[8][8]=new Grid(8,8,new Mob("!Beetle",1,{maxhealth:80,increment:2}),"Existing")
 			return mapArray
 		}
+		levelList["East Water 1"]=new Array()
+		levelList["East Water 1"][1]={x:50,y:50,precondition:[],height:7,width:6,coefficient:10,exponent:1.2,goal:6859,spawner:[[{weight:15,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Basic",2),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Stinger",2),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Air",2),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Rose",2),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Leaf",2),"Existing")}]],spawnset:"Default",valueset:() => {MobAttributeList[9].increment=0},valuetext:{mob:"Nerfed Crab damage increment: 2->0"},chvaluetext:{mob:"削弱螃蟹伤害增量：2->0"}}
+		levelList["East Water 1"][1].initialmap=function() {
+			let mapArray=generateMap(7,6)
+			mapArray[1][5]=new Grid(1,5,new Mob("!Sponge",1,100),"Existing")
+			mapArray[1][6]=new Grid(1,6,new Mob("!Crab",1,100),"Existing")
+			mapArray[2][6]=new Grid(2,6,new Mob("!Crab",2,224),"Existing")
+			mapArray[2][7]=new Grid(2,7,new Mob("!Sponge",2,224),"Existing")
+			mapArray[3][5]=new Grid(3,5,new Mob("!Sponge",3,316),"Existing")
+			mapArray[4][7]=new Grid(4,7,new Mob("!Sponge",3,316),"Existing")
+			mapArray[5][5]=new Grid(5,5,new Mob("!Sponge",2,224),"Existing")
+			mapArray[5][6]=new Grid(5,6,new Mob("!Crab",2,224),"Existing")
+			mapArray[6][6]=new Grid(6,6,new Mob("!Crab",1,100),"Existing")
+			mapArray[6][7]=new Grid(6,7,new Mob("!Sponge",1,100),"Existing")
+			return mapArray
+		}
+		levelList["East Water 1"][2]={x:70,y:70,precondition:[1],height:8,width:8,coefficient:5,exponent:1.15,goal:5625,spawner:[[{weight:3,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing","Row"),noinitial:true},{weight:3,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing","Column"),noinitial:true},{weight:22,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:22,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:30,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")}],[{weight:50,result:(x,y) => new Grid(x,y,new Petal("Air",1,{rearrange:"None"}),"Existing")},{weight:30,result:(x,y) => new Grid(x,y,new Petal("Rose",1,{rearrange:"None"}),"Existing")},{weight:10,result:(x,y) => new Grid(x,y,new Petal("Rose",3),"Existing","Row")},{weight:10,result:(x,y) => new Grid(x,y,new Petal("Rose",3),"Existing","Column")}]],spawnset:[{x:1,y:1,set:1},{x:2,y:1,set:1},{x:3,y:1,set:1},{x:4,y:1,set:1},{x:5,y:1,set:1},{x:6,y:1,set:1},{x:7,y:1,set:1},{x:8,y:1,set:1},{x:3,y:3,set:0},{x:4,y:3,set:0},{x:5,y:3,set:0},{x:6,y:3,set:0},{x:2,y:8,set:1},{x:3,y:8,set:1},{x:4,y:8,set:1},{x:5,y:8,set:1},{x:6,y:8,set:1},{x:7,y:8,set:1}],valueset:() => {PetalAttributeList[3].heal=5; MobAttributeList[9].damage=80},valuetext:{petal:"Nerfed Rose heal: 10->5",mob:"Buffed Crab damage: 40->80"},chvaluetext:{petal:"削弱玫瑰治疗：10->5",mob:"增强螃蟹伤害：40->80"}}
+		levelList["East Water 1"][2].initialmap=function() {
+			let mapArray=generateMap(8,8)
+			for(let i=1;i<=4;i++) {
+				mapArray[1][2*i-1]=new Grid(1,2*i-1,new Petal("Air",7,{rearrange:"None"}),"Existing")
+				mapArray[1][2*i]=new Grid(1,2*i,new Petal("Rose",7,{rearrange:"None"}),"Existing")
+				mapArray[8][2*i-1]=new Grid(8,2*i-1,new Petal("Rose",7,{rearrange:"None"}),"Existing")
+				mapArray[8][2*i]=new Grid(8,2*i,new Petal("Air",7,{rearrange:"None"}),"Existing")
+			}
+			for(let i=1;i<=3;i++) {
+				mapArray[2*i][1]=new Grid(2*i,1,new Petal("Rose",7,{rearrange:"None"}),"Existing")
+				mapArray[2*i+1][1]=new Grid(2*i+1,1,new Petal("Air",7,{rearrange:"None"}),"Existing")
+				mapArray[2*i][8]=new Grid(2*i,8,new Petal("Air",7,{rearrange:"None"}),"Existing")
+				mapArray[2*i+1][8]=new Grid(2*i+1,8,new Petal("Rose",7,{rearrange:"None"}),"Existing")
+			}
+			for(let i=2;i<=7;i++) {
+				mapArray[2][i]=new Grid(2,i,new Item("?Vortex",9),"Existing")
+				mapArray[7][i]=new Grid(7,i,new Item("?Vortex",9),"Existing")
+			}
+			for(let i=3;i<=6;i++) {
+				mapArray[i][2]=new Grid(i,2,new Item("?Vortex",9),"Existing")
+				mapArray[i][7]=new Grid(i,7,new Item("?Vortex",9),"Existing")
+			}
+			mapArray[1][7]=new Grid(1,7,new Mob("!Crab",7,60),"Existing")
+			mapArray[2][8]=new Grid(2,8,new Mob("!Crab",7,70),"Existing")
+			mapArray[7][1]=new Grid(7,1,new Mob("!Crab",7,70),"Existing")
+			mapArray[8][4]=new Grid(8,4,new Mob("!Crab",7,90),"Existing")
+			return mapArray
+		}
 		let mapList=new Array()
 		mapList[0]={name:"Training Ground",x:50,y:50,color:"#bfbfbf",precondition:[],cost:79}
 		mapList[1]={name:"Centralia Field 1",x:30,y:50,color:"#bfffbf",precondition:[0],cost:27}
 		mapList[2]={name:"South Desert 1",x:50,y:70,color:"#efef7f",precondition:[0],cost:27}
+		mapList[3]={name:"East Water 1",x:70,y:50,color:"#bfbfff",precondition:[0],cost:27}
 		for(let i in mapList) for(let j in levelList[mapList[i].name]) if(levelList[mapList[i].name][j].spawnset==="Default") {
 			levelList[mapList[i].name][j].spawnset=new Array()
 			for(let k=1;k<=levelList[mapList[i].name][j].width;k++) levelList[mapList[i].name][j].spawnset.push({x:k,y:1,set:0})
@@ -2108,9 +2351,9 @@
 			mouseX=mouse.clientX
 			mouseY=mouse.clientY
 		} )
-		const version=20260806,acceptedVersion=20260321
+		const version=20260914,acceptedVersion=20260321
 		const svgNS="http://www.w3.org/2000/svg"
-		const dx=[0,0,1,0,-1],dy=[0,-1,0,1,0],dx2=[0,1,1,-1,-1],dy2=[0,-1,1,1,-1],dx5=[0,1,2,2,1,-1,-2,-2,-1],dy5=[0,-2,-1,1,2,2,1,-1,-2]
+		const dx=[0,0,1,0,-1],dy=[0,-1,0,1,0],dx2=[0,1,1,-1,-1],dy2=[0,-1,1,1,-1],dx2i=[0,0,1,1,1,0,-1,-1,-1],dy2i=[0,-1,-1,0,1,1,1,0,-1],dx5=[0,1,2,2,1,-1,-2,-2,-1],dy5=[0,-2,-1,1,2,2,1,-1,-2]
 		let rarityColor=["#000000","#7eef6d","#ffe65d","#4d52e3","#861fde","#de1f1f","#1fdbde","#ff2b75","#2bffa3","#555555"]
 		let rarityColorEP=["#000000","#7eef6d; filter: brightness(90%)","#ffe65d; filter: brightness(80%)","#4d52e3","#861fde","#de1f1f","#1fdbde","#ff2b75","#2bffa3; filter: brightness(80%)","#555555"]
 		let rarityName=["None","Common","Unusual","Rare","Epic","Legendary","Mythic","Ultra","Super","Unique"]
@@ -2120,7 +2363,7 @@
 		}
 		if(!userVersion) userVersion=version
 		setVersion()
-		let versionAnnouncement="<h2>Announcement</h2><span>This game was updated again when you left!</span><span>Do you want to perform a <span class='bold'>hard reset</span> before starting the game?</span><br><span>The last update was on 2026/8/6,</span><span>which completed Desert 1.</span><br><span>The last update before was on 2026/8/3,</span><span>which updated language settings, also updated desert.</span><br><span>The last important update before was on 2026/3/21,</span><span>which completed Centralia 1.</span><br><button type='button' tabindex='-1' id='version3' onclick='updateVersion(false)'>No, just update the version.</button><br><button type='button' tabindex='-1' id='version4' onclick='updateVersion(true)'>Yes, hard reset before starting.</button>"
+		let versionAnnouncement="<h2>Announcement</h2><span>This game was updated again when you left!</span><span>Do you want to perform a <span class='bold'>hard reset</span> before starting the game?</span><br><span>The last update was on 2026/9/14,</span><span>which updated Ocean 1.</span><br><span>The last update before was on 2026/8/6,</span><span>which completed Desert 1.</span><br><span>The last important update before was on 2026/3/21,</span><span>which completed Centralia 1.</span><br><button type='button' tabindex='-1' id='version3' onclick='updateVersion(false)'>No, just update the version.</button><br><button type='button' tabindex='-1' id='version4' onclick='updateVersion(true)'>Yes, hard reset before starting.</button>"
 		let player=JSON.parse(localStorage.getItem("PETALCRUSHplayer"))
 		let game=JSON.parse(localStorage.getItem("PETALCRUSHgame"))
 		function setPlayer() {
@@ -2390,7 +2633,7 @@
 			}
 			mouseGridInfo()
 		}
-		async function addTempMovingGrid(grid,startX,startY,endX,endY,period=200) {
+		async function addTempMovingGrid(grid,startX,startY,endX,endY,period=200,opacity=[0.8,0.5],scale=0.5) {
 			if(player.settings.skipanimation===true) return
 			let startRect=getGrid(0,startX,startY).getBoundingClientRect()
 			let endRect=getGrid(0,endX,endY).getBoundingClientRect()
@@ -2398,12 +2641,12 @@
 			grid.style.left=startRect.left+"px"
 			grid.style.top=startRect.top+"px"
 			grid.style.transform="translate(0px, 0px) scale(1)"
-			grid.style.opacity=0.8
+			grid.style.opacity=opacity[0]
 			grid.style.transition="transform "+(0.9*period)+"ms linear, opacity "+(0.9*period)+"ms linear"
 			document.body.appendChild(grid)
 			await delay(period/10)
-			grid.style.transform="translate("+(endRect.left-startRect.left)+"px, "+(endRect.top-startRect.top)+"px) scale(0.5)"
-			grid.style.opacity=0.5
+			grid.style.transform="translate("+(endRect.left-startRect.left)+"px, "+(endRect.top-startRect.top)+"px) scale("+scale+")"
+			grid.style.opacity=opacity[1]
 			setTimeout(()=>{grid.remove()},0.9*period)
 		}
 	</script>
@@ -2935,6 +3178,16 @@
 				let addButton=settingButton(1,3,"English")
 				themeDisplay.appendChild(addButton)
 			}
+			if(player.settings.filter==="Low") {
+				let addButton=settingButton(2,3,"Low")
+				themeDisplay.appendChild(addButton)
+			} else if(player.settings.filter==="Off") {
+				let addButton=settingButton(2,3,"Off")
+				themeDisplay.appendChild(addButton)
+			} else {
+				let addButton=settingButton(2,3,"On")
+				themeDisplay.appendChild(addButton)
+			}
 			document.getElementById("settings").appendChild(themeDisplay)
 			let qolTitle=document.createElement("h3")
 			qolTitle.innerHTML=translateText("Quality of Life")
@@ -3072,11 +3325,23 @@
 			}
 			if(setX===1 && setY===3 && state==="English") {
 				addButton=createGrid(5,setX,setY,"Text_"+translateText("Language")+"<br><br>"+translateText("English"),2)
-				addButton.classList.add("white-bg","llmargin")
+				addButton.classList.add("white-bg")
 			}
 			if(setX===1 && setY===3 && state==="Chinese") {
 				addButton=createGrid(5,setX,setY,"Text_"+translateText("Language")+"<br><br>"+translateText("Chinese"),2)
-				addButton.classList.add("white-bg","llmargin")
+				addButton.classList.add("white-bg")
+			}
+			if(setX===2 && setY===3 && state==="On") {
+				addButton=createGrid(5,setX,setY,"Text_"+translateText("Filter")+"<br><br>"+translateText("On"),2)
+				addButton.classList.add("green-bg")
+			}
+			if(setX===2 && setY===3 && state==="Low") {
+				addButton=createGrid(5,setX,setY,"Text_"+translateText("Filter")+"<br><br>"+translateText("Low"),2)
+				addButton.classList.add("lgreen-bg")
+			}
+			if(setX===2 && setY===3 && state==="Off") {
+				addButton=createGrid(5,setX,setY,"Text_"+translateText("Filter")+"<br><br>"+translateText("Off"),2)
+				addButton.classList.add("white-bg")
 			}
 			if(setX===1 && setY===4 && state==="On") {
 				addButton=createGrid(5,setX,setY,"Text_"+translateText("Always<br>scroll<br>before<br>display"),2)
@@ -3250,6 +3515,19 @@
 					getGrid(5,setX,setY).replaceWith(settingButton(setX,setY,"English"))
 				}
 			}
+			if(setX===2 && setY===3) {
+				if(!player.settings.hasOwnProperty("filter")) player.settings.filter="On"
+				if(player.settings.filter==="On") {
+					player.settings.filter="Low"
+					getGrid(5,setX,setY).replaceWith(settingButton(setX,setY,"Low"))
+				} else if(player.settings.filter==="Low") {
+					player.settings.filter="Off"
+					getGrid(5,setX,setY).replaceWith(settingButton(setX,setY,"Off"))
+				} else if(player.settings.filter==="Off") {
+					player.settings.filter="On"
+					getGrid(5,setX,setY).replaceWith(settingButton(setX,setY,"On"))
+				}
+			}
 			if(setX===1 && setY===4) {
 				if(!player.settings.hasOwnProperty("alwaysscroll")) {
 					player.settings.alwaysscroll=true
@@ -3361,6 +3639,7 @@
 				delete player.biomename
 				setPlayer()
 				home()
+				document.getElementById("globalfilter").style.background="none"
 				printWorld()
 				document.getElementById("level-btn").classList.add("llred-bg")
 				updateFlowerState()
@@ -3612,8 +3891,6 @@
 			document.getElementById("end1").style["pointer-events"]="unset"
 			document.getElementById("version1").style.display="none"
 			document.getElementById("version2").style.display="none"
-			document.getElementById("endgame1").style.display="none"
-			document.getElementById("endgame2").style.display="none"
 			if(userVersion!==version) {
 				document.getElementById("version2").innerHTML=versionAnnouncement
 				document.getElementById("version1").style.display="unset"
@@ -3630,6 +3907,12 @@
 			setContainElement()
 			document.getElementById("flower-effect-buff").style.top="-15px"
 			document.getElementById("flower-effect-debuff").style.top="60px"
+			if(player.settings.filter==="Low") {
+				document.getElementById("globalfilter").style.opacity=0.2
+			}
+			if(player.settings.filter==="Off") {
+				document.getElementById("globalfilter").style.opacity=0
+			}
 			if(player.settings.transparentinfo===true) {
 				document.getElementById("gridinfo").style.opacity=0.5
 			}
@@ -3657,6 +3940,7 @@
 				printWorld()
 				displayWorld()
 			}
+			if(player.hasOwnProperty("biome")) document.getElementById("globalfilter").style.background=mapList[player.biome].color
 			document.addEventListener("keydown",(e) => {
 				if((e.key===" " || e.key==="Enter") && e.target.tagName==="BUTTON") {
 					e.preventDefault()
@@ -3842,6 +4126,7 @@
 				player.biomename=mapList[spotValue].name
 				closeMapInfo()
 				home()
+				document.getElementById("globalfilter").style.background=mapList[player.biome].color
 				printBiome()
 				document.getElementById("level-btn").classList.remove("llred-bg")
 				updateFlowerState()
@@ -3977,7 +4262,10 @@
 						pendingText="<span style='color: #bfbf00'>没有行动，但可以被蝎子发射。</span>"
 					}
 					if(mob.name==="!Beetle") {
-						pendingText="<span style='color: #bfbf00'>吃或者向最近食物移动</span>"
+						pendingText="<span style='color: #bfbf00'>吃或者向最近食物移动。</span>"
+					}
+					if(mob.name==="!Crab") {
+						pendingText="<span style='color: #bfbf00'>移动一定步数后攻击。</span>"
 					}
 					return pendingText
 				}
@@ -3995,6 +4283,15 @@
 				if(attributeName==="speed") {
 					if(mob.attribute.hasOwnProperty("cost")) return ""
 					let pendingText="<span style='color: #bf7fff'>每回合获得<span class='bold'>"+attributeValue+"</span>行动条。</span>"
+					return pendingText
+				}
+				if(attributeName==="dir") {
+					let pendingText
+					if(attributeValue===0) pendingText="<span style='color: #7f3fff'>当前不移动。</span>"
+					if(attributeValue===1) pendingText="<span style='color: #7f3fff'>向上移动。</span>"
+					if(attributeValue===2) pendingText="<span style='color: #7f3fff'>向右移动。</span>"
+					if(attributeValue===3) pendingText="<span style='color: #7f3fff'>向下移动。</span>"
+					if(attributeValue===4) pendingText="<span style='color: #7f3fff'>向左移动。</span>"
 					return pendingText
 				}
 				if(attributeName==="connect") {
@@ -4040,6 +4337,19 @@
 					let pendingText="<span style='color: #ff7f7f'>在攻击后，伤害增加<span class='bold'>"+attributeValue+"</span>。</span>"
 					return pendingText
 				}
+				if(attributeName==="step") {
+					if(mob.attribute.hasOwnProperty("interval")) {
+						let pendingText="<span style='color: #bf3fff'>在<span class='bold'>"+attributeValue+"/"+mob.attribute.interval+"</span>次移动后攻击。</span>"
+						return pendingText
+					}
+					let pendingText="<span style='color: #bf3fff'>已移动<span class='bold'>"+attributeValue+"</span>步。</span>"
+					return pendingText
+				}
+				if(attributeName==="interval") {
+					if(mob.attribute.hasOwnProperty("step")) return ""
+					let pendingText="<span style='color: #7fdfdf'>间隔<span class='bold'>"+attributeValue+"</span>次。</span>"
+					return pendingText
+				}
 				if(attributeName==="shoot") {
 					let pendingText="<span style='color: #7fdfdf'>以<span class='bold'>"+attributeValue+"%</span>概率发射所有导弹。</span>"
 					return pendingText
@@ -4063,6 +4373,19 @@
 				if(attributeName==="maxhealth") {
 					if(mob.attribute.hasOwnProperty("health")) return ""
 					let pendingText="<span style='color: #7fdf7f'>具有<span class='bold'>"+attributeValue+"</span>最大生命值。</span>"
+					return pendingText
+				}
+				if(attributeName==="absorb") {
+					if(mob.attribute.hasOwnProperty("reduction")) {
+						let pendingText="<span style='color: #7fbf3f'>吸收周围生物<span class='bold'>"+attributeValue+"%</span>的伤害，并减免<span class='bold'>"+mob.attribute.reduction+"</span>%。</span>"
+						return pendingText
+					}
+					let pendingText="<span style='color: #7fbf3f'>吸收周围生物<span class='bold'>"+attributeValue+"%</span>的伤害。</span>"
+					return pendingText
+				}
+				if(attributeName==="reduction") {
+					if(mob.attribute.hasOwnProperty("absorb")) return ""
+					let pendingText="<span style='color: #bfbfbf'>减少<span class='bold'>"+attributeValue+"</span>%。</span>"
 					return pendingText
 				}
 				if(attributeName==="drop" && attributeValue==="Disabled") {
@@ -4111,6 +4434,9 @@
 				if(mob.name==="!Beetle") {
 					pendingText="<span style='color: #bfbf00'>Eats or moves to nearest food.</span>"
 				}
+				if(mob.name==="!Crab") {
+					pendingText="<span style='color: #bfbf00'>Attacks after certain steps.</span>"
+				}
 				return pendingText
 			}
 			if(attributeName==="actionbar") {
@@ -4127,6 +4453,15 @@
 			if(attributeName==="speed") {
 				if(mob.attribute.hasOwnProperty("cost")) return ""
 				let pendingText="<span style='color: #bf7fff'>Gains <span class='bold'>"+attributeValue+"</span> actionbar each turn.</span>"
+				return pendingText
+			}
+			if(attributeName==="dir") {
+				let pendingText
+				if(attributeValue===0) pendingText="<span style='color: #7f3fff'>Not moving.</span>"
+				if(attributeValue===1) pendingText="<span style='color: #7f3fff'>Moves up.</span>"
+				if(attributeValue===2) pendingText="<span style='color: #7f3fff'>Moves right.</span>"
+				if(attributeValue===3) pendingText="<span style='color: #7f3fff'>Moves down.</span>"
+				if(attributeValue===4) pendingText="<span style='color: #7f3fff'>Moves left.</span>"
 				return pendingText
 			}
 			if(attributeName==="connect") {
@@ -4172,6 +4507,19 @@
 				let pendingText="<span style='color: #ff7f7f'>Increases damage by <span class='bold'>"+attributeValue+"</span> after attack.</span>"
 				return pendingText
 			}
+			if(attributeName==="step") {
+				if(mob.attribute.hasOwnProperty("interval")) {
+					let pendingText="<span style='color: #bf3fff'>Attacks after <span class='bold'>"+attributeValue+"/"+mob.attribute.interval+"</span> steps.</span>"
+					return pendingText
+				}
+				let pendingText="<span style='color: #bf3fff'><span class='bold'>"+attributeValue+"</span> steps moved.</span>"
+				return pendingText
+			}
+			if(attributeName==="interval") {
+				if(mob.attribute.hasOwnProperty("step")) return ""
+				let pendingText="<span style='color: #7fdfdf'>Action every <span class='bold'>"+attributeValue+"</span> times.</span>"
+				return pendingText
+			}
 			if(attributeName==="shoot") {
 				let pendingText="<span style='color: #7fdfdf'>Has <span class='bold'>"+attributeValue+"%</span> probability of shooting all missiles.</span>"
 				return pendingText
@@ -4195,6 +4543,19 @@
 			if(attributeName==="maxhealth") {
 				if(mob.attribute.hasOwnProperty("health")) return ""
 				let pendingText="<span style='color: #7fdf7f'>Has <span class='bold'>"+attributeValue+"</span> maximum health.</span>"
+				return pendingText
+			}
+			if(attributeName==="absorb") {
+				if(mob.attribute.hasOwnProperty("reduction")) {
+					let pendingText="<span style='color: #7fbf3f'>Absorbs <span class='bold'>"+attributeValue+"%</span> damage taken by nearby mobs and reduced by <span class='bold'>"+mob.attribute.reduction+"</span>%.</span>"
+					return pendingText
+				}
+				let pendingText="<span style='color: #7fbf3f'>Absorbs <span class='bold'>"+attributeValue+"%</span> damage taken by nearby mobs.</span>"
+				return pendingText
+			}
+			if(attributeName==="reduction") {
+				if(mob.attribute.hasOwnProperty("absorb")) return ""
+				let pendingText="<span style='color: #bfbfbf'>Reduced by <span class='bold'>"+attributeValue+"</span>%.</span>"
 				return pendingText
 			}
 			if(attributeName==="drop" && attributeValue==="Disabled") {
@@ -4230,8 +4591,21 @@
 			}
 			return "<span>"+effectName+": "+effectValue+"</span>"
 		}
-		function itemAttributeText(attributeName,attributeValue) {
+		function itemAttributeText(attributeName,attributeValue,item) {
 			if(player.savesettings.language==="Chinese") {
+				if(attributeName==="period") {
+					if(item.attribute.hasOwnProperty("state")) {
+						let pendingText="<span style='color: #7f7fff'>旋转<span class='bold'>"+attributeValue[item.attribute.state]+"</span>格。</span>"
+						return pendingText
+					}
+					let pendingText="<span style='color: #3f3fff'>速度具有<span class='bold'>"+attributeValue+"</span>的周期。</span>"
+					return pendingText
+				}
+				if(attributeName==="state") {
+					if(item.attribute.hasOwnProperty("period")) return ""
+					let pendingText="<span style='color: #7f7f7f'>当前状态为<span class='bold'>"+attributeValue+"</span>。</span>"
+					return pendingText
+				}
 				if(attributeName==="drop" && attributeValue==="Disabled") {
 					let pendingText="<span style='color: #ff5f5f'>不会掉落。</span>"
 					return pendingText
@@ -4240,6 +4614,19 @@
 					let pendingText="<span style='color: #ff5f5f'>不可被交换。</span>"
 					return pendingText
 				}
+			}
+			if(attributeName==="period") {
+				if(item.attribute.hasOwnProperty("state")) {
+					let pendingText="<span style='color: #7f7fff'>Rotates <span class='bold'>"+attributeValue[item.attribute.state]+"</span> grids.</span>"
+					return pendingText
+				}
+				let pendingText="<span style='color: #3f3fff'>The speed has a cycle of <span class='bold'>"+attributeValue+"</span>.</span>"
+				return pendingText
+			}
+			if(attributeName==="state") {
+				if(item.attribute.hasOwnProperty("period")) return ""
+				let pendingText="<span style='color: #7f7f7f'>The current state is <span class='bold'>"+attributeValue+"</span>.</span>"
+				return pendingText
 			}
 			if(attributeName==="drop" && attributeValue==="Disabled") {
 				let pendingText="<span style='color: #ff5f5f'>Does not drop.</span>"
@@ -4293,7 +4680,7 @@
 					editingGridHTML+="<span>"+ItemDescriptionListTrans[gridContent.id]+"</span><br>"
 					if(JSON.stringify(gridContent.attribute)!=="{}") {
 						let pendingText=""
-						for(let i in gridContent.attribute) pendingText+=itemAttributeText(i,gridContent.attribute[i])
+						for(let i in gridContent.attribute) pendingText+=itemAttributeText(i,gridContent.attribute[i],gridContent)
 						editingGridHTML+=pendingText+"<br>"
 					}
 				}
@@ -4606,7 +4993,7 @@
 		}
 		function flowerInjure(mob) {
 			if(game.flower.health===0) return
-			if(mob.name==="!Missile (H)" || mob.name==="!Beetle") {
+			if(mob.name==="!Missile (H)" || mob.name==="!Beetle" || mob.name==="!Crab") {
 				let pendingDamage=mob.attribute.damage
 				if(pendingDamage>game.flower.health) pendingDamage=game.flower.health
 				game.flower.health-=pendingDamage
@@ -4884,7 +5271,7 @@
 			if(comboCheck) crushCombo++
 			let targetMob
 			if(mobArray.length>0) targetMob=mobArray[roll(0,mobArray.length-1)]
-			let targetSpawn,targetSpawnRarity
+			let targetSpawn,targetSpawnRarity,targetRearrange
 			if(validCreate.length>0 && (pendingType!=="Normal" || pendingRarity>0)) {
 				if(firstCrush) {
 					let priorityCreate=new Array()
@@ -4896,6 +5283,7 @@
 					targetSpawnRarity=targetSpawn.content.rarity
 				} else {
 					targetSpawnRarity=Math.min(pendingRarity+1,NewValue.maxrarity)
+					if(targetSpawn.content.attribute.rearrange==="None") targetRearrange="None"
 				}
 			}
 			for(let i=1;i<=game.width;i++) for(let j=1;j<=game.height;j++) if(game.board[i][j].crush==="Crush "+crushId) game.board[i][j].destroy(targetMob)
@@ -4916,6 +5304,7 @@
 				game.board[targetSpawn.x][targetSpawn.y].type=pendingType
 				game.board[targetSpawn.x][targetSpawn.y].crush="Crushed"
 				game.board[targetSpawn.x][targetSpawn.y].content.rarity=targetSpawnRarity
+				if(targetRearrange==="None") game.board[targetSpawn.x][targetSpawn.y].content.attribute.rearrange="None"
 				game.board[targetSpawn.x][targetSpawn.y].print()
 			}
 			if(delayFlag) await delay(1500)
@@ -5015,16 +5404,40 @@
 			}
 			await delay(200)
 			for(let i=1;i<=game.height;i++) for(let j=1;j<=game.width;j++) if(isMob(game.board[j][i].content)) game.board[j][i].content.progressed=false
-			let mobCheck,actionOrder=["!Hornet","!Spider","!Cactus","!Scorpion","!Beetle"]
+			let actionOrder=["!Hornet","!Spider","!Cactus","!Scorpion","!Beetle","!Crab"]
 			for(let actionName of actionOrder) {
-				mobCheck=false
+				actionCheck=false
 				for(let i=1;i<=game.height;i++) for(let j=1;j<=game.width;j++) {
 					if(isMob(game.board[j][i].content) && game.board[j][i].content.name===actionName && !game.board[j][i].content.progressed) {
-						mobCheck=true
 						await game.board[j][i].content.progress(j,i)
 					}
 				}
-				if(mobCheck) {
+				if(actionCheck) {
+					while(dropFlag) await dropAll()
+					while(mapCrushCheck()) {
+						crushSign=0
+						blastGrid=new Array()
+						setMatch()
+						for(let i=1;i<=crushSign;i++) await matchResult(i)
+						while(blastGrid.length>0) await blastAll()
+						for(let i=1;i<=game.width;i++) for(let j=1;j<=game.height;j++) game.board[i][j].crush="None"
+						dropFlag=true
+						while(dropFlag) await dropAll()
+						firstCrush=false
+					}
+					await delay(200)
+				}
+			}
+			for(let i=1;i<=game.height;i++) for(let j=1;j<=game.width;j++) if(isItem(game.board[j][i].content)) game.board[j][i].content.progressed=false
+			actionOrder=["?Vortex"]
+			for(let actionName of actionOrder) {
+				actionCheck=false
+				for(let i=1;i<=game.height;i++) for(let j=1;j<=game.width;j++) {
+					if(isItem(game.board[j][i].content) && game.board[j][i].content.name===actionName && !game.board[j][i].content.progressed) {
+						await game.board[j][i].content.progress(j,i)
+					}
+				}
+				if(actionCheck) {
 					while(dropFlag) await dropAll()
 					while(mapCrushCheck()) {
 						crushSign=0
@@ -5327,18 +5740,6 @@
 		}
 	</script>
 	<script>
-		function generateMapText(height,width) {
-			let editingStr="["
-			for(let i=1;i<=width;i++) {
-				editingStr+=",["
-				for(let j=1;j<=height;j++) {
-					editingStr+=",new Grid("+i+","+j+",\"Uninitialized\")"
-				}
-				editingStr+="]"
-			}
-			editingStr+="]"
-			return editingStr
-		}
 		const perfectGame="The game is perfect, there are no bugs"
 		console.log(perfectGame)
 	</script>
@@ -5402,8 +5803,11 @@
 				case "Scorpion": return "蝎子"
 				case "Missile (S)": return "导弹（蝎子）"
 				case "Beetle": return "甲虫"
+				case "Sponge": return "海绵"
+				case "Crab": return "螃蟹"
+				case "Starfish": return "海星"
 				case "Void": return "虚无"
-				case "Trader": return "商人"
+				case "Vortex": return "漩涡"
 				case "Hornets": return "黄蜂类"
 				case "Scorpions": return "蝎子类"
 				case "Row": return "行"
@@ -5413,6 +5817,7 @@
 				case "Training Ground": return "训练场"
 				case "Centralia Field 1": return "花园1"
 				case "South Desert 1": return "沙漠1"
+				case "East Water 1": return "海洋1"
 				case "Welcome to Petal Crush!": return "欢迎来到花瓣粉碎！"
 				case "The new planet is sprouting...": return "新的行星已经发芽..."
 				case "Your version is too outdated...": return "你的版本过时太久了..."
@@ -5437,12 +5842,10 @@
 				case "Language": return "语言"
 				case "English": return "英语"
 				case "Chinese": return "中文"
-				case "Theme": return "场景"
-				case "Classic": return "经典"
-				case "Rarity": return "稀有度"
-				case "Normal": return "正常"
-				case "Prefixed": return "前缀"
-				case "Inverted": return "倒转"
+				case "Filter": return "滤镜"
+				case "On": return "启用"
+				case "Low": return "弱化"
+				case "Off": return "禁用"
 				case "Always<br>scroll<br>before<br>display": return "总在滚动<br>之后展示"
 				case "Enable<br>right<br>click<br>menu": return "右键单击<br>启用菜单"
 				case "Low<br>opacity<br>grid<br>info": return "低可见度<br>格内信息"
@@ -5500,13 +5903,13 @@
 		function translateAll() {
 			if(player.savesettings.language!=="Chinese") return
 			PetalDescriptionListTrans=["基本中的基本。","被这玩意打很疼，但是很脆。","空无一物。","惊人的治疗物。","光合作用以持续治疗。","困住敌人。","有的生物活着...","临时吸收伤害。","有价值的物品。","造成高额击退。"]
-			MobDescriptionListTrans=["什么也不做。","积聚导弹并发射。","被黄蜂召唤。","织网。","损伤周围的花瓣。","它会蜇人。","被蝎子召唤。","吃花瓣。"]
-			ItemDescriptionListTrans=["真正空无一物。","如果你有货物。"]
+			MobDescriptionListTrans=["什么也不做。","积聚导弹并发射。","被黄蜂召唤。","织网。","损伤周围的花瓣。","它会蜇人。","被蝎子召唤。","吃花瓣。","吸收伤害。","左左右右。","旋转的红色五角星。"]
+			ItemDescriptionListTrans=["真正空无一物。","优雅的传送带。"]
 			bookHTMLTrans["Advanced Crafter Guide"]="<h2>进阶合成指南</h2><span>你是否为特殊实体感到困惑？这是一本对于它们的指南！</span><br><span>你已经发现了，有限的花瓣并不足以应对无尽的生物。生成器可以持续创造新花瓣，它们在特定格上用记号标注，符号是\"=x=\"。你可以在关卡信息（在右下角，<span class='bold'>同时用以离开场景</span>）知道它们会生成什么。</span><br><span>你也发现了，对一个有大量空格的棋盘，你需要传送器传送花瓣。它们也会在特定格上用记号标注，符号是\"x,y\"，这是它传送起始格的坐标。</span><br><span>墙壁会阻止你交换花瓣。墙壁边消除的花瓣会固定对墙壁造成1点伤害。如果墙壁两边的花瓣同时被消除，<span class='bold'>伤害叠加</span>。</span>"
 			bookHTMLTrans["Flower Game Guide"]="<h2>花朵游戏指南</h2><div class='white-bg inner-box'><span style='color: #008000'>#包含&lt;游玩PFLF的工具.h&gt;</span><span><span style='font-weight: bold'>正在使用 命名空间</span> std<span style='color: #ff0000; font-weight: bold'>;</span></span><span><span style='font-weight: bold'>整数</span> 主要<span style='color: #ff0000; font-weight: bold'>()</span></span><span style='color: #ff0000; font-weight: bold'>{</span><span style='margin-left: 2em'>系统<span style='color: #ff0000; font-weight: bold'>(</span><span style='color: #0000ff; font-weight: bold'>\"cls\"</span><span style='color: #ff0000; font-weight: bold'>);</span></span><span style='margin-left: 2em'>缓慢输出<span style='color: #ff0000; font-weight: bold'>(</span><span style='color: #0000ff; font-weight: bold'>\"↓更多 游戏 (点击!)↓\"</span><span style='color: #ff0000; font-weight: bold'>,</span><span style='color: #800080'>50</span><span style='color: #ff0000; font-weight: bold'>);</span></span><span style='margin-left: 2em'>缓慢输出<span style='color: #ff0000; font-weight: bold'>(</span><a href='https://6triple6single.github.io/Florroom' target='_blank' style='color: #0000ff; font-weight: bold; text-decoration: none'>\"花室\"</a><span style='color: #ff0000; font-weight: bold'>,</span><span style='color: #800080'>50</span><span style='color: #ff0000; font-weight: bold'>);</span></span><span style='margin-left: 2em'>缓慢输出<span style='color: #ff0000; font-weight: bold'>(</span><a href='https://6triple6single.github.io/PFLF' target='_blank' style='color: #0000ff; font-weight: bold; text-decoration: none'>\"PFLF\"</a><span style='color: #ff0000; font-weight: bold'>,</span><span style='color: #800080'>50</span><span style='color: #ff0000; font-weight: bold'>);</span></span><span style='margin-left: 2em'>缓慢输出<span style='color: #ff0000; font-weight: bold'>(</span><a href='https://6triple6single.github.io/Virus1' target='_blank' style='color: #0000ff; font-weight: bold; text-decoration: none'>\"病毒 1\"</a><span style='color: #ff0000; font-weight: bold'>,</span><span style='color: #800080'>50</span><span style='color: #ff0000; font-weight: bold'>);</span></span><span style='margin-left: 2em'><span style='font-weight: bold'>返回</span> <span style='color: #800080'>0</span><span style='color: #ff0000; font-weight: bold'>;</span></span><span style='color: #ff0000; font-weight: bold'>}</span></div>"
 			bookHTMLTrans["Petal Crafter Tutorial"]="<h2>花瓣合成教程</h2><span>你将3个花瓣组成一条线，它们随即粉碎，并合成了新的花瓣！你已经见识到它的力量了，石头在瞬间被你摧毁。</span><span>也许你还需要进行一些新尝试，比如合成4个或更多花瓣，合成不同稀有度的花瓣...无论如何，这是一个好的开始，继续下去！</span><br><span>啊，你不知道伤害怎么工作？好吧，当你合成花瓣时，如果有相邻生物，所有花瓣会对同一个随机的相邻生物造成伤害。随后，每个花瓣对所有和它自身相邻的生物造成伤害。所以，事实上<span class='bold'>你对岩石造成了30+10伤害</span>！真是强大的力量！</span><br><span>啊，你还想知道分数是什么？分数随回合数降低，这代表你的表现有多出色，记住拿到尽可能高的分数。</span><br><span>不要在设置中把[资源]日志的显示关掉，这样你就会在有新东西要学习时获得通知！</span>"
 			bookHTMLTrans["Various Petal Collection"]="<h2>花瓣种类收集</h2><span>你可以自己合成特殊种类的特殊花瓣！</span><br><span>行类型：它有横线和两个向外箭头的图标。它在消除时释放冲击波，摧毁一横排的花瓣，并对生物造成伤害。</span><span>列类型：它有竖线和两个向外箭头的图标。它也在消除时释放冲击波，只不过作为替代，影响的是整列的物体。</span><span>炸弹类型：它有两条对角线和四个向外箭头的图标。它在消除时释放冲击波，作为替代，冲击波影响的是<span class='bold'>sqrt(5)</span>距离内的物体。</span><span>万花筒类型：它有一个正五边形图标。消除时，它会收集所有同类花瓣，而不是发射冲击波。<span class='bold'>这不会摧毁可被冲击波摧毁的花瓣</span>。</span><h3>如何获取</h3><span>行类型：在一列组合4个花瓣，只在炸弹和万花筒不能被创造时创造。</span><span>列类型：在一行组合4个花瓣，条件同上。</span><span>炸弹类型：在有任何交叉（即有花瓣同时在行和列上消除），并且万花筒不能被创造时创造。</span><span>万花筒类型：在一行或一列组合5个花瓣，具有最高优先级。</span><br><span>一个区域只能创造一个特殊种类的花瓣。如果区域内只有同一种稀有度，所有花瓣会合成一个稀有度更高的，但这的优先级最低。如果没有地方创造新花瓣，什么也不会发生[[并且]]这和能量流失毫无关联。</span>"
-			versionAnnouncement="<h2>公告</h2><span>在你离开期间，这个游戏已经更新了79次！</span><span>在开始游戏前。你想要进行<span class='bold'>硬重置</span>吗？</span><br><span>上次更新在2026/8/6，</span><span>完成了沙漠1。</span><br><span>上上次更新在2026/8/3，</span><span>更新了语言设置，以及沙漠。</span><br><span>上次大更新在2026/3/21，</span><span>完成了花园1。</span><br><button type='button' tabindex='-1' id='version3' onclick='updateVersion(false)'>不，直接更新版本号。</button><br><button type='button' tabindex='-1' id='version4' onclick='updateVersion(true)'>好，先硬重置了再说。</button>"
+			versionAnnouncement="<h2>公告</h2><span>在你离开期间，这个游戏已经更新了79次！</span><span>在开始游戏前。你想要进行<span class='bold'>硬重置</span>吗？</span><br><span>上次更新在2026/9/14，</span><span>更新了海洋1。</span><br><span>上上次更新在2026/8/6，</span><span>完成了沙漠1。</span><br><span>上次大更新在2026/3/21，</span><span>完成了花园1。</span><br><button type='button' tabindex='-1' id='version3' onclick='updateVersion(false)'>不，直接更新版本号。</button><br><button type='button' tabindex='-1' id='version4' onclick='updateVersion(true)'>好，先硬重置了再说。</button>"
 			document.getElementById("pause-title").innerHTML="已暂停"
 			document.getElementById("import-btn").innerHTML="取回记忆"
 			document.getElementById("restart-btn").innerHTML="重启宇宙"
@@ -5659,9 +6062,8 @@
 	</div>
 	<div id="version1"></div>
 	<div id="version2"></div>
-	<div id="endgame1"></div>
-	<div id="endgame2"></div>
 	<div id="end1"></div>
 	<div id="end2"></div>
+	<div id="globalfilter"></div>
 </body>
 </html>
