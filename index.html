@@ -1034,10 +1034,21 @@
 		}
 	</style>
 	<script>
-		const PetalNameList=["Basic","Stinger","Air","Rose","Leaf","Web","Iris","Cotton","Coin","Jelly"]
-		const PetalDefaultAttributeList=[{damage:10,knockback:"Default"},{damage:30,knockback:"Default",blast:"Destroy"},{craft:"Disabled"},{heal:10,blast:"Destroy"},{heal:3,duration:3,knockback:"Default",blast:"Destroy"},{damage:5,weavestrength:70,blast:"Destroy"},{damage:5,duration:5,blast:"Destroy"},{cotton:20,duration:1,blast:"Destroy"},{damage:8,knockback:"Default"},{damage:8,knockback:250,limit:-200}]
+		const PetalNameList=["Basic","Stinger","Air","Rose","Leaf","Web","Iris","Sand","Coin","Jelly"]
+		const PetalDefaultAttributeList={
+			Basic:{damage:10,knockback:"Default"},
+			Stinger:{damage:30,knockback:"Default",blast:"Destroy"},
+			Air:{craft:"Disabled"},
+			Rose:{heal:10,blast:"Destroy"},
+			Leaf:{heal:3,duration:3,knockback:"Default",blast:"Destroy"},
+			Web:{damage:5,weavestrength:70,blast:"Destroy"},
+			Iris:{damage:5,duration:5,blast:"Destroy"},
+			Sand:{damage:5,multidamage:50,knockback:0,multiknockback:200,blast:"Destroy"},
+			Coin:{damage:8,knockback:"Default"},
+			Jelly:{damage:8,knockback:250,limit:-200}
+		}
 		let PetalAttributeList=structuredClone(PetalDefaultAttributeList)
-		const PetalDescriptionList=["The most basic.","Really hurts but fragile.","Literally nothing.","Amazing healing.","Photosynthesis for constant heal.","Traps enemies.","Slowly kill the enemy.","Absorbs damage temporarily.","The valuable one.","Deals higher knockback."]
+		const PetalDescriptionList=["The most basic.","Really hurts but fragile.","Literally nothing.","Amazing healing.","Photosynthesis for constant heal.","Traps enemies.","Slowly kill the enemy.","Combine them together.","The valuable one.","Deals higher knockback."]
 		let PetalDescriptionListTrans=structuredClone(PetalDescriptionList)
 		const PetalSVGArray=new Object()
 		PetalSVGArray.Basic="<svg viewBox='0 0 100 100' class='in-svg'><path class='fwhite-path ns' d='M50 25A25 25 0 0 0 50 75A25 25 0 0 0 50 25'/><path class='white-path' d='M50 25A25 25 0 0 0 50 75A25 25 0 0 0 50 25' style='filter: brightness(90%)'/></svg>"
@@ -1047,11 +1058,23 @@
 		PetalSVGArray.Leaf="<svg viewBox='0 0 100 100' class='in-svg'><path class='fdgreen-path ns' d='M50 20L70 50L50 80L30 50Z'/><path class='dgreen-path' d='M50 20L70 50L50 80L30 50Z' style='filter: brightness(90%)'/></svg>"
 		PetalSVGArray.Web="<svg viewBox='0 0 100 100' class='in-svg'><path class='fwhite-path ns' d='M50 24A25 25 0 0 0 75 42A25 25 0 0 0 65 71A25 25 0 0 0 35 71A25 25 0 0 0 25 42A25 25 0 0 0 50 24Z'/><path class='white-path rcap' d='M50 24A25 25 0 0 0 75 42A25 25 0 0 0 65 71A25 25 0 0 0 35 71A25 25 0 0 0 25 42A25 25 0 0 0 50 24Z' style='filter: brightness(90%)'/></svg>"
 		PetalSVGArray.Iris="<svg viewBox='0 0 100 100' class='in-svg'><path class='fdpurple-path ns' d='M50 35A15 15 0 0 0 50 65A15 15 0 0 0 50 35'/><path class='dpurple-path' d='M50 35A15 15 0 0 0 50 65A15 15 0 0 0 50 35' style='filter: brightness(90%)'/></svg>"
-		PetalSVGArray.Cotton=PetalSVGArray.Basic
+		PetalSVGArray.Sand="<svg viewBox='0 0 100 100' class='in-svg'><path class='fdyellow-path ns' d='M50 38A12 12 0 0 0 50 62A12 12 0 0 0 50 38'/><path class='dyellow-path' d='M50 38A12 12 0 0 0 50 62A12 12 0 0 0 50 38' style='filter: brightness(90%)'/></svg>"
 		PetalSVGArray.Coin=PetalSVGArray.Basic
 		PetalSVGArray.Jelly=PetalSVGArray.Basic
 		const MobNameList=["!Rock","!Hornet","!Missile (H)","!Spider","!Cactus","!Scorpion","!Missile (S)","!Beetle","!Sponge","!Crab","!Starfish"]
-		const MobDefaultAttributeList=[{action:"None",drop:"Disabled",move:"Disabled",immune:"Poison"},{action:"Default",cost:50,speed:50,connect:{knockback:"Rarity Hornets"},summon:"10%",damage:10,increment:1,shoot:20,drop:"Disabled",move:"Disabled"},{action:"Default",connect:{knockback:"Rarity Hornets"},reflect:"50%",drop:"Disabled",move:"Disabled",immune:"Poison"},{action:"Default",cost:"Default",speed:50,damage:20,increment:0,duration:5,weavestrength:30,drop:"Disabled",move:"Disabled"},{action:"Default",cost:"Default",speed:50,drop:"Disabled",move:"Disabled"},{action:"Default",cost:"Default",speed:50,summon:"20%",damage:20,increment:1,duration:3,drop:"Disabled",move:"Disabled"},{action:"Default",drop:"Disabled",move:"Disabled",immune:"Poison"},{action:"Default",cost:100,speed:50,eat:"Leaf",damage:30,increment:5},{action:"None",absorb:90,reduction:75,drop:"Disabled",move:"Disabled",immune:"Poison"},{action:"Default",cost:50,speed:75,dir:0,damage:40,increment:2,step:0,interval:5,drop:"Disabled"},{action:"Default",cost:"Variant",speed:50,damage:40,increment:10,drop:"Disabled",immune:"Poison"}]
+		const MobDefaultAttributeList={
+			Rock:{action:"None",drop:"Disabled",move:"Disabled",immune:"Poison"},
+			Hornet:{action:"Default",cost:50,speed:50,connect:{knockback:"Rarity Hornets"},summon:"10%",damage:10,increment:1,shoot:20,drop:"Disabled",move:"Disabled"},
+			"Missile (H)":{action:"Default",connect:{knockback:"Rarity Hornets"},reflect:"50%",drop:"Disabled",move:"Disabled",immune:"Poison"},
+			Spider:{action:"Default",cost:"Default",speed:50,damage:20,increment:0,duration:5,weavestrength:30,drop:"Disabled",move:"Disabled"},
+			Cactus:{action:"Default",cost:"Default",speed:50,drop:"Disabled",move:"Disabled"},
+			Scorpion:{action:"Default",cost:"Default",speed:50,summon:"20%",damage:20,increment:1,duration:3,drop:"Disabled",move:"Disabled"},
+			"Missile (S)":{action:"Default",drop:"Disabled",move:"Disabled",immune:"Poison"},
+			Beetle:{action:"Default",cost:100,speed:50,eat:"Leaf",damage:30,increment:5},
+			Sponge:{action:"None",absorb:90,reduction:75,drop:"Disabled",move:"Disabled",immune:"Poison"},
+			Crab:{action:"Default",cost:50,speed:75,dir:0,damage:40,increment:2,step:0,interval:5,drop:"Disabled"},
+			Starfish:{action:"Default",cost:"Variant",speed:50,damage:40,increment:10,heal:"20%",drop:"Disabled",state:0,immune:"Poison"}
+		}
 		let MobAttributeList=structuredClone(MobDefaultAttributeList)
 		const MobDescriptionList=["It does nothing.","Accumulates missiles and shoots.","Summoned by Hornet.","Weaves webs.","Hurts petals around.","It stings.","Summoned by Scorpion.","Eats petals.","Absorbs damage.","Left. Left. Right. Right.","Spinning red star."]
 		let MobDescriptionListTrans=structuredClone(MobDescriptionList)
@@ -1068,7 +1091,10 @@
 		MobSVGArray["!Crab"]="<svg viewBox='0 0 100 100' class='in-svg'><path class='fblack-path ns' fill-opacity='0.2' d='M8 100A8 8 0 0 1 0 92L0 8A8 8 0 0 1 8 0L92 0A8 8 0 0 1 100 8L100 92A8 8 0 0 1 92 100L92 8L8 8ZM8 92L92 92L92 100L8 100Z'/><g><path class='wide rcap' d='M42 35L30 30L44 28M31 42L21 39M28 47L18 46M27 52L17 53M29 57L19 60M58 35L70 30L56 28M69 42L79 39M72 47L82 46M73 52L83 53M71 57L81 60'/><path class='fdbrown-path ns' d='M50 36A20 14 0 0 0 50 64A20 14 0 0 0 50 36'/><path class='dbrown-path' d='M50 36A20 14 0 0 0 50 64A20 14 0 0 0 50 36' style='filter: brightness(90%)'/></g></svg>"
 		MobSVGArray["!Starfish"]="<svg viewBox='0 0 100 100' class='in-svg'><path class='fblack-path ns' fill-opacity='0.2' d='M8 100A8 8 0 0 1 0 92L0 8A8 8 0 0 1 8 0L92 0A8 8 0 0 1 100 8L100 92A8 8 0 0 1 92 100L92 8L8 8ZM8 92L92 92L92 100L8 100Z'/><g><path class='red-path wider' d='M41 50L47 26A9 5 90 0 1 53 26L59 50Z' style='filter: brightness(90%)'/><path class='red-path rot72 wider' d='M41 50L47 26A9 5 90 0 1 53 26L59 50Z' style='filter: brightness(90%)'/><path class='red-path rot144 wider' d='M41 50L47 26A9 5 90 0 1 53 26L59 50Z' style='filter: brightness(90%)'/><path class='red-path rot216 wider' d='M41 50L47 26A9 5 90 0 1 53 26L59 50Z' style='filter: brightness(90%)'/><path class='red-path rot288 wider' d='M41 50L47 26A9 5 90 0 1 53 26L59 50Z' style='filter: brightness(90%)'/><path class='fred-path ns' d='M41 50L47 26A9 5 90 0 1 53 26L59 50Z'/><path class='fred-path rot72 ns' d='M41 50L47 26A9 5 90 0 1 53 26L59 50Z'/><path class='fred-path rot144 ns' d='M41 50L47 26A9 5 90 0 1 53 26L59 50Z'/><path class='fred-path rot216 ns' d='M41 50L47 26A9 5 90 0 1 53 26L59 50Z'/><path class='fred-path rot288 ns' d='M41 50L47 26A9 5 90 0 1 53 26L59 50Z'/><path class='fwhite-path ns' fill-opacity='0.8' d='M50 29A3 3 0 0 0 50 35A3 3 0 0 0 50 29M50 37A4 4 0 0 0 50 45A4 4 0 0 0 50 37'/><path class='fdbrown-path rot288 ns' fill-opacity='0.4' d='M50 29A3 3 0 0 0 50 35A3 3 0 0 0 50 29M50 37A4 4 0 0 0 50 45A4 4 0 0 0 50 37'/><path class='fyellow-path rot216 ns' fill-opacity='0.2' d='M50 29A3 3 0 0 0 50 35A3 3 0 0 0 50 29M50 37A4 4 0 0 0 50 45A4 4 0 0 0 50 37'/><path class='fgreen-path rot144 ns' fill-opacity='0.1' d='M50 29A3 3 0 0 0 50 35A3 3 0 0 0 50 29M50 37A4 4 0 0 0 50 45A4 4 0 0 0 50 37'/><path class='fgreen-path rot72 ns' fill-opacity='0.1' d='M50 29A3 3 0 0 0 50 35A3 3 0 0 0 50 29M50 37A4 4 0 0 0 50 45A4 4 0 0 0 50 37'/></g></svg>"
 		const ItemNameList=["?Void","?Vortex"]
-		const ItemDefaultAttributeList=[{drop:"Disabled",move:"Disabled"},{drop:"Disabled",move:"Disabled",period:[1,0],state:0}]
+		const ItemDefaultAttributeList={
+			Void:{drop:"Disabled",move:"Disabled"},
+			Vortex:{drop:"Disabled",move:"Disabled",period:[1,0],state:0}
+		}
 		let ItemAttributeList=structuredClone(ItemDefaultAttributeList)
 		const ItemDescriptionList=["Truly nothing.","Graceful conveyer belt."]
 		let ItemDescriptionListTrans=structuredClone(ItemDescriptionList)
@@ -1090,13 +1116,16 @@
 			this.id=id,this.rarity=rarity
 			if(typeof(this.id)==="string") this.id=PetalNameList.indexOf(this.id)
 			this.name=PetalNameList[this.id]
-			this.attribute=structuredClone(PetalAttributeList[this.id])
+			this.attribute=structuredClone(PetalAttributeList[this.name])
 			Object.assign(this.attribute,other)
 			if(this.attribute.hasOwnProperty("knockback") && this.attribute.knockback==="Default") {
 				this.attribute.knockback=NewValue.knockback
 			}
 			if(this.attribute.hasOwnProperty("damage") && typeof(this.attribute.damage)==="number") {
 				this.attribute.damage*=NewValue.damagemult[this.rarity]
+			}
+			if(this.attribute.hasOwnProperty("multidamage") && typeof(this.attribute.multidamage)==="number") {
+				this.attribute.multidamage*=NewValue.damagemult[this.rarity]
 			}
 			if(this.attribute.hasOwnProperty("heal") && typeof(this.attribute.heal)==="number") {
 				this.attribute.heal*=NewValue.healmult[this.rarity]
@@ -1116,6 +1145,12 @@
 		}
 		Petal.prototype.print=function(gridX,gridY,type) {
 			let baseGrid=createGrid(0,gridX,gridY,"Petal_"+this.name,1,this.rarity)
+			if(this.attribute.destroyed===true && player.savesettings.effects==="Icon") {
+				baseGrid.innerHTML+="<svg viewBox='0 0 100 100' class='apos in-svg' style='top: 0px; left: 0px; opacity: 0.8'><path class='white-path' d='M0 0L100 100'/></svg>"
+			}
+			if(this.attribute.rearrange==="None" && player.savesettings.effects==="Icon") {
+				baseGrid.innerHTML+="<svg viewBox='0 0 100 100' class='apos in-svg' style='top: 0px; left: 0px'><path class='red-path fwhite-path wide' d='M50 45A5 5 0 0 0 50 55A5 5 0 0 0 50 45'/></svg>"
+			}
 			if(type==="Row") {
 				baseGrid.innerHTML+="<svg viewBox='0 0 100 100' class='apos in-svg' style='top: 0px; left: 0px; opacity: 0.5'><path class='fgrey-path ns' d='M30 30L10 50L30 70L30 55L70 55L70 70L90 50L70 30L70 45L30 45Z'/></svg>"
 			}
@@ -1135,7 +1170,7 @@
 			this.id=id,this.rarity=rarity
 			if(typeof(this.id)==="string") this.id=MobNameList.indexOf(this.id)
 			this.name=MobNameList[this.id]
-			this.attribute=structuredClone(MobAttributeList[this.id])
+			this.attribute=structuredClone(MobAttributeList[this.name.slice(1)])
 			if(typeof(other)==="number") other={maxhealth:other}
 			Object.assign(this.attribute,other)
 			if(this.attribute.hasOwnProperty("cost") && this.attribute.cost==="Default") {
@@ -1143,6 +1178,10 @@
 			}
 			if(this.attribute.hasOwnProperty("summon")) {
 				if(isPercentage(this.attribute.summon)) this.attribute.summon=Math.max(betterFloor(getPercentage(this.attribute.summon)/100*this.attribute.maxhealth),1)
+			}
+			if(this.attribute.hasOwnProperty("heal")) {
+				if(isPercentage(this.attribute.heal)) this.attribute.heal=betterFloor(getPercentage(this.attribute.heal)/100*this.attribute.maxhealth)
+
 			}
 			if(this.attribute.hasOwnProperty("reflect")) {
 				if(isPercentage(this.attribute.reflect)) this.attribute.reflect=betterFloor(getPercentage(this.attribute.reflect)/100*this.attribute.damage)
@@ -1162,8 +1201,15 @@
 		}
 		Mob.prototype.print=function(gridX,gridY) {
 			let baseGrid=createGrid(0,gridX,gridY,"Mob_"+this.name,1,this.rarity)
+			let editingPath=baseGrid.children[0].children[0]
+			let actionProgress=this.attribute.actionbar/NewValue.upperlimit,healthP=this.attribute.health/this.attribute.maxhealth
+			if(isNaN(healthP)) healthP=1
+			if(isNaN(actionProgress)) actionProgress=0
+			if(actionProgress>1) actionProgress=1
+			if(actionProgress<0) actionProgress=0
+			editingPath.setAttribute("d","M8 100A8 8 0 0 1 0 92L0 8A8 8 0 0 1 8 0L92 0A8 8 0 0 1 100 8L100 92A8 8 0 0 1 92 100L92 8L8 8ZM8 92L92 92L92 100L8 100L8 97L"+(8+84*actionProgress)+" 97L"+(8+84*actionProgress)+" 95L8 95ZM8 8L92 8L92 "+(92-84*healthP)+"L8 "+(92-84*healthP)+"Z")
 			let editingMob=baseGrid.children[0].children[1]
-			if(this.name==="!Crab" && this.attribute.action==="Default") {
+			if(this.name==="!Crab" && (this.attribute.action==="Default" || this.attribute.action==="Nimble")) {
 				if(this.attribute.step===this.attribute.interval) {
 					editingMob.innerHTML+="<path class='red-path wide' d='M50 38L50 54'/><path class='fred-path ns' d='M50 58A2 2 0 0 0 50 62A2 2 0 0 0 50 58'/>"
 				} else if(this.attribute.dir===2) {
@@ -1172,13 +1218,39 @@
 					editingMob.innerHTML+="<path class='purple-path wide rcap' d='M34 50L66 50M34 50L40 44M34 50L40 56'/>"
 				}
 			}
-			let editingPath=baseGrid.children[0].children[0]
-			let actionProgress=this.attribute.actionbar/NewValue.upperlimit,healthP=this.attribute.health/this.attribute.maxhealth
-			if(isNaN(healthP)) healthP=1
-			if(isNaN(actionProgress)) actionProgress=0
-			if(actionProgress>1) actionProgress=1
-			if(actionProgress<0) actionProgress=0
-			editingPath.setAttribute("d","M8 100A8 8 0 0 1 0 92L0 8A8 8 0 0 1 8 0L92 0A8 8 0 0 1 100 8L100 92A8 8 0 0 1 92 100L92 8L8 8ZM8 92L92 92L92 100L8 100L8 97L"+(8+84*actionProgress)+" 97L"+(8+84*actionProgress)+" 95L8 95ZM8 8L92 8L92 "+(92-84*healthP)+"L8 "+(92-84*healthP)+"Z")
+			if(this.name==="!Starfish" && this.attribute.action==="Default") {
+				if(this.attribute.state===1) {
+					editingMob.children[10].classList.replace("fwhite-path","fdbrown-path")
+					editingMob.children[11].classList.replace("fdbrown-path","fyellow-path")
+					editingMob.children[12].classList.replace("fyellow-path","fgreen-path")
+					editingMob.children[13].classList.replace("fgreen-path","fgreen-path")
+					editingMob.children[14].classList.replace("fgreen-path","fwhite-path")
+				}
+				if(this.attribute.state===2) {
+					editingMob.children[10].classList.replace("fwhite-path","fyellow-path")
+					editingMob.children[11].classList.replace("fdbrown-path","fgreen-path")
+					editingMob.children[12].classList.replace("fyellow-path","fgreen-path")
+					editingMob.children[13].classList.replace("fgreen-path","fwhite-path")
+					editingMob.children[14].classList.replace("fgreen-path","fdbrown-path")
+				}
+				if(this.attribute.state===3) {
+					editingMob.children[10].classList.replace("fwhite-path","fgreen-path")
+					editingMob.children[11].classList.replace("fdbrown-path","fgreen-path")
+					editingMob.children[12].classList.replace("fyellow-path","fwhite-path")
+					editingMob.children[13].classList.replace("fgreen-path","fdbrown-path")
+					editingMob.children[14].classList.replace("fgreen-path","fyellow-path")
+				}
+				if(this.attribute.state===4) {
+					editingMob.children[10].classList.replace("fwhite-path","fgreen-path")
+					editingMob.children[11].classList.replace("fdbrown-path","fwhite-path")
+					editingMob.children[12].classList.replace("fyellow-path","fdbrown-path")
+					editingMob.children[13].classList.replace("fgreen-path","fyellow-path")
+					editingMob.children[14].classList.replace("fgreen-path","fgreen-path")
+				}
+			}
+			if(this.effect.hasOwnProperty("poison") && player.savesettings.effects==="Icon") {
+				baseGrid.innerHTML+="<svg viewBox='0 0 100 100' class='apos in-svg' style='top: 0px; left: 0px'><path class='purple-path fcyan-path wide' d='M43 46L57 46L50 58Z'/></svg>"
+			}
 			return baseGrid
 		}
 		Mob.prototype.progress=async function(actionX,actionY) {
@@ -1236,7 +1308,6 @@
 				game.board[actionX][actionY].print()
 			}
 			if(this.name==="!Hornet" && this.attribute.action==="Default") {
-				this.attribute.actionbar=NewValue.upperlimit
 				if(player.savesettings.language==="Chinese") {
 					addLog("[Mob] 位于("+actionX+","+actionY+")的"+translateText(this.name)+"的行动...","#bfbf00")
 				} else {
@@ -1282,7 +1353,6 @@
 				return
 			}
 			if(this.name==="!Spider" && this.attribute.action==="Default") {
-				this.attribute.actionbar=NewValue.upperlimit
 				if(player.savesettings.language==="Chinese") {
 					addLog("[Mob] 位于("+actionX+","+actionY+")的"+translateText(this.name)+"的行动...","#bfbf00")
 				} else {
@@ -1335,7 +1405,6 @@
 				return
 			}
 			if(this.name==="!Cactus" && this.attribute.action==="Default") {
-				this.attribute.actionbar=NewValue.upperlimit
 				if(player.savesettings.language==="Chinese") {
 					addLog("[Mob] 位于("+actionX+","+actionY+")的"+translateText(this.name)+"的行动...","#bfbf00")
 				} else {
@@ -1349,13 +1418,20 @@
 					}
 				}
 				for(let i=1;i<=4;i++) if(actionX+dx[i]>=1 && actionX+dx[i]<=game.width && actionY+dy[i]>=1 && actionY+dy[i]<=game.height) {
-					if(isPetal(game.board[actionX+dx[i]][actionY+dy[i]].content) && game.board[actionX+dx[i]][actionY+dy[i]].content.attribute.blast==="Destroy") game.board[actionX+dx[i]][actionY+dy[i]].content.attribute=new Object()
+					if(isPetal(game.board[actionX+dx[i]][actionY+dy[i]].content) && game.board[actionX+dx[i]][actionY+dy[i]].content.attribute.blast==="Destroy") {
+						let saveRearrange
+						if(game.board[actionX+dx[i]][actionY+dy[i]].content.attribute.rearrange==="None") saveRearrange=true
+						game.board[actionX+dx[i]][actionY+dy[i]].content.attribute={destroyed:true}
+						if(saveRearrange) game.board[actionX+dx[i]][actionY+dy[i]].content.attribute.rearrange="None"
+						game.board[actionX+dx[i]][actionY+dy[i]].print()
+						await delay(100)
+					}
 				}
+				await delay(100)
 				game.board[actionX][actionY].print()
 				return
 			}
 			if(this.name==="!Scorpion" && this.attribute.action==="Default") {
-				this.attribute.actionbar=NewValue.upperlimit
 				if(player.savesettings.language==="Chinese") {
 					addLog("[Mob] 位于("+actionX+","+actionY+")的"+translateText(this.name)+"的行动...","#bfbf00")
 				} else {
@@ -1400,7 +1476,6 @@
 				return
 			}
 			if(this.name==="!Beetle" && this.attribute.action==="Default") {
-				this.attribute.actionbar=NewValue.upperlimit
 				if(player.savesettings.language==="Chinese") {
 					addLog("[Mob] 位于("+actionX+","+actionY+")的"+translateText(this.name)+"的行动...","#bfbf00")
 				} else {
@@ -1467,7 +1542,6 @@
 				return
 			}
 			if(this.name==="!Crab" && this.attribute.action==="Default") {
-				this.attribute.actionbar=NewValue.upperlimit
 				if(player.savesettings.language==="Chinese") {
 					addLog("[Mob] 位于("+actionX+","+actionY+")的"+translateText(this.name)+"的行动...","#bfbf00")
 				} else {
@@ -1495,6 +1569,7 @@
 					}
 					this.attribute.step=0
 					this.attribute.actionbar=0
+					await delay(100)
 					game.board[actionX][actionY].print()
 					return
 				}
@@ -1539,7 +1614,270 @@
 					}
 				}
 				this.attribute.dir=2+2*roll(0,1)
+				await delay(100)
 				game.board[actionX][actionY].print()
+				return
+			}
+			if(this.name==="!Crab" && this.attribute.action==="Nimble") {
+				if(player.savesettings.language==="Chinese") {
+					addLog("[Mob] 位于("+actionX+","+actionY+")的"+translateText(this.name)+"的敏捷行动...","#bfbf00")
+				} else {
+					addLog("[Mob] Nimble action of "+this.name+" at ("+actionX+","+actionY+")...","#bfbf00")
+				}
+				this.attribute.actionbar-=this.attribute.cost
+				if(this.attribute.step===this.attribute.interval) {
+					if(!player.settings.hasOwnProperty("skipanimation")) {
+						for(let i=0;i<=20;i++) {
+							getGrid(0,actionX,actionY).children[0].children[1].style.transform="translate(0px,"+i+"px)"
+							await delay(20)
+						}
+						for(let i=1;i<=10;i++) {
+							getGrid(0,actionX,actionY).children[0].children[1].style.transform="translate(0px,"+(20-4*i)+"px)"
+							await delay(20)
+						}
+					}
+					flowerInjure(this)
+					this.attribute.damage+=this.attribute.increment
+					if(!player.settings.hasOwnProperty("skipanimation")) {
+						for(let i=1;i<=20;i++) {
+							getGrid(0,actionX,actionY).children[0].children[1].style.transform="translate(0px,"+(i-20)+"px)"
+							await delay(20)
+						}
+					}
+					this.attribute.step=0
+					this.attribute.actionbar=0
+					await delay(100)
+					game.board[actionX][actionY].print()
+					return
+				}
+				if(this.attribute.dir && actionX+dx[this.attribute.dir]>=1 && actionX+dx[this.attribute.dir]<=game.width && game.wall[actionX][actionY][this.attribute.dir]===0 && ((isPetal(game.board[actionX+dx[this.attribute.dir]][actionY].content) && game.board[actionX+dx[this.attribute.dir]][actionY].state==="Existing") || game.board[actionX+dx[this.attribute.dir]][actionY].state==="Empty")) {
+					if(!player.settings.hasOwnProperty("skipanimation")) {
+						for(let i=0;i<=40;i++) {
+							getGrid(0,actionX,actionY).style.scale=1.3-0.015*Math.abs(i-20)
+							await delay(20)
+						}
+					}
+					this.attribute.step++
+					let resultX=actionX+dx[this.attribute.dir]
+					if(game.board[actionX+dx[this.attribute.dir]][actionY].state==="Empty") {
+						game.board[resultX][actionY]=new Grid(resultX,actionY,this,"Existing")
+						game.board[resultX][actionY].print()
+						game.board[actionX][actionY].empty()
+						game.board[actionX][actionY].print()
+					} else {
+						let saveContent=game.board[resultX][actionY].content,saveType=game.board[resultX][actionY].type
+						game.board[resultX][actionY]=new Grid(resultX,actionY,this,"Existing")
+						game.board[resultX][actionY].print()
+						game.board[actionX][actionY]=new Grid(actionX,actionY,saveContent,"Existing",saveType)
+						game.board[actionX][actionY].print()
+					}
+					if(resultX+dx[this.attribute.dir]<1 || resultX+dx[this.attribute.dir]>game.width || game.wall[resultX][actionY][this.attribute.dir]>0 || !((isPetal(game.board[resultX+dx[this.attribute.dir]][actionY].content) && game.board[resultX+dx[this.attribute.dir]][actionY].state==="Existing") || game.board[resultX+dx[this.attribute.dir]][actionY].state==="Empty")) {
+						let saveDir=this.attribute.dir
+						await delay(100)
+						this.attribute.dir=0
+						game.board[resultX][actionY].print()
+						await delay(100)
+						this.attribute.dir=6-saveDir
+						game.board[resultX][actionY].print()
+					}
+					dropFlag=true
+					return
+				}
+				if(!player.settings.hasOwnProperty("skipanimation")) {
+					let clockwise=3-this.attribute.dir
+					if(this.attribute.dir===0) clockwise=2*roll(0,1)-1
+					for(let i=0;i<=10;i++) {
+						getGrid(0,actionX,actionY).children[0].children[1].style.transform="rotate("+(clockwise*(4*i))+"deg)"
+						await delay(20)
+					}
+					for(let i=1;i<=20;i++) {
+						getGrid(0,actionX,actionY).children[0].children[1].style.transform="rotate("+(clockwise*(40-4*i))+"deg)"
+						await delay(20)
+					}
+					for(let i=1;i<=10;i++) {
+						getGrid(0,actionX,actionY).children[0].children[1].style.transform="rotate("+(clockwise*(4*i-40))+"deg)"
+						await delay(20)
+					}
+				}
+				if(this.attribute.dir===0) {
+					this.attribute.dir=2+2*roll(0,1)
+				} else {
+					this.attribute.dir=6-this.attribute.dir
+				}
+				await delay(100)
+				game.board[actionX][actionY].print()
+				return
+			}
+			if(this.name==="!Starfish" && this.attribute.action==="Default") {
+				if(player.savesettings.language==="Chinese") {
+					addLog("[Mob] 位于("+actionX+","+actionY+")的"+translateText(this.name)+"的行动...","#bfbf00")
+				} else {
+					addLog("[Mob] Action of "+this.name+" at ("+actionX+","+actionY+")...","#bfbf00")
+				}
+				if(this.attribute.state===0) {
+					this.attribute.actionbar-=200
+					if(!player.settings.hasOwnProperty("skipanimation")) {
+						for(let i=0;i<=24;i++) {
+							getGrid(0,actionX,actionY).children[0].children[1].style.transform="rotate("+(3*i)+"deg)"
+							await delay(20)
+						}
+					}
+					this.attribute.state=1
+					await delay(100)
+					game.board[actionX][actionY].print()
+					return
+				}
+				if(this.attribute.state===1) {
+					this.attribute.actionbar-=200
+					if(!player.settings.hasOwnProperty("skipanimation")) {
+						for(let i=0;i<=20;i++) {
+							getGrid(0,actionX,actionY).children[0].children[1].style.transform="translate(0px,"+i+"px)"
+							await delay(20)
+						}
+						for(let i=1;i<=10;i++) {
+							getGrid(0,actionX,actionY).children[0].children[1].style.transform="translate(0px,"+(20-4*i)+"px)"
+							await delay(20)
+						}
+					}
+					flowerInjure(this)
+					await delay(100)
+					if(!player.settings.hasOwnProperty("skipanimation")) {
+						for(let i=1;i<=20;i++) {
+							getGrid(0,actionX,actionY).children[0].children[1].style.transform="translate(0px,"+(i-20)+"px)"
+							await delay(20)
+						}
+						for(let i=0;i<=24;i++) {
+							getGrid(0,actionX,actionY).children[0].children[1].style.transform="rotate("+(3*i)+"deg)"
+							await delay(20)
+						}
+					}
+					this.attribute.state=2
+					await delay(100)
+					game.board[actionX][actionY].print()
+					return
+				}
+				if(this.attribute.state===2) {
+					this.attribute.actionbar-=50
+					if(!player.settings.hasOwnProperty("skipanimation")) {
+						for(let i=0;i<=40;i++) {
+							getGrid(0,actionX,actionY).style.scale=1.3-0.015*Math.abs(i-20)
+							await delay(20)
+						}
+					}
+					let searchArray=new Array(),searchRound=0,searchEnd=false,searchFound=false,searchDir=[,false,false,false,false]
+					for(let i=1;i<=game.width;i++) {
+						searchArray[i]=new Array()
+						for(let j=1;j<=game.height;j++) searchArray[i][j]={round:-1,dir:[,false,false,false,false]}
+					}
+					searchArray[actionX][actionY]={round:0,dir:[,false,false,false,false]}
+					while(searchEnd===false && searchFound===false) {
+						searchRound++
+						searchEnd=true
+						for(let i=1;i<=game.width;i++) for(let j=1;j<=game.height;j++) if(searchArray[i][j].round===searchRound-1) {
+							for(let k=1;k<=4;k++) if(i+dx[k]>=1 && i+dx[k]<=game.width && j+dy[k]>=1 && j+dy[k]<=game.height && (searchArray[i+dx[k]][j+dy[k]].round===-1 || searchArray[i+dx[k]][j+dy[k]].round===searchRound)) {
+								let nearbyX=i+dx[k],nearbyY=j+dy[k],nearbyGrid=game.board[nearbyX][nearbyY]
+								if(game.wall[i][j][k]===0 && isPetal(nearbyGrid.content) && nearbyGrid.state==="Existing") {
+									searchArray[i+dx[k]][j+dy[k]].round=searchRound
+									searchEnd=false
+									for(let l=1;l<=4;l++) if(searchArray[i][j].dir[l] || (l===k && searchRound===1)) {
+										searchArray[nearbyX][nearbyY].dir[l]=true
+									}
+								}
+								if(isMob(nearbyGrid.content) && nearbyGrid.content.name==="!Sponge") {
+									searchFound=true
+									for(let l=1;l<=4;l++) if(searchArray[i][j].dir[l]) searchDir[l]=true
+								}
+							}
+						}
+					}
+					let resultDir=0
+					if(!searchFound) {
+						let leastDamage=0,leastDamageDir=[0]
+						for(let i=1;i<=4;i++) if(actionX+dx[i]>=1 && actionX+dx[i]<=game.width && actionY+dy[i]>=1 && actionY+dy[i]<=game.height && isPetal(game.board[actionX+dx[i]][actionY+dy[i]].content)) leastDamage+=(game.board[actionX+dx[i]][actionY+dy[i]].content.attribute.damage||1)
+						for(let i=1;i<=4;i++) if(actionX+dx[i]>=1 && actionX+dx[i]<=game.width && actionY+dy[i]>=1 && actionY+dy[i]<=game.height && game.wall[actionX][actionY][i]===0 && isPetal(game.board[actionX+dx[i]][actionY+dy[i]].content) && game.board[actionX+dx[i]][actionY+dy[i]].state==="Existing") {
+							let newX=actionX+dx[i],newY=actionY+dy[i]
+							let dirDamage=(game.board[newX][newY].content.attribute.damage||1)
+							for(let j=1;j<=4;j++) if(newX+dx[j]>=1 && newX+dx[j]<=game.width && newY+dy[j]>=1 && newY+dy[j]<=game.height && isPetal(game.board[newX+dx[j]][newY+dy[j]].content)) dirDamage+=(game.board[newX+dx[j]][newY+dy[j]].content.attribute.damage||1)
+							if(dirDamage<leastDamage) {
+								leastDamage=dirDamage
+								leastDamageDir=[i]
+							} else if(dirDamage===leastDamage) {
+								leastDamageDir.push(i)
+							}
+						}
+						resultDir=leastDamageDir[roll(0,leastDamageDir.length-1)]
+					} else if(searchRound>1) {
+						resultDir=roll(1,4)
+						while(!searchDir[resultDir]) resultDir=roll(1,4)
+					}
+					let resultX=actionX+dx[resultDir],resultY=actionY+dy[resultDir]
+					if(resultDir===0) {
+						game.board[actionX][actionY].print()
+						await delay(100)
+					} else {
+						let saveContent=game.board[resultX][resultY].content,saveType=game.board[resultX][resultY].type
+						game.board[resultX][resultY]=new Grid(resultX,resultY,this,"Existing")
+						game.board[resultX][resultY].print()
+						game.board[actionX][actionY]=new Grid(actionX,actionY,saveContent,"Existing",saveType)
+						game.board[actionX][actionY].print()
+						dropFlag=true
+						await delay(300)
+					}
+					if(!player.settings.hasOwnProperty("skipanimation")) {
+						for(let i=0;i<=24;i++) {
+							getGrid(0,resultX,resultY).children[0].children[1].style.transform="rotate("+(3*i)+"deg)"
+							await delay(20)
+						}
+					}
+					this.attribute.state=3
+					game.board[actionX][actionY].print()
+					return
+				}
+				if(this.attribute.state===3) {
+					this.attribute.actionbar-=200
+					if(!player.settings.hasOwnProperty("skipanimation")) {
+						for(let i=0;i<=40;i++) {
+							getGrid(0,actionX,actionY).style.scale=1.3-0.015*Math.abs(i-20)
+							await delay(20)
+						}
+					}
+					this.heal(actionX,actionY,this)
+					game.board[actionX][actionY].print()
+					await delay(100)
+					if(!player.settings.hasOwnProperty("skipanimation")) {
+						for(let i=0;i<=24;i++) {
+							getGrid(0,actionX,actionY).children[0].children[1].style.transform="rotate("+(3*i)+"deg)"
+							await delay(20)
+						}
+					}
+					this.attribute.state=4
+					await delay(100)
+					game.board[actionX][actionY].print()
+					return
+				}
+				if(this.attribute.state===4) {
+					this.attribute.actionbar-=100
+					if(!player.settings.hasOwnProperty("skipanimation")) {
+						for(let i=0;i<=40;i++) {
+							getGrid(0,actionX,actionY).style.scale=1.3-0.015*Math.abs(i-20)
+							await delay(20)
+						}
+					}
+					this.heal(actionX,actionY,this)
+					this.attribute.damage+=this.attribute.increment
+					game.board[actionX][actionY].print()
+					await delay(100)
+					if(!player.settings.hasOwnProperty("skipanimation")) {
+						for(let i=0;i<=24;i++) {
+							getGrid(0,actionX,actionY).children[0].children[1].style.transform="rotate("+(3*i)+"deg)"
+							await delay(20)
+						}
+					}
+					this.attribute.state=0
+					await delay(100)
+					game.board[actionX][actionY].print()
+					return
+				}
 				return
 			}
 		}
@@ -1575,6 +1913,7 @@
 				let effectTurn=petal.attribute.duration
 				if(!this.effect.hasOwnProperty("poison")) this.effect.poison=new Array()
 				for(let i=0;i<effectTurn;i++) this.effect.poison[i]=(this.effect.poison[i]||0)+pendingDamage
+				game.board[mobX][mobY].print()
 				return
 			}
 			if(petal.name==="Reflection") {
@@ -1683,7 +2022,22 @@
 				} else {
 					addLog("[Mob] <span style='color: "+rarityColorEP[this.rarity]+"'>"+this.name+"</span> received "+pendingKnockback+" knockback from Connection.","#bfbf00")
 				}
-				if(this.name==="!Crab" && this.attribute.step===this.attribute.interval) this.attribute.step=0
+				if(this.name==="!Crab" && this.attribute.action==="Default" && this.attribute.step===this.attribute.interval) {
+					if(player.savesettings.language==="Chinese") {
+						addLog("[Mob] <span style='color: "+rarityColorEP[this.rarity]+"'>"+translateText(this.name)+"</span>的行动被中止。","#9f9fdf")
+					} else {
+						addLog("[Mob] Action of <span style='color: "+rarityColorEP[this.rarity]+"'>"+translateText(this.name)+"</span> is stopped.","#9f9fdf")
+					}
+					this.attribute.step=0
+				}
+				if(this.name==="!Crab" && this.attribute.action==="Nimble" && this.attribute.step===this.attribute.interval) {
+					if(player.savesettings.language==="Chinese") {
+						addLog("[Mob] <span style='color: "+rarityColorEP[this.rarity]+"'>"+translateText(this.name)+"</span>的行动被打断。","#9f9fdf")
+					} else {
+						addLog("[Mob] Action of <span style='color: "+rarityColorEP[this.rarity]+"'>"+translateText(this.name)+"</span> is interrupted.","#9f9fdf")
+					}
+					this.attribute.step--
+				}
 				game.board[mobX][mobY].print()
 				return
 			}
@@ -1702,16 +2056,47 @@
 				} else {
 					addLog("[Petal] <span style='color: "+rarityColorEP[petal.rarity]+"'>"+petal.name+"</span> dealt "+pendingKnockback+" knockback to <span style='color: "+rarityColorEP[this.rarity]+"'>"+this.name+"</span>.","#9f9fdf")
 				}
-				if(this.name==="!Crab" && this.attribute.step===this.attribute.interval) this.attribute.step=0
+				if(this.name==="!Crab" && this.attribute.action==="Default" && this.attribute.step===this.attribute.interval) {
+					if(player.savesettings.language==="Chinese") {
+						addLog("[Petal] <span style='color: "+rarityColorEP[petal.rarity]+"'>"+translateText(petal.name)+"</span>终止了<span style='color: "+rarityColorEP[this.rarity]+"'>"+translateText(this.name)+"</span>的行动。","#9f9fdf")
+					} else {
+						addLog("[Petal] <span style='color: "+rarityColorEP[petal.rarity]+"'>"+petal.name+"</span> stopped action of <span style='color: "+rarityColorEP[this.rarity]+"'>"+this.name+"</span>.","#9f9fdf")
+					}
+					this.attribute.step=0
+				}
+				if(this.name==="!Crab" && this.attribute.action==="Nimble" && this.attribute.step===this.attribute.interval) {
+					if(player.savesettings.language==="Chinese") {
+						addLog("[Petal] <span style='color: "+rarityColorEP[petal.rarity]+"'>"+translateText(petal.name)+"</span>打断了<span style='color: "+rarityColorEP[this.rarity]+"'>"+translateText(this.name)+"</span>的行动。","#9f9fdf")
+					} else {
+						addLog("[Petal] <span style='color: "+rarityColorEP[petal.rarity]+"'>"+petal.name+"</span> interrupted action of <span style='color: "+rarityColorEP[this.rarity]+"'>"+this.name+"</span>.","#9f9fdf")
+					}
+					this.attribute.step--
+				}
 				game.board[mobX][mobY].print()
 			}
+		}
+		Mob.prototype.heal=function(mobX,mobY,mob) {
+			if(this.attribute.health===0) return
+			if(this.attribute.health===this.attribute.maxhealth) return
+			let pendingHeal
+			if(isMob(mob)) {
+				pendingHeal=mob.attribute.heal
+				if(pendingHeal>this.attribute.maxhealth-this.attribute.health) pendingHeal=this.attribute.maxhealth-this.attribute.health
+				this.attribute.health+=pendingHeal
+				if(player.savesettings.language==="Chinese") {
+					addLog("[Mob] <span style='color: "+rarityColorEP[mob.rarity]+"'>"+translateText(mob.name)+"</span>对<span style='color: "+rarityColorEP[this.rarity]+"'>"+translateText(this.name)+"</span>造成了"+pendingHeal+"治疗，剩余"+this.attribute.health+"生命值。","#9f9fdf")
+				} else {
+					addLog("[Mob] <span style='color: "+rarityColorEP[mob.rarity]+"'>"+mob.name+"</span> heals <span style='color: "+rarityColorEP[this.rarity]+"'>"+this.name+"</span> for "+pendingHeal+", "+this.attribute.health+" health remaining.","#9f9fdf")
+				}
+			}
+			game.board[mobX][mobY].print()
 		}
 		function Item(id=0,rarity=1,other) {
 			this.proto="Item"
 			this.id=id,this.rarity=rarity
 			if(typeof(this.id)==="string") this.id=ItemNameList.indexOf(this.id)
 			this.name=ItemNameList[this.id]
-			this.attribute=structuredClone(ItemAttributeList[this.id])
+			this.attribute=structuredClone(ItemAttributeList[this.name.slice(1)])
 			Object.assign(this.attribute,other)
 		}
 		function isItem(potentialItem) {
@@ -1941,7 +2326,7 @@
 		Grid.prototype.destroy=function(targetMob) {
 			if(this.crush==="Crushed") return
 			if(this.state==="Existing") {
-				if(this.crush==="Blasted" && this.content.attribute.blast==="Destroy") this.content.attribute=new Object()
+				if(this.crush==="Blasted" && this.content.attribute.blast==="Destroy") this.content.attribute={destroyed:true}
 				if(targetMob && this.content.attribute.damage>0) {
 					targetMob.content.injure(targetMob.x,targetMob.y,this.content)
 					addTempMovingGrid(createGrid(79,0,0,"Petal_"+this.content.name,1,this.content.rarity),this.x,this.y,targetMob.x,targetMob.y)
@@ -1997,6 +2382,15 @@
 						if(isMob(game.board[i][this.y].content) && this.content.attribute.damage>0 && this.content.attribute.blast!=="Destroy") game.board[i][this.y].content.injure(i,this.y,this.content)
 						if(isMob(game.board[i][this.y].content) && this.content.attribute.knockback>0 && this.content.attribute.blast!=="Destroy") game.board[i][this.y].content.repulse(i,this.y,this.content)
 						if(isPetal(game.board[i][this.y].content)) blastGrid.push(game.board[i][this.y])
+						if(isMob(game.board[i][this.y].content) && game.board[i][this.y].content.name==="!Starfish" && game.board[i][this.y].content.attribute.action==="Default" && game.board[i][this.y].content.attribute.state>0) {
+							game.board[i][this.y].content.attribute.state=0
+							game.board[i][this.y].print()
+							if(player.savesettings.language==="Chinese") {
+								addLog("[Petal] <span style='color: "+rarityColorEP[this.content.rarity]+"'>"+translateText(this.content.name)+"</span>终止了<span style='color: "+rarityColorEP[game.board[i][this.y].content.rarity]+"'>"+translateText(game.board[i][this.y].content.name)+"</span>的行动。","#9f9fdf")
+							} else {
+								addLog("[Petal] <span style='color: "+rarityColorEP[this.content.rarity]+"'>"+this.content.name+"</span> stopped action of <span style='color: "+rarityColorEP[game.board[i][this.y].content.rarity]+"'>"+game.board[i][this.y].content.name+"</span>.","#9f9fdf")
+							}
+						}
 					}
 				}
 				if(this.type==="Column") {
@@ -2018,6 +2412,15 @@
 						if(isMob(game.board[this.x][i].content) && this.content.attribute.damage>0 && this.content.attribute.blast!=="Destroy") game.board[this.x][i].content.injure(this.x,i,this.content)
 						if(isMob(game.board[this.x][i].content) && this.content.attribute.knockback>0 && this.content.attribute.blast!=="Destroy") game.board[this.x][i].content.repulse(this.x,i,this.content)
 						if(isPetal(game.board[this.x][i].content)) blastGrid.push(game.board[this.x][i])
+						if(isMob(game.board[this.x][i].content) && game.board[this.x][i].content.name==="!Starfish" && game.board[this.x][i].content.attribute.action==="Default" && game.board[this.x][i].content.attribute.state>0) {
+							game.board[this.x][i].content.attribute.state=0
+							game.board[this.x][i].print()
+							if(player.savesettings.language==="Chinese") {
+								addLog("[Petal] <span style='color: "+rarityColorEP[this.content.rarity]+"'>"+translateText(this.content.name)+"</span>终止了<span style='color: "+rarityColorEP[game.board[this.x][i].content.rarity]+"'>"+translateText(game.board[this.x][i].content.name)+"</span>的行动。","#9f9fdf")
+							} else {
+								addLog("[Petal] <span style='color: "+rarityColorEP[this.content.rarity]+"'>"+this.content.name+"</span> stopped action of <span style='color: "+rarityColorEP[game.board[this.x][i].content.rarity]+"'>"+game.board[this.x][i].content.name+"</span>.","#9f9fdf")
+							}
+						}
 					}
 				}
 				if(this.type==="Bomb") {
@@ -2039,6 +2442,15 @@
 						if(isMob(game.board[i][j].content) && this.content.attribute.damage>0 && this.content.attribute.blast!=="Destroy") game.board[i][j].content.injure(i,j,this.content)
 						if(isMob(game.board[i][j].content) && this.content.attribute.knockback>0 && this.content.attribute.blast!=="Destroy") game.board[i][j].content.repulse(i,j,this.content)
 						if(isPetal(game.board[i][j].content)) blastGrid.push(game.board[i][j])
+						if(isMob(game.board[i][j].content) && game.board[i][j].content.name==="!Starfish" && game.board[i][j].content.attribute.action==="Default" && game.board[i][j].content.attribute.state>0) {
+							game.board[i][j].content.attribute.state=0
+							game.board[i][j].print()
+							if(player.savesettings.language==="Chinese") {
+								addLog("[Petal] <span style='color: "+rarityColorEP[this.content.rarity]+"'>"+translateText(this.content.name)+"</span>终止了<span style='color: "+rarityColorEP[game.board[i][j].content.rarity]+"'>"+translateText(game.board[i][j].content.name)+"</span>的行动。","#9f9fdf")
+							} else {
+								addLog("[Petal] <span style='color: "+rarityColorEP[this.content.rarity]+"'>"+this.content.name+"</span> stopped action of <span style='color: "+rarityColorEP[game.board[i][j].content.rarity]+"'>"+game.board[i][j].content.name+"</span>.","#9f9fdf")
+							}
+						}
 					}
 				}
 				if(this.state==="Existing" && this.type==="Kaleidoscope") {
@@ -2079,7 +2491,7 @@
 			return mapArray
 		}
 		levelList["Centralia Field 1"]=new Array()
-		levelList["Centralia Field 1"][1]={x:50,y:50,precondition:[],height:6,width:6,coefficient:10,exponent:1.2,goal:6400,spawner:[[{weight:14,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing","Row"),noinitial:true},{weight:1,result:(x,y) => new Grid(x,y,new Petal("Basic",5),"Existing"),noinitial:true},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing"),noinitial:true},{weight:25,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:25,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")}]],spawnset:"Default",valueset:() => {PetalAttributeList[1].damage=20; MobAttributeList[1].increment=0; MobAttributeList[2].reflect="200%"},valuetext:{petal:"Nerfed Stinger damage: 30->20",mob:"Nerfed Hornet damage increment: 1->0<br>Buffed Missile damage reflect: 50%->200%"},chvaluetext:{petal:"削弱刺伤害：30->20",mob:"削弱黄蜂伤害增量：1->0<br>增强导弹伤害反射：50%->200%"}}
+		levelList["Centralia Field 1"][1]={x:50,y:50,precondition:[],height:6,width:6,coefficient:10,exponent:1.2,goal:6400,spawner:[[{weight:14,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing","Row"),noinitial:true},{weight:1,result:(x,y) => new Grid(x,y,new Petal("Basic",5),"Existing"),noinitial:true},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing"),noinitial:true},{weight:25,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:25,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")}]],spawnset:"Default",valueset:() => {PetalAttributeList.Stinger.damage=20; MobAttributeList.Hornet.increment=0; MobAttributeList["Missile (H)"].reflect="200%"},valuetext:{petal:"Nerfed Stinger damage: 30->20",mob:"Nerfed Hornet damage increment: 1->0<br>Buffed Missile damage reflect: 50%->200%"},chvaluetext:{petal:"削弱刺伤害：30->20",mob:"削弱黄蜂伤害增量：1->0<br>增强导弹伤害反射：50%->200%"}}
 		levelList["Centralia Field 1"][1].initialmap=function() {
 			let mapArray=generateMap(6,6)
 			mapArray[1][5]=new Grid(1,5,new Mob("!Rock",3,200),"Existing")
@@ -2092,7 +2504,7 @@
 			mapArray[6][6]=new Grid(6,6,new Mob("!Hornet",1,200),"Existing")
 			return mapArray
 		}
-		levelList["Centralia Field 1"][2]={x:30,y:30,precondition:[1],height:7,width:7,coefficient:10,exponent:1.3,goal:6241,spawner:[[{weight:20,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")}]],spawnset:"Default",valueset:() => {MobAttributeList[2].immune="All"},valuetext:{mob:"Modify Missile: Immunes all damage"},chvaluetext:{mob:"修改导弹：免疫所有伤害"}}
+		levelList["Centralia Field 1"][2]={x:30,y:30,precondition:[1],height:7,width:7,coefficient:10,exponent:1.3,goal:6241,spawner:[[{weight:20,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")}]],spawnset:"Default",valueset:() => {MobAttributeList["Missile (H)"].immune="All"},valuetext:{mob:"Modify Missile: Immunes all damage"},chvaluetext:{mob:"修改导弹：免疫所有伤害"}}
 		levelList["Centralia Field 1"][2].initialmap=function() {
 			let mapArray=generateMap(7,7)
 			mapArray[3][4]=new Grid(3,4,new Mob("!Missile (H)",7,{health:6361,damage:50}),"Existing")
@@ -2102,7 +2514,7 @@
 			mapArray[5][4]=new Grid(5,4,new Mob("!Missile (H)",7,{health:6361,damage:50}),"Existing")
 			return mapArray
 		}
-		levelList["Centralia Field 1"][3]={x:30,y:70,precondition:[1],height:8,width:8,coefficient:15,exponent:1.2,goal:5625,spawner:[[{weight:18,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Basic",2),"Existing")},{weight:2,result:(x,y) => new Grid(x,y,new Petal("Basic",3),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Stinger",2),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Rose",2),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Leaf",2),"Existing")}],[{weight:30,result:(x,y) => new Grid(x,y,new Petal("Basic",4),"Existing","Column")},{weight:30,result:(x,y) => new Grid(x,y,new Petal("Basic",4),"Existing","Bomb")},{weight:30,result:(x,y) => new Grid(x,y,new Petal("Stinger",4),"Existing","Row")},{weight:10,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")}]],spawnset:[{x:1,y:1,set:0},{x:8,y:1,set:0},{x:4,y:2,set:1},{x:5,y:2,set:1}],wall:[{x:3,y:2,dir:2,stack:6361},{x:4,y:2,dir:2,stack:6361},{x:5,y:2,dir:2,stack:6361},{x:4,y:3,dir:3,stack:6361},{x:5,y:3,dir:3,stack:6361}],valueset:() => {PetalAttributeList[3].heal=0; PetalAttributeList[4].heal=2; NewValue.damagemult[4]=0; NewValue.healmult[1]=0},valuetext:{petal:"Nerfed Rose heal: 10->0<br>Nerfed Leaf heal: 3->2",other:"Nerfed [RAR4] Petal damage multiplier: 8->0<br>Nerfed [RAR1] Petal heal multiplier: 1->0"},chvaluetext:{petal:"削弱玫瑰治疗：10->0<br>削弱叶子治疗：3->2",other:"削弱[RAR4]花瓣伤害乘数：8->0<br>削弱[RAR1]花瓣治疗乘数：1->0"}}
+		levelList["Centralia Field 1"][3]={x:30,y:70,precondition:[1],height:8,width:8,coefficient:15,exponent:1.2,goal:5625,spawner:[[{weight:18,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Basic",2),"Existing")},{weight:2,result:(x,y) => new Grid(x,y,new Petal("Basic",3),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Stinger",2),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Rose",2),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Leaf",2),"Existing")}],[{weight:30,result:(x,y) => new Grid(x,y,new Petal("Basic",4),"Existing","Column")},{weight:30,result:(x,y) => new Grid(x,y,new Petal("Basic",4),"Existing","Bomb")},{weight:30,result:(x,y) => new Grid(x,y,new Petal("Stinger",4),"Existing","Row")},{weight:10,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")}]],spawnset:[{x:1,y:1,set:0},{x:8,y:1,set:0},{x:4,y:2,set:1},{x:5,y:2,set:1}],wall:[{x:3,y:2,dir:2,stack:6361},{x:4,y:2,dir:2,stack:6361},{x:5,y:2,dir:2,stack:6361},{x:4,y:3,dir:3,stack:6361},{x:5,y:3,dir:3,stack:6361}],valueset:() => {PetalAttributeList.Rose.heal=0; PetalAttributeList.Leaf.heal=2; NewValue.damagemult[4]=0; NewValue.healmult[1]=0},valuetext:{petal:"Nerfed Rose heal: 10->0<br>Nerfed Leaf heal: 3->2",other:"Nerfed [RAR4] Petal damage multiplier: 8->0<br>Nerfed [RAR1] Petal heal multiplier: 1->0"},chvaluetext:{petal:"削弱玫瑰治疗：10->0<br>削弱叶子治疗：3->2",other:"削弱[RAR4]花瓣伤害乘数：8->0<br>削弱[RAR1]花瓣治疗乘数：1->0"}}
 		levelList["Centralia Field 1"][3].initialmap=function() {
 			let mapArray=generateMap(8,8)
 			mapArray[2][1]=new Grid(2,1)
@@ -2119,7 +2531,7 @@
 			mapArray[7][1]=new Grid(7,1)
 			return mapArray
 		}
-		levelList["Centralia Field 1"][4]={x:10,y:50,precondition:[2,3],height:6,width:6,coefficient:10,exponent:1.2,goal:6000,spawner:[[{weight:25,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Leaf",4),"Existing")},{weight:25,result:(x,y) => new Grid(x,y,new Petal("Web",1),"Existing")}]],spawnset:"Default",valueset:() => {MobAttributeList[1].increment=2},valuetext:{mob:"Buffed Hornet damage increment: 1->2"},chvaluetext:{mob:"增强黄蜂伤害增量：1->2"}}
+		levelList["Centralia Field 1"][4]={x:10,y:50,precondition:[2,3],height:6,width:6,coefficient:10,exponent:1.2,goal:6000,spawner:[[{weight:25,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Leaf",4),"Existing")},{weight:25,result:(x,y) => new Grid(x,y,new Petal("Web",1),"Existing")}]],spawnset:"Default",valueset:() => {MobAttributeList.Hornet.increment=2},valuetext:{mob:"Buffed Hornet damage increment: 1->2"},chvaluetext:{mob:"增强黄蜂伤害增量：1->2"}}
 		levelList["Centralia Field 1"][4].initialmap=function() {
 			let mapArray=generateMap(6,6)
 			mapArray[1][1]=new Grid(1,1,new Mob("!Rock",1,30),"Existing")
@@ -2136,7 +2548,7 @@
 			mapArray[6][6]=new Grid(6,6,new Mob("!Hornet",1,80),"Existing")
 			return mapArray
 		}
-		levelList["Centralia Field 1"][5]={x:-10,y:30,precondition:[4],height:7,width:6,coefficient:10,exponent:1.2,goal:6000,spawner:[[{weight:20,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Web",1),"Existing")}]],spawnset:"Default",wall:[{x:2,y:4,dir:2,stack:16},{x:4,y:4,dir:2,stack:16},{x:1,y:3,dir:3,stack:9},{x:2,y:3,dir:3,stack:4},{x:5,y:3,dir:3,stack:4},{x:6,y:3,dir:3,stack:9},{x:3,y:4,dir:3,stack:6},{x:4,y:4,dir:3,stack:6}],valueset:() => {MobAttributeList[3].increment=10},valuetext:{mob:"Buffed Spider damage increment: 0->10"},chvaluetext:{mob:"增强蜘蛛伤害增量：0->10"}}
+		levelList["Centralia Field 1"][5]={x:-10,y:30,precondition:[4],height:7,width:6,coefficient:10,exponent:1.2,goal:6000,spawner:[[{weight:20,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Web",1),"Existing")}]],spawnset:"Default",wall:[{x:2,y:4,dir:2,stack:16},{x:4,y:4,dir:2,stack:16},{x:1,y:3,dir:3,stack:9},{x:2,y:3,dir:3,stack:4},{x:5,y:3,dir:3,stack:4},{x:6,y:3,dir:3,stack:9},{x:3,y:4,dir:3,stack:6},{x:4,y:4,dir:3,stack:6}],valueset:() => {MobAttributeList.Spider.increment=10},valuetext:{mob:"Buffed Spider damage increment: 0->10"},chvaluetext:{mob:"增强蜘蛛伤害增量：0->10"}}
 		levelList["Centralia Field 1"][5].initialmap=function() {
 			let mapArray=generateMap(7,6)
 			mapArray[1][5]=new Grid(1,5,new Mob("!Rock",3,300),"Existing")
@@ -2149,7 +2561,7 @@
 			mapArray[6][7]=new Grid(6,7,new Mob("!Hornet",2,200),"Existing")
 			return mapArray
 		}
-		levelList["Centralia Field 1"][6]={x:-10,y:70,precondition:[4],height:7,width:7,coefficient:5,exponent:1.15,goal:4900,spawner:[[{weight:10,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:10,result:(x,y) => new Grid(x,y,new Petal("Stinger",2),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:17,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:3,result:(x,y) => new Grid(x,y,new Petal("Rose",6),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Web",1),"Existing")}],[{weight:100,result:(x,y) => new Grid(x,y,new Petal("Rose",3),"Existing","Row")}],[{weight:100,result:(x,y) => new Grid(x,y,new Petal("Basic",1,{rearrange:"None"}),"Existing")}],[{weight:100,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing","Bomb")}]],spawnset:[{x:1,y:1,set:0},{x:2,y:1,set:0},{x:3,y:1,set:0},{x:4,y:1,set:0},{x:5,y:1,set:0},{x:6,y:1,set:0},{x:7,y:1,set:0},{x:1,y:7,set:1},{x:2,y:7,set:2},{x:3,y:7,set:3},{x:5,y:7,set:3},{x:6,y:7,set:2},{x:7,y:7,set:1}],valueset:() => {MobAttributeList[2].reflect=0,MobAttributeList[3].weavestrength=10},valuetext:{mob:"Nerfed Missile damage reflect: 50%->0<br>Nerfed Spider weave strength: 30->10"},chvaluetext:{mob:"削弱导弹伤害反射：50%->0<br>削弱蜘蛛织网强度：30->10"}}
+		levelList["Centralia Field 1"][6]={x:-10,y:70,precondition:[4],height:7,width:7,coefficient:5,exponent:1.15,goal:4900,spawner:[[{weight:10,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:10,result:(x,y) => new Grid(x,y,new Petal("Stinger",2),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:17,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:3,result:(x,y) => new Grid(x,y,new Petal("Rose",6),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Web",1),"Existing")}],[{weight:100,result:(x,y) => new Grid(x,y,new Petal("Rose",3),"Existing","Row")}],[{weight:100,result:(x,y) => new Grid(x,y,new Petal("Basic",1,{rearrange:"None"}),"Existing")}],[{weight:100,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing","Bomb")}]],spawnset:[{x:1,y:1,set:0},{x:2,y:1,set:0},{x:3,y:1,set:0},{x:4,y:1,set:0},{x:5,y:1,set:0},{x:6,y:1,set:0},{x:7,y:1,set:0},{x:1,y:7,set:1},{x:2,y:7,set:2},{x:3,y:7,set:3},{x:5,y:7,set:3},{x:6,y:7,set:2},{x:7,y:7,set:1}],valueset:() => {MobAttributeList["Missile (H)"].reflect=0,MobAttributeList.Spider.weavestrength=10},valuetext:{mob:"Nerfed Missile damage reflect: 50%->0<br>Nerfed Spider weave strength: 30->10"},chvaluetext:{mob:"削弱导弹伤害反射：50%->0<br>削弱蜘蛛织网强度：30->10"}}
 		levelList["Centralia Field 1"][6].initialmap=function() {
 			let mapArray=generateMap(7,7)
 			mapArray[1][6]=new Grid(1,6,new Item("?Void",9),"Existing")
@@ -2165,7 +2577,7 @@
 			mapArray[7][7]=new Grid(7,7,new Mob("!Hornet",1,50),"Existing")
 			return mapArray
 		}
-		levelList["Centralia Field 1"][7]={x:-30,y:50,precondition:[5,6],height:9,width:9,coefficient:8,exponent:1.1,goal:1,spawner:[[{weight:20,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")}],[{weight:100,result:(x,y) => new Grid(x,y,new Petal("Basic",4,{rearrange:"None"}),"Existing")}],[{weight:50,result:(x,y) => new Grid(x,y,new Petal("Basic",4),"Existing","Column")},{weight:50,result:(x,y) => new Grid(x,y,new Petal("Basic",4),"Existing","Bomb")}]],spawnset:[{x:6,y:1,set:0},{x:7,y:1,set:0},{x:8,y:1,set:0},{x:9,y:1,set:0},{x:1,y:4,set:1},{x:1,y:9,set:2}],transportset:[{start:{x:1,y:3},end:{x:1,y:6}},{start:{x:2,y:4},end:{x:2,y:6}},{start:{x:3,y:4},end:{x:3,y:6}},{start:{x:4,y:4},end:{x:4,y:6}},{start:{x:6,y:4},end:{x:6,y:6}},{start:{x:7,y:4},end:{x:7,y:6}},{start:{x:8,y:4},end:{x:8,y:6}},{start:{x:9,y:4},end:{x:9,y:6}},{start:{x:6,y:9},end:{x:1,y:1}},{start:{x:7,y:9},end:{x:2,y:1}},{start:{x:8,y:9},end:{x:3,y:1}},{start:{x:9,y:9},end:{x:4,y:1}}],valueset:() => {PetalAttributeList[0].damage=1; PetalAttributeList[1].damage=1; delete PetalAttributeList[1].blast; PetalAttributeList[4].heal=0; MobAttributeList[3].speed=30; MobAttributeList[3].increment=10; MobAttributeList[3].weavestrength=10; NewValue.damagemult[2]=10; NewValue.damagemult[4]=100},valuetext:{petal:"Nerfed Basic damage: 10->1<br>Nerfed Stinger damage: 30->1<br>Modify Stinger: No longer destroys by blast<br>Nerfed Leaf heal: 3->0",mob:"Nerfed Spider speed: 50->30<br>Buffed Spider damage increment: 0->5<br>Nerfed Spider weave strength: 30->10",other:"Buffed [RAR2] Petal damage multiplier: 2->10<br>Buffed [RAR4] Petal damage multiplier: 8->100"},chvaluetext:{petal:"削弱基本伤害：10->1<br>削弱刺伤害：30->1<br>修改刺：不再被冲击波摧毁<br>削弱叶子治疗：3->0",mob:"削弱蜘蛛速度：50->30<br>增强蜘蛛伤害增量：0->5<br>削弱蜘蛛织网强度：30->10",other:"增强[RAR2]花瓣伤害乘数：2->10<br>增强[RAR4]花瓣伤害乘数：8->100"}}
+		levelList["Centralia Field 1"][7]={x:-30,y:50,precondition:[5,6],height:9,width:9,coefficient:8,exponent:1.1,goal:1,spawner:[[{weight:20,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")}],[{weight:100,result:(x,y) => new Grid(x,y,new Petal("Basic",4,{rearrange:"None"}),"Existing")}],[{weight:50,result:(x,y) => new Grid(x,y,new Petal("Basic",4),"Existing","Column")},{weight:50,result:(x,y) => new Grid(x,y,new Petal("Basic",4),"Existing","Bomb")}]],spawnset:[{x:6,y:1,set:0},{x:7,y:1,set:0},{x:8,y:1,set:0},{x:9,y:1,set:0},{x:1,y:4,set:1},{x:1,y:9,set:2}],transportset:[{start:{x:1,y:3},end:{x:1,y:6}},{start:{x:2,y:4},end:{x:2,y:6}},{start:{x:3,y:4},end:{x:3,y:6}},{start:{x:4,y:4},end:{x:4,y:6}},{start:{x:6,y:4},end:{x:6,y:6}},{start:{x:7,y:4},end:{x:7,y:6}},{start:{x:8,y:4},end:{x:8,y:6}},{start:{x:9,y:4},end:{x:9,y:6}},{start:{x:6,y:9},end:{x:1,y:1}},{start:{x:7,y:9},end:{x:2,y:1}},{start:{x:8,y:9},end:{x:3,y:1}},{start:{x:9,y:9},end:{x:4,y:1}}],valueset:() => {PetalAttributeList.Basic.damage=1; PetalAttributeList.Stinger.damage=1; delete PetalAttributeList.Stinger.blast; PetalAttributeList.Leaf.heal=0; MobAttributeList.Spider.speed=30; MobAttributeList.Spider.increment=10; MobAttributeList.Spider.weavestrength=10; NewValue.damagemult[2]=10; NewValue.damagemult[4]=100},valuetext:{petal:"Nerfed Basic damage: 10->1<br>Nerfed Stinger damage: 30->1<br>Modify Stinger: No longer destroys by blast<br>Nerfed Leaf heal: 3->0",mob:"Nerfed Spider speed: 50->30<br>Buffed Spider damage increment: 0->5<br>Nerfed Spider weave strength: 30->10",other:"Buffed [RAR2] Petal damage multiplier: 2->10<br>Buffed [RAR4] Petal damage multiplier: 8->100"},chvaluetext:{petal:"削弱基本伤害：10->1<br>削弱刺伤害：30->1<br>修改刺：不再被冲击波摧毁<br>削弱叶子治疗：3->0",mob:"削弱蜘蛛速度：50->30<br>增强蜘蛛伤害增量：0->5<br>削弱蜘蛛织网强度：30->10",other:"增强[RAR2]花瓣伤害乘数：2->10<br>增强[RAR4]花瓣伤害乘数：8->100"}}
 		levelList["Centralia Field 1"][7].initialmap=function() {
 			let mapArray=generateMap(9,9)
 			for(let i=1;i<=9;i++) mapArray[i][5]=new Grid(i,5,new Item("?Void",9),"Existing")
@@ -2182,7 +2594,7 @@
 			return mapArray
 		}
 		levelList["South Desert 1"]=new Array()
-		levelList["South Desert 1"][1]={x:50,y:50,precondition:[],height:7,width:7,coefficient:10,exponent:1.2,goal:6400,spawner:[[{weight:15,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing"),noinitial:true},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Basic",2),"Existing"),noinitial:true},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing"),noinitial:true},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Stinger",2),"Existing"),noinitial:true},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")}]],spawnset:"Default",valueset:() => {MobAttributeList[5].increment=0},valuetext:{mob:"Nerfed Scorpion damage increment: 1->0"},chvaluetext:{mob:"削弱蝎子伤害增量：1->0"}}
+		levelList["South Desert 1"][1]={x:50,y:50,precondition:[],height:7,width:7,coefficient:10,exponent:1.2,goal:6400,spawner:[[{weight:15,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing"),noinitial:true},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Basic",2),"Existing"),noinitial:true},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing"),noinitial:true},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Stinger",2),"Existing"),noinitial:true},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")}]],spawnset:"Default",valueset:() => {MobAttributeList.Scorpion.increment=0},valuetext:{mob:"Nerfed Scorpion damage increment: 1->0"},chvaluetext:{mob:"削弱蝎子伤害增量：1->0"}}
 		levelList["South Desert 1"][1].initialmap=function() {
 			let mapArray=generateMap(7,7)
 			mapArray[3][5]=new Grid(3,5,new Mob("!Cactus",1,100),"Existing")
@@ -2193,7 +2605,7 @@
 			mapArray[5][7]=new Grid(5,7,new Mob("!Scorpion",1,200),"Existing")
 			return mapArray
 		}
-		levelList["South Desert 1"][2]={x:30,y:70,precondition:[1],height:7,width:7,coefficient:12,exponent:1.2,goal:5625,spawner:[[{weight:25,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:10,result:(x,y) => new Grid(x,y,new Petal("Rose",3),"Existing"),noinitial:true},{weight:25,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")},{weight:25,result:(x,y) => new Grid(x,y,new Petal("Iris",1),"Existing")}],[{weight:100,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing","Column")}]],spawnset:[{x:1,y:1,set:0},{x:2,y:1,set:0},{x:3,y:1,set:0},{x:4,y:1,set:1},{x:5,y:1,set:0},{x:6,y:1,set:0},{x:7,y:1,set:0}],wall:[{x:4,y:1,dir:3,stack:6361}],valueset:() => {PetalAttributeList[0].damage=1; MobAttributeList[5].speed=20},valuetext:{petal:"Nerfed Basic damage: 10->1",mob:"Nerfed Scorpion speed: 50->20"},chvaluetext:{petal:"削弱基本伤害：10->1",mob:"削弱蝎子速度：50->20"}}
+		levelList["South Desert 1"][2]={x:30,y:70,precondition:[1],height:7,width:7,coefficient:12,exponent:1.2,goal:5625,spawner:[[{weight:25,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:10,result:(x,y) => new Grid(x,y,new Petal("Rose",3),"Existing"),noinitial:true},{weight:25,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")},{weight:25,result:(x,y) => new Grid(x,y,new Petal("Iris",1),"Existing")}],[{weight:100,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing","Column")}]],spawnset:[{x:1,y:1,set:0},{x:2,y:1,set:0},{x:3,y:1,set:0},{x:4,y:1,set:1},{x:5,y:1,set:0},{x:6,y:1,set:0},{x:7,y:1,set:0}],wall:[{x:4,y:1,dir:3,stack:6361}],valueset:() => {PetalAttributeList.Basic.damage=1; MobAttributeList.Scorpion.speed=20},valuetext:{petal:"Nerfed Basic damage: 10->1",mob:"Nerfed Scorpion speed: 50->20"},chvaluetext:{petal:"削弱基本伤害：10->1",mob:"削弱蝎子速度：50->20"}}
 		levelList["South Desert 1"][2].initialmap=function() {
 			let mapArray=generateMap(7,7)
 			mapArray[3][6]=new Grid(3,6,new Mob("!Missile (S)",5,{health:1,damage:6361,duration:3}),"Existing")
@@ -2202,7 +2614,7 @@
 			mapArray[5][6]=new Grid(5,6,new Mob("!Missile (S)",6,{health:3,damage:6361,duration:3}),"Existing")
 			return mapArray
 		}
-		levelList["South Desert 1"][3]={x:70,y:70,precondition:[1],height:7,width:7,coefficient:10,exponent:1.2,goal:5625,spawner:[[{weight:20,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Iris",1),"Existing")}]],spawnset:[{x:1,y:4,set:0},{x:2,y:4,set:0},{x:3,y:4,set:0},{x:4,y:4,set:0},{x:5,y:4,set:0},{x:6,y:4,set:0},{x:7,y:4,set:0}],transportset:[{start:{x:1,y:7},end:{x:1,y:1}},{start:{x:2,y:7},end:{x:2,y:1}},{start:{x:3,y:7},end:{x:3,y:1}},{start:{x:4,y:7},end:{x:4,y:1}},{start:{x:5,y:7},end:{x:5,y:1}},{start:{x:6,y:7},end:{x:6,y:1}},{start:{x:7,y:7},end:{x:7,y:1}}],wall:[{x:1,y:3,dir:3,stack:6361},{x:2,y:3,dir:3,stack:6361},{x:3,y:3,dir:3,stack:6361},{x:4,y:3,dir:3,stack:6361},{x:5,y:3,dir:3,stack:6361},{x:6,y:3,dir:3,stack:6361},{x:7,y:3,dir:3,stack:6361}],valueset:() => {PetalAttributeList[0].blast="Destroy"; PetalAttributeList[4].knockback=0; MobAttributeList[4].speed=200; MobAttributeList[5].summon=1},valuetext:{petal:"Modify Basic: Destroys by blast<br>Nerfed Leaf knockback: 50->0",mob:"Buffed Cactus speed: 50->200<br>Nerfed Scorpion summon health: 20%->1"},chvaluetext:{petal:"修改基本：被冲击波摧毁<br>削弱叶子击退：50->0",mob:"增强仙人掌速度：50->200<br>削弱蝎子召唤生命值：20%->1"}}
+		levelList["South Desert 1"][3]={x:70,y:70,precondition:[1],height:7,width:7,coefficient:10,exponent:1.2,goal:5625,spawner:[[{weight:20,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Iris",1),"Existing")}]],spawnset:[{x:1,y:4,set:0},{x:2,y:4,set:0},{x:3,y:4,set:0},{x:4,y:4,set:0},{x:5,y:4,set:0},{x:6,y:4,set:0},{x:7,y:4,set:0}],transportset:[{start:{x:1,y:7},end:{x:1,y:1}},{start:{x:2,y:7},end:{x:2,y:1}},{start:{x:3,y:7},end:{x:3,y:1}},{start:{x:4,y:7},end:{x:4,y:1}},{start:{x:5,y:7},end:{x:5,y:1}},{start:{x:6,y:7},end:{x:6,y:1}},{start:{x:7,y:7},end:{x:7,y:1}}],wall:[{x:1,y:3,dir:3,stack:6361},{x:2,y:3,dir:3,stack:6361},{x:3,y:3,dir:3,stack:6361},{x:4,y:3,dir:3,stack:6361},{x:5,y:3,dir:3,stack:6361},{x:6,y:3,dir:3,stack:6361},{x:7,y:3,dir:3,stack:6361}],valueset:() => {PetalAttributeList.Basic.blast="Destroy"; PetalAttributeList.Leaf.knockback=0; MobAttributeList.Cactus.speed=200; MobAttributeList.Scorpion.summon=1},valuetext:{petal:"Modify Basic: Destroys by blast<br>Nerfed Leaf knockback: 50->0",mob:"Buffed Cactus speed: 50->200<br>Nerfed Scorpion summon health: 20%->1"},chvaluetext:{petal:"修改基本：被冲击波摧毁<br>削弱叶子击退：50->0",mob:"增强仙人掌速度：50->200<br>削弱蝎子召唤生命值：20%->1"}}
 		levelList["South Desert 1"][3].initialmap=function() {
 			let mapArray=generateMap(7,7)
 			mapArray[1][3]=new Grid(1,3,new Mob("!Cactus",1,50),"Existing")
@@ -2211,7 +2623,7 @@
 			mapArray[7][3]=new Grid(7,3,new Mob("!Cactus",1,50),"Existing")
 			return mapArray
 		}
-		levelList["South Desert 1"][4]={x:50,y:90,precondition:[2,3],height:6,width:6,coefficient:10,exponent:1.2,goal:6400,spawner:[[{weight:20,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:12,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:3,result:(x,y) => new Grid(x,y,new Petal("Stinger",3),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing"),noinitial:true},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Iris",1),"Existing")}]],spawnset:"Default",valueset:() => {PetalAttributeList[1].damage=5},valuetext:{petal:"Nerfed Stinger damage: 30->5"},chvaluetext:{petal:"削弱刺伤害：30->5"}}
+		levelList["South Desert 1"][4]={x:50,y:90,precondition:[2,3],height:6,width:6,coefficient:10,exponent:1.2,goal:6400,spawner:[[{weight:20,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:12,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:3,result:(x,y) => new Grid(x,y,new Petal("Stinger",3),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing"),noinitial:true},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Iris",1),"Existing")}]],spawnset:"Default",valueset:() => {PetalAttributeList.Stinger.damage=5},valuetext:{petal:"Nerfed Stinger damage: 30->5"},chvaluetext:{petal:"削弱刺伤害：30->5"}}
 		levelList["South Desert 1"][4].initialmap=function() {
 			let mapArray=generateMap(6,6)
 			mapArray[1][6]=new Grid(1,6,new Mob("!Beetle",1,200),"Existing")
@@ -2237,7 +2649,7 @@
 			mapArray[7][7]=new Grid(7,7,new Mob("!Beetle",4,500),"Existing")
 			return mapArray
 		}
-		levelList["South Desert 1"][6]={x:70,y:110,precondition:[4],height:8,width:7,coefficient:10,exponent:1.15,goal:4900,spawner:[[{weight:20,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:10,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:10,result:(x,y) => new Grid(x,y,new Petal("Stinger",2),"Existing")},{weight:10,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:10,result:(x,y) => new Grid(x,y,new Petal("Rose",2),"Existing")},{weight:10,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")},{weight:10,result:(x,y) => new Grid(x,y,new Petal("Leaf",2),"Existing")},{weight:10,result:(x,y) => new Grid(x,y,new Petal("Iris",1),"Existing")},{weight:10,result:(x,y) => new Grid(x,y,new Petal("Iris",2),"Existing")}],[{weight:100,result:(x,y) => new Grid(x,y,new Petal("Basic",1,{rearrange:"None"}),"Existing")}]],spawnset:[{x:1,y:1,set:0},{x:2,y:1,set:0},{x:3,y:1,set:0},{x:4,y:1,set:0},{x:5,y:1,set:0},{x:6,y:1,set:0},{x:7,y:1,set:0},{x:1,y:7,set:1},{x:3,y:7,set:1},{x:5,y:7,set:1},{x:7,y:7,set:1}],valueset:() => {MobAttributeList[5].summon=1},valuetext:{mob:"Nerfed Scorpion summon health: 20%->1"},chvaluetext:{mob:"削弱蝎子召唤生命值：20%->1"}}
+		levelList["South Desert 1"][6]={x:70,y:110,precondition:[4],height:8,width:7,coefficient:10,exponent:1.15,goal:4900,spawner:[[{weight:20,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:10,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:10,result:(x,y) => new Grid(x,y,new Petal("Stinger",2),"Existing")},{weight:10,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:10,result:(x,y) => new Grid(x,y,new Petal("Rose",2),"Existing")},{weight:10,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")},{weight:10,result:(x,y) => new Grid(x,y,new Petal("Leaf",2),"Existing")},{weight:10,result:(x,y) => new Grid(x,y,new Petal("Iris",1),"Existing")},{weight:10,result:(x,y) => new Grid(x,y,new Petal("Iris",2),"Existing")}],[{weight:100,result:(x,y) => new Grid(x,y,new Petal("Basic",1,{rearrange:"None"}),"Existing")}]],spawnset:[{x:1,y:1,set:0},{x:2,y:1,set:0},{x:3,y:1,set:0},{x:4,y:1,set:0},{x:5,y:1,set:0},{x:6,y:1,set:0},{x:7,y:1,set:0},{x:1,y:7,set:1},{x:3,y:7,set:1},{x:5,y:7,set:1},{x:7,y:7,set:1}],valueset:() => {MobAttributeList.Scorpion.summon=1},valuetext:{mob:"Nerfed Scorpion summon health: 20%->1"},chvaluetext:{mob:"削弱蝎子召唤生命值：20%->1"}}
 		levelList["South Desert 1"][6].initialmap=function() {
 			let mapArray=generateMap(8,7)
 			for(let i=1;i<=7;i++) mapArray[i][6]=new Grid(i,6,new Item("?Void",9),"Existing")
@@ -2257,7 +2669,7 @@
 			mapArray[7][8]=new Grid(7,8,new Petal("Basic",1,{rearrange:"None"}),"Existing")
 			return mapArray
 		}
-		levelList["South Desert 1"][7]={x:50,y:130,precondition:[5,6],height:8,width:8,coefficient:10,exponent:1.1,goal:1,spawner:[[{weight:10,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:10,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Leaf",2),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Iris",1),"Existing")}],[{weight:100,result:(x,y) => new Grid(x,y,new Petal("Basic",1,{rearrange:"None"}),"Existing")}]],spawnset:[{x:1,y:1,set:1},{x:2,y:1,set:1},{x:4,y:1,set:0},{x:5,y:1,set:0},{x:7,y:1,set:1},{x:8,y:1,set:1},{x:1,y:2,set:1},{x:8,y:2,set:1},{x:1,y:7,set:1},{x:8,y:7,set:1},{x:1,y:8,set:1},{x:2,y:8,set:1},{x:7,y:8,set:1},{x:8,y:8,set:1}],wall:[{x:2,y:1,dir:3,stack:6361},{x:7,y:1,dir:3,stack:6361},{x:1,y:2,dir:3,stack:6361},{x:8,y:2,dir:3,stack:6361}],valueset:() => {MobAttributeList[7].speed=25; MobAttributeList[7].eat="Basic"},valuetext:{mob:"Nerfed Beetle speed: 50->25<br>Modify Beetle: Eats Basic"},chvaluetext:{mob:"削弱甲虫速度：50->25<br>修改甲虫：食用基本"}}
+		levelList["South Desert 1"][7]={x:50,y:130,precondition:[5,6],height:8,width:8,coefficient:10,exponent:1.1,goal:1,spawner:[[{weight:10,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:10,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Leaf",2),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Iris",1),"Existing")}],[{weight:100,result:(x,y) => new Grid(x,y,new Petal("Basic",1,{rearrange:"None"}),"Existing")}]],spawnset:[{x:1,y:1,set:1},{x:2,y:1,set:1},{x:4,y:1,set:0},{x:5,y:1,set:0},{x:7,y:1,set:1},{x:8,y:1,set:1},{x:1,y:2,set:1},{x:8,y:2,set:1},{x:1,y:7,set:1},{x:8,y:7,set:1},{x:1,y:8,set:1},{x:2,y:8,set:1},{x:7,y:8,set:1},{x:8,y:8,set:1}],wall:[{x:2,y:1,dir:3,stack:6361},{x:7,y:1,dir:3,stack:6361},{x:1,y:2,dir:3,stack:6361},{x:8,y:2,dir:3,stack:6361}],valueset:() => {MobAttributeList.Beetle.speed=25; MobAttributeList.Beetle.eat="Basic"},valuetext:{mob:"Nerfed Beetle speed: 50->25<br>Modify Beetle: Eats Basic"},chvaluetext:{mob:"削弱甲虫速度：50->25<br>修改甲虫：食用基本"}}
 		levelList["South Desert 1"][7].initialmap=function() {
 			let mapArray=generateMap(8,8)
 			mapArray[1][1]=new Grid(1,1,new Mob("!Beetle",1,{maxhealth:40,damage:0,increment:4}),"Existing")
@@ -2291,7 +2703,7 @@
 			return mapArray
 		}
 		levelList["East Water 1"]=new Array()
-		levelList["East Water 1"][1]={x:50,y:50,precondition:[],height:7,width:6,coefficient:10,exponent:1.2,goal:6859,spawner:[[{weight:15,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Basic",2),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Stinger",2),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Air",2),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Rose",2),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Leaf",2),"Existing")}]],spawnset:"Default",valueset:() => {MobAttributeList[9].increment=0},valuetext:{mob:"Nerfed Crab damage increment: 2->0"},chvaluetext:{mob:"削弱螃蟹伤害增量：2->0"}}
+		levelList["East Water 1"][1]={x:50,y:50,precondition:[],height:7,width:6,coefficient:10,exponent:1.2,goal:6859,spawner:[[{weight:15,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Basic",2),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Stinger",2),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Air",2),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Rose",2),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Leaf",2),"Existing")}]],spawnset:"Default",valueset:() => {MobAttributeList.Crab.increment=0},valuetext:{mob:"Nerfed Crab damage increment: 2->0"},chvaluetext:{mob:"削弱螃蟹伤害增量：2->0"}}
 		levelList["East Water 1"][1].initialmap=function() {
 			let mapArray=generateMap(7,6)
 			mapArray[1][5]=new Grid(1,5,new Mob("!Sponge",1,100),"Existing")
@@ -2306,7 +2718,7 @@
 			mapArray[6][7]=new Grid(6,7,new Mob("!Sponge",1,100),"Existing")
 			return mapArray
 		}
-		levelList["East Water 1"][2]={x:70,y:70,precondition:[1],height:8,width:8,coefficient:5,exponent:1.15,goal:5625,spawner:[[{weight:3,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing","Row"),noinitial:true},{weight:3,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing","Column"),noinitial:true},{weight:22,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:22,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:30,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")}],[{weight:50,result:(x,y) => new Grid(x,y,new Petal("Air",1,{rearrange:"None"}),"Existing")},{weight:30,result:(x,y) => new Grid(x,y,new Petal("Rose",1,{rearrange:"None"}),"Existing")},{weight:10,result:(x,y) => new Grid(x,y,new Petal("Rose",3),"Existing","Row")},{weight:10,result:(x,y) => new Grid(x,y,new Petal("Rose",3),"Existing","Column")}]],spawnset:[{x:1,y:1,set:1},{x:2,y:1,set:1},{x:3,y:1,set:1},{x:4,y:1,set:1},{x:5,y:1,set:1},{x:6,y:1,set:1},{x:7,y:1,set:1},{x:8,y:1,set:1},{x:3,y:3,set:0},{x:4,y:3,set:0},{x:5,y:3,set:0},{x:6,y:3,set:0},{x:2,y:8,set:1},{x:3,y:8,set:1},{x:4,y:8,set:1},{x:5,y:8,set:1},{x:6,y:8,set:1},{x:7,y:8,set:1}],valueset:() => {PetalAttributeList[3].heal=5; MobAttributeList[9].damage=80},valuetext:{petal:"Nerfed Rose heal: 10->5",mob:"Buffed Crab damage: 40->80"},chvaluetext:{petal:"削弱玫瑰治疗：10->5",mob:"增强螃蟹伤害：40->80"}}
+		levelList["East Water 1"][2]={x:70,y:70,precondition:[1],height:8,width:8,coefficient:5,exponent:1.15,goal:5625,spawner:[[{weight:3,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing","Row"),noinitial:true},{weight:3,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing","Column"),noinitial:true},{weight:22,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:22,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:30,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")}],[{weight:50,result:(x,y) => new Grid(x,y,new Petal("Air",1,{rearrange:"None"}),"Existing")},{weight:30,result:(x,y) => new Grid(x,y,new Petal("Rose",1,{rearrange:"None"}),"Existing")},{weight:10,result:(x,y) => new Grid(x,y,new Petal("Rose",3),"Existing","Row")},{weight:10,result:(x,y) => new Grid(x,y,new Petal("Rose",3),"Existing","Column")}]],spawnset:[{x:1,y:1,set:1},{x:2,y:1,set:1},{x:3,y:1,set:1},{x:4,y:1,set:1},{x:5,y:1,set:1},{x:6,y:1,set:1},{x:7,y:1,set:1},{x:8,y:1,set:1},{x:3,y:3,set:0},{x:4,y:3,set:0},{x:5,y:3,set:0},{x:6,y:3,set:0},{x:2,y:8,set:1},{x:3,y:8,set:1},{x:4,y:8,set:1},{x:5,y:8,set:1},{x:6,y:8,set:1},{x:7,y:8,set:1}],valueset:() => {PetalAttributeList.Rose.heal=5; MobAttributeList.Crab.damage=80},valuetext:{petal:"Nerfed Rose heal: 10->5",mob:"Buffed Crab damage: 40->80"},chvaluetext:{petal:"削弱玫瑰治疗：10->5",mob:"增强螃蟹伤害：40->80"}}
 		levelList["East Water 1"][2].initialmap=function() {
 			let mapArray=generateMap(8,8)
 			for(let i=1;i<=4;i++) {
@@ -2335,6 +2747,48 @@
 			mapArray[8][4]=new Grid(8,4,new Mob("!Crab",7,90),"Existing")
 			return mapArray
 		}
+		levelList["East Water 1"][3]={x:70,y:30,precondition:[1],height:8,width:8,coefficient:12,exponent:1.05,goal:1,spawner:[[{weight:25,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:25,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:25,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:25,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")}],[{weight:100,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")}]],spawnset:[{x:1,y:1,set:1},{x:2,y:1,set:0},{x:3,y:1,set:0},{x:4,y:1,set:0},{x:5,y:1,set:0},{x:6,y:1,set:0},{x:7,y:1,set:0},{x:8,y:1,set:0},{x:1,y:2,set:0},{x:8,y:8,set:1}],wall:[{x:6,y:1,dir:2,stack:6361}],valueset:() => {PetalAttributeList.Stinger.damage=0; PetalAttributeList.Rose.craft="Disabled"; MobAttributeList.Crab.action="Nimble"; ItemAttributeList.Vortex.period=[1,0,0]},valuetext:{petal:"Nerfed Stinger damage: 30->0<br>Modify Rose: Can not be crafted",mob:"Modify Crab: Nimble action",item:"Modify Vortex: Cycle of [1,0,0]"},chvaluetext:{petal:"削弱刺伤害：30->0<br>修改玫瑰：不会被合成",mob:"修改螃蟹：敏捷行动",item:"修改漩涡：以[1,0,0]为周期"}}
+		levelList["East Water 1"][3].initialmap=function() {
+			let mapArray=generateMap(8,8)
+			mapArray[2][1]=new Grid(2,1,new Mob("!Crab",2,{maxhealth:36,speed:55}),"Existing")
+			mapArray[2][2]=new Grid(2,2,new Item("?Vortex",9),"Existing")
+			mapArray[2][3]=new Grid(2,3,new Item("?Vortex",9),"Existing")
+			mapArray[2][6]=new Grid(2,6,new Item("?Vortex",9),"Existing")
+			mapArray[2][7]=new Grid(2,7,new Item("?Vortex",9),"Existing")
+			mapArray[2][8]=new Grid(2,8,new Mob("!Crab",3,{maxhealth:24,speed:65}),"Existing")
+			mapArray[3][1]=new Grid(3,1,new Mob("!Sponge",2,10),"Existing")
+			mapArray[3][2]=new Grid(3,2,new Item("?Vortex",9),"Existing")
+			mapArray[3][7]=new Grid(3,7,new Item("?Vortex",9),"Existing")
+			mapArray[3][8]=new Grid(3,8,new Mob("!Sponge",3,10),"Existing")
+			mapArray[6][2]=new Grid(6,2,new Item("?Vortex",9),"Existing")
+			mapArray[6][3]=new Grid(6,3,new Mob("!Sponge",1,10),"Existing")
+			mapArray[6][7]=new Grid(6,7,new Item("?Vortex",9),"Existing")
+			mapArray[6][8]=new Grid(6,8,new Mob("!Sponge",4,10),"Existing")
+			mapArray[7][1]=new Grid(7,1,new Mob("!Crab",1,{maxhealth:72,speed:45}),"Existing")
+			mapArray[7][2]=new Grid(7,2,new Item("?Vortex",9),"Existing")
+			mapArray[7][3]=new Grid(7,3,new Item("?Vortex",9),"Existing")
+			mapArray[7][6]=new Grid(7,6,new Item("?Vortex",9),"Existing")
+			mapArray[7][7]=new Grid(7,7,new Item("?Vortex",9),"Existing")
+			mapArray[7][8]=new Grid(7,8,new Mob("!Crab",4,18),"Existing")
+			return mapArray
+		}
+		levelList["East Water 1"][4]={x:90,y:50,precondition:[2,3],height:7,width:7,coefficient:10,exponent:1.2,goal:6400,spawner:[[{weight:10,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:10,result:(x,y) => new Grid(x,y,new Petal("Basic",2),"Existing")},{weight:15,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Sand",1),"Existing")},{weight:5,result:(x,y) => new Grid(x,y,new Petal("Sand",2),"Existing")}]],spawnset:"Default"}
+		levelList["East Water 1"][4].initialmap=function() {
+			let mapArray=generateMap(7,7)
+			mapArray[1][6]=new Grid(1,6,new Mob("!Starfish",2,200),"Existing")
+			mapArray[2][2]=new Grid(2,2,new Item("?Vortex",9),"Existing")
+			mapArray[2][6]=new Grid(2,6,new Item("?Vortex",9),"Existing")
+			mapArray[2][7]=new Grid(2,7,new Mob("!Sponge",1,100),"Existing")
+			mapArray[3][6]=new Grid(3,6,new Mob("!Starfish",3,300),"Existing")
+			mapArray[3][7]=new Grid(3,7,new Petal("Rose",3,{rearrange:"None"}),"Existing")
+			mapArray[4][4]=new Grid(4,4,new Item("?Vortex",9),"Existing")
+			mapArray[5][6]=new Grid(5,6,new Mob("!Crab",4,500),"Existing")
+			mapArray[6][2]=new Grid(6,2,new Item("?Vortex",9),"Existing")
+			mapArray[6][6]=new Grid(6,6,new Item("?Vortex",9),"Existing")
+			mapArray[6][7]=new Grid(6,7,new Mob("!Sponge",1,100),"Existing")
+			mapArray[7][6]=new Grid(7,6,new Mob("!Starfish",5,800),"Existing")
+			return mapArray
+		}
 		let mapList=new Array()
 		mapList[0]={name:"Training Ground",x:50,y:50,color:"#bfbfbf",precondition:[],cost:79}
 		mapList[1]={name:"Centralia Field 1",x:30,y:50,color:"#bfffbf",precondition:[0],cost:27}
@@ -2351,7 +2805,7 @@
 			mouseX=mouse.clientX
 			mouseY=mouse.clientY
 		} )
-		const version=20260914,acceptedVersion=20260321
+		const version=20260917,acceptedVersion=20260321
 		const svgNS="http://www.w3.org/2000/svg"
 		const dx=[0,0,1,0,-1],dy=[0,-1,0,1,0],dx2=[0,1,1,-1,-1],dy2=[0,-1,1,1,-1],dx2i=[0,0,1,1,1,0,-1,-1,-1],dy2i=[0,-1,-1,0,1,1,1,0,-1],dx5=[0,1,2,2,1,-1,-2,-2,-1],dy5=[0,-2,-1,1,2,2,1,-1,-2]
 		let rarityColor=["#000000","#7eef6d","#ffe65d","#4d52e3","#861fde","#de1f1f","#1fdbde","#ff2b75","#2bffa3","#555555"]
@@ -2363,7 +2817,8 @@
 		}
 		if(!userVersion) userVersion=version
 		setVersion()
-		let versionAnnouncement="<h2>Announcement</h2><span>This game was updated again when you left!</span><span>Do you want to perform a <span class='bold'>hard reset</span> before starting the game?</span><br><span>The last update was on 2026/9/14,</span><span>which updated Ocean 1.</span><br><span>The last update before was on 2026/8/6,</span><span>which completed Desert 1.</span><br><span>The last important update before was on 2026/3/21,</span><span>which completed Centralia 1.</span><br><button type='button' tabindex='-1' id='version3' onclick='updateVersion(false)'>No, just update the version.</button><br><button type='button' tabindex='-1' id='version4' onclick='updateVersion(true)'>Yes, hard reset before starting.</button>"
+		let versionAnnouncement="<h2>Announcement</h2><span>This game was updated again when you left!</span><span>Do you want to perform a <span class='bold'>hard reset</span> before starting the game?</span><br><span>The last update was on 2026/9/17,</span><span>which updated 2 levels.</span><br><span>The last update before was on 2026/9/14,</span><span>which updated Ocean 1.</span><br><span>The last important update before was on 2026/8/6,</span><span>which completed Desert 1.</span><br><button type='button' tabindex='-1' id='version3' onclick='updateVersion(false)'>No, just update the version.</button><br><button type='button' tabindex='-1' id='version4' onclick='updateVersion(true)'>Yes, hard reset before starting.</button>"
+		let versionAnnouncementCH="<h2>公告</h2><span>在你离开期间，这个游戏已经更新了79次！</span><span>在开始游戏前。你想要进行<span class='bold'>硬重置</span>吗？</span><br><span>上次更新在2026/9/17，</span><span>更新了2关。</span><br><span>上上次更新在2026/9/14，</span><span>更新了海洋1。</span><br><span>上次大更新在2026/8/6，</span><span>完成了沙漠1。</span><br><button type='button' tabindex='-1' id='version3' onclick='updateVersion(false)'>不，直接更新版本号。</button><br><button type='button' tabindex='-1' id='version4' onclick='updateVersion(true)'>好，先硬重置了再说。</button>"
 		let player=JSON.parse(localStorage.getItem("PETALCRUSHplayer"))
 		let game=JSON.parse(localStorage.getItem("PETALCRUSHgame"))
 		function setPlayer() {
@@ -3188,6 +3643,13 @@
 				let addButton=settingButton(2,3,"On")
 				themeDisplay.appendChild(addButton)
 			}
+			if(player.settings.effects==="Off") {
+				let addButton=settingButton(3,3,"Off")
+				themeDisplay.appendChild(addButton)
+			} else {
+				let addButton=settingButton(3,3,"Icon")
+				themeDisplay.appendChild(addButton)
+			}
 			document.getElementById("settings").appendChild(themeDisplay)
 			let qolTitle=document.createElement("h3")
 			qolTitle.innerHTML=translateText("Quality of Life")
@@ -3342,6 +3804,14 @@
 			if(setX===2 && setY===3 && state==="Off") {
 				addButton=createGrid(5,setX,setY,"Text_"+translateText("Filter")+"<br><br>"+translateText("Off"),2)
 				addButton.classList.add("white-bg")
+			}
+			if(setX===3 && setY===3 && state==="Icon") {
+				addButton=createGrid(5,setX,setY,"Text_"+translateText("Effects")+"<br><br>"+translateText("Icon"),2)
+				addButton.classList.add("green-bg")
+			}
+			if(setX===3 && setY===3 && state==="Off") {
+				addButton=createGrid(5,setX,setY,"Text_"+translateText("Effects")+"<br><br>"+translateText("Off"),2)
+				addButton.classList.add("red-bg")
 			}
 			if(setX===1 && setY===4 && state==="On") {
 				addButton=createGrid(5,setX,setY,"Text_"+translateText("Always<br>scroll<br>before<br>display"),2)
@@ -3523,9 +3993,19 @@
 				} else if(player.settings.filter==="Low") {
 					player.settings.filter="Off"
 					getGrid(5,setX,setY).replaceWith(settingButton(setX,setY,"Off"))
-				} else if(player.settings.filter==="Off") {
+				} else {
 					player.settings.filter="On"
 					getGrid(5,setX,setY).replaceWith(settingButton(setX,setY,"On"))
+				}
+			}
+			if(setX===3 && setY===3) {
+				if(!player.settings.hasOwnProperty("effects")) player.settings.effects="Icon"
+				if(player.settings.effects==="Icon") {
+					player.settings.effects="Off"
+					getGrid(5,setX,setY).replaceWith(settingButton(setX,setY,"Off"))
+				} else {
+					player.settings.effects="Icon"
+					getGrid(5,setX,setY).replaceWith(settingButton(setX,setY,"Icon"))
 				}
 			}
 			if(setX===1 && setY===4) {
@@ -3692,6 +4172,9 @@
 				}
 				if(adjustText.hasOwnProperty("mob")) {
 					editingValueHTML+="<span class='lcmargin'>"+translateText("Mob Adjustment")+"</span><span style='color: #bfbf00'>"+adjustText.mob+"</span><br>"
+				}
+				if(adjustText.hasOwnProperty("item")) {
+					editingValueHTML+="<span class='lcmargin'>"+translateText("Item Adjustment")+"</span><span style='color: #9f9f9f'>"+adjustText.item+"</span><br>"
 				}
 				if(adjustText.hasOwnProperty("other")) {
 					editingValueHTML+="<span class='lcmargin'>"+translateText("Other Adjustment")+"</span><span style='color: #00bfbf'>"+adjustText.other+"</span><br>"
@@ -4156,12 +4639,20 @@
 					let pendingText="<span style='color: #ff7f7f'>消除时对相邻生物造成<span class='bold'>"+attributeValue+"</span>伤害。</span>"
 					return pendingText
 				}
+				if(attributeName==="multidamage") {
+					let pendingText="<span style='color: #ff7f7f'>至少同时消除4个时，伤害变为<span class='bold'>"+attributeValue+"</span>。</span>"
+					return pendingText
+				}
 				if(attributeName==="weavestrength") {
 					let pendingText="<span style='color: #7fdfdf'>消除时以<span class='bold'>"+attributeValue+"%</span>概率困住相邻生物。</span>"
 					return pendingText
 				}
 				if(attributeName==="knockback") {
 					let pendingText="<span style='color: #9f9f5f'>消除时对相邻生物造成<span class='bold'>"+attributeValue+"</span>击退。</span>"
+					return pendingText
+				}
+				if(attributeName==="multiknockback") {
+					let pendingText="<span style='color: #9f9f5f'>至少同时消除4个时，击退变为<span class='bold'>"+attributeValue+"</span>。</span>"
 					return pendingText
 				}
 				if(attributeName==="heal") {
@@ -4190,6 +4681,10 @@
 					let pendingText="<span style='color: #ff5f9f'>不会被重排。</span>"
 					return pendingText
 				}
+				if(attributeName==="destroyed" && attributeValue===true)  {
+					let pendingText="<span style='color: #ff3f00'>已摧毁。</span>"
+					return pendingText
+				}
 			}
 			if(attributeName==="damage") {
 				if(petal.attribute.hasOwnProperty("duration")) {
@@ -4199,12 +4694,20 @@
 				let pendingText="<span style='color: #ff7f7f'>Deals <span class='bold'>"+attributeValue+"</span> damage to nearby mobs when crushed.</span>"
 				return pendingText
 			}
+			if(attributeName==="multidamage") {
+				let pendingText="<span style='color: #ff7f7f'>The damage becomes <span class='bold'>"+attributeValue+"</span> when 4 or more is crushed concurrently.</span>"
+				return pendingText
+			}
 			if(attributeName==="weavestrength") {
 				let pendingText="<span style='color: #7fdfdf'>Traps nearby mobs with <span class='bold'>"+attributeValue+"%</span> strength when crushed.</span>"
 				return pendingText
 			}
 			if(attributeName==="knockback") {
 				let pendingText="<span style='color: #9f9f5f'>Deals <span class='bold'>"+attributeValue+"</span> knockback to nearby mobs when crushed.</span>"
+				return pendingText
+			}
+			if(attributeName==="multiknockback") {
+				let pendingText="<span style='color: #ff7f7f'>The knockback becomes <span class='bold'>"+attributeValue+"</span> when 4 or more is crushed concurrently.</span>"
 				return pendingText
 			}
 			if(attributeName==="heal") {
@@ -4231,6 +4734,10 @@
 			}
 			if(attributeName==="rearrange" && attributeValue==="None") {
 				let pendingText="<span style='color: #ff5f9f'>Can not be rearranged.</span>"
+				return pendingText
+			}
+			if(attributeName==="destroyed" && attributeValue===true)  {
+				let pendingText="<span style='color: #ff3f00'>Destroyed.</span>"
 				return pendingText
 			}
 			return "<span>"+attributeName+": "+attributeValue+"</span>"
@@ -4267,6 +4774,30 @@
 					if(mob.name==="!Crab") {
 						pendingText="<span style='color: #bfbf00'>移动一定步数后攻击。</span>"
 					}
+					if(mob.name==="!Starfish") {
+						pendingText="<span style='color: #bfbf00'>在5种行动间切换。</span>"
+						if(mob.attribute.hasOwnProperty("state")) {
+							if(mob.attribute.state===0) {
+								pendingText="<span style='color: #bfbf00'>消耗200行动条。</span>"
+							}
+							if(mob.attribute.state===1) {
+								pendingText="<span style='color: #bfbf00'>消耗200行动条并攻击，不增加伤害。</span>"
+							}
+							if(mob.attribute.state===2) {
+								pendingText="<span style='color: #bfbf00'>消耗50行动条移动。</span>"
+							}
+							if(mob.attribute.state===3) {
+								pendingText="<span style='color: #bfbf00'>消耗200行动条治疗。</span>"
+							}
+							if(mob.attribute.state===4) {
+								pendingText="<span style='color: #bfbf00'>消耗100行动条治疗并增加伤害。</span>"
+							}
+						}
+					}
+					return pendingText
+				}
+				if(attributeName==="action" && attributeValue==="Nimble" && mob.name==="!Crab") {
+					let pendingText="<span style='color: #ffdf00'>敏捷移动。移动一定步数后攻击。</span>"
 					return pendingText
 				}
 				if(attributeName==="actionbar") {
@@ -4275,9 +4806,11 @@
 				if(attributeName==="cost") {
 					if(mob.attribute.hasOwnProperty("speed")) {
 						let pendingText="<span><span style='color: #bf7fff'>获得<span class='bold'>"+mob.attribute.speed+"</span>行动条</span>，<span style='color: #bfbf00'>消耗<span class='bold'>"+attributeValue+"</span>行动条行动。</span></span>"
+						if(typeof(attributeValue)==="string") pendingText="<span><span style='color: #bf7fff'>获得<span class='bold'>"+mob.attribute.speed+"</span>行动条</span>，<span style='color: #bfbf00'>消耗<span class='bold'>"+translateText(attributeValue)+"</span>行动条行动。</span></span>"
 						return pendingText
 					}
 					let pendingText="<span style='color: #bfbf00'>行动消耗<span class='bold'>"+attributeValue+"</span>行动条。</span>"
+					if(typeof(attributeValue)==="string") pendingText="<span style='color: #bfbf00'>行动消耗<span class='bold'>"+translateText(attributeValue)+"</span>行动条。</span>"
 					return pendingText
 				}
 				if(attributeName==="speed") {
@@ -4286,7 +4819,7 @@
 					return pendingText
 				}
 				if(attributeName==="dir") {
-					let pendingText
+					let pendingText=""
 					if(attributeValue===0) pendingText="<span style='color: #7f3fff'>当前不移动。</span>"
 					if(attributeValue===1) pendingText="<span style='color: #7f3fff'>向上移动。</span>"
 					if(attributeValue===2) pendingText="<span style='color: #7f3fff'>向右移动。</span>"
@@ -4335,6 +4868,10 @@
 				if(attributeName==="increment") {
 					if(mob.attribute.hasOwnProperty("damage")) return ""
 					let pendingText="<span style='color: #ff7f7f'>在攻击后，伤害增加<span class='bold'>"+attributeValue+"</span>。</span>"
+					return pendingText
+				}
+				if(attributeName==="heal") {
+					let pendingText="<span style='color: #5fbf5f'>治疗<span class='bold'>"+attributeValue+"</span>。</span>"
 					return pendingText
 				}
 				if(attributeName==="step") {
@@ -4396,6 +4933,11 @@
 					let pendingText="<span style='color: #ff5f5f'>不可被交换。</span>"
 					return pendingText
 				}
+				if(attributeName==="state") {
+					if(mob.name==="!Starfish" && mob.attribute.action==="Default") return ""
+					let pendingText="<span style='color: #7f7f7f'>当前状态为<span class='bold'>"+attributeValue+"</span>。</span>"
+					return pendingText
+				}
 				if(attributeName==="immune") {
 					let pendingText
 					if(attributeValue==="All") {
@@ -4437,6 +4979,30 @@
 				if(mob.name==="!Crab") {
 					pendingText="<span style='color: #bfbf00'>Attacks after certain steps.</span>"
 				}
+				if(mob.name==="!Starfish") {
+					pendingText="<span style='color: #bfbf00'>Switches between 5 actions.</span>"
+					if(mob.attribute.hasOwnProperty("state")) {
+						if(mob.attribute.state===0) {
+							pendingText="<span style='color: #bfbf00'>Uses 200 actionbar.</span>"
+						}
+						if(mob.attribute.state===1) {
+							pendingText="<span style='color: #bfbf00'>Uses 200 actionbar to attack without increasing damage.</span>"
+						}
+						if(mob.attribute.state===2) {
+							pendingText="<span style='color: #bfbf00'>Uses 50 actionbar to move.</span>"
+						}
+						if(mob.attribute.state===3) {
+							pendingText="<span style='color: #bfbf00'>Uses 200 actionbar to heal.</span>"
+						}
+						if(mob.attribute.state===4) {
+							pendingText="<span style='color: #bfbf00'>Uses 100 actionbar to heal and increase damage.</span>"
+						}
+					}
+				}
+				return pendingText
+			}
+			if(attributeName==="action" && attributeValue==="Nimble" && mob.name==="!Crab") {
+				let pendingText="<span style='color: #ffdf00'>Nimble movement. Attacks after certain steps.</span>"
 				return pendingText
 			}
 			if(attributeName==="actionbar") {
@@ -4456,7 +5022,7 @@
 				return pendingText
 			}
 			if(attributeName==="dir") {
-				let pendingText
+				let pendingText=""
 				if(attributeValue===0) pendingText="<span style='color: #7f3fff'>Not moving.</span>"
 				if(attributeValue===1) pendingText="<span style='color: #7f3fff'>Moves up.</span>"
 				if(attributeValue===2) pendingText="<span style='color: #7f3fff'>Moves right.</span>"
@@ -4505,6 +5071,10 @@
 			if(attributeName==="increment") {
 				if(mob.attribute.hasOwnProperty("damage")) return ""
 				let pendingText="<span style='color: #ff7f7f'>Increases damage by <span class='bold'>"+attributeValue+"</span> after attack.</span>"
+				return pendingText
+			}
+			if(attributeName==="heal") {
+				let pendingText="<span style='color: #5fbf5f'>Heals for <span class='bold'>"+attributeValue+"</span>.</span>"
 				return pendingText
 			}
 			if(attributeName==="step") {
@@ -4566,6 +5136,11 @@
 				let pendingText="<span style='color: #ff5f5f'>Can not be exchanged.</span>"
 				return pendingText
 			}
+			if(attributeName==="state") {
+				if(mob.name==="!Starfish" && mob.attribute.action==="Default") return ""
+				let pendingText="<span style='color: #7f7f7f'>The current state is <span class='bold'>"+attributeValue+"</span>.</span>"
+				return pendingText
+			}
 			if(attributeName==="immune") {
 				let pendingText
 				if(attributeValue==="All") {
@@ -4601,17 +5176,17 @@
 					let pendingText="<span style='color: #3f3fff'>速度具有<span class='bold'>"+attributeValue+"</span>的周期。</span>"
 					return pendingText
 				}
-				if(attributeName==="state") {
-					if(item.attribute.hasOwnProperty("period")) return ""
-					let pendingText="<span style='color: #7f7f7f'>当前状态为<span class='bold'>"+attributeValue+"</span>。</span>"
-					return pendingText
-				}
 				if(attributeName==="drop" && attributeValue==="Disabled") {
 					let pendingText="<span style='color: #ff5f5f'>不会掉落。</span>"
 					return pendingText
 				}
 				if(attributeName==="move" && attributeValue==="Disabled") {
 					let pendingText="<span style='color: #ff5f5f'>不可被交换。</span>"
+					return pendingText
+				}
+				if(attributeName==="state") {
+					if(item.attribute.hasOwnProperty("period")) return ""
+					let pendingText="<span style='color: #7f7f7f'>当前状态为<span class='bold'>"+attributeValue+"</span>。</span>"
 					return pendingText
 				}
 			}
@@ -4623,17 +5198,17 @@
 				let pendingText="<span style='color: #3f3fff'>The speed has a cycle of <span class='bold'>"+attributeValue+"</span>.</span>"
 				return pendingText
 			}
-			if(attributeName==="state") {
-				if(item.attribute.hasOwnProperty("period")) return ""
-				let pendingText="<span style='color: #7f7f7f'>The current state is <span class='bold'>"+attributeValue+"</span>.</span>"
-				return pendingText
-			}
 			if(attributeName==="drop" && attributeValue==="Disabled") {
 				let pendingText="<span style='color: #ff5f5f'>Does not drop.</span>"
 				return pendingText
 			}
 			if(attributeName==="move" && attributeValue==="Disabled") {
 				let pendingText="<span style='color: #ff5f5f'>Can not be exchanged.</span>"
+				return pendingText
+			}
+			if(attributeName==="state") {
+				if(item.attribute.hasOwnProperty("period")) return ""
+				let pendingText="<span style='color: #7f7f7f'>The current state is <span class='bold'>"+attributeValue+"</span>.</span>"
 				return pendingText
 			}
 			return "<span>"+attributeName+": "+attributeValue+"</span>"
@@ -4993,7 +5568,7 @@
 		}
 		function flowerInjure(mob) {
 			if(game.flower.health===0) return
-			if(mob.name==="!Missile (H)" || mob.name==="!Beetle" || mob.name==="!Crab") {
+			if(mob.name==="!Missile (H)" || mob.name==="!Beetle" || mob.name==="!Crab" || mob.name==="!Starfish") {
 				let pendingDamage=mob.attribute.damage
 				if(pendingDamage>game.flower.health) pendingDamage=game.flower.health
 				game.flower.health-=pendingDamage
@@ -5286,7 +5861,17 @@
 					if(targetSpawn.content.attribute.rearrange==="None") targetRearrange="None"
 				}
 			}
-			for(let i=1;i<=game.width;i++) for(let j=1;j<=game.height;j++) if(game.board[i][j].crush==="Crush "+crushId) game.board[i][j].destroy(targetMob)
+			for(let i=1;i<=game.width;i++) for(let j=1;j<=game.height;j++) if(game.board[i][j].crush==="Crush "+crushId) {
+				if(game.board[i][j].content.name==="Sand" && game.board[i][j].content.attribute.hasOwnProperty("multidamage") && rowCheck+columnCheck>1) {
+					game.board[i][j].content.attribute.damage=game.board[i][j].content.attribute.multidamage
+					delete game.board[i][j].content.attribute.multidamage
+				}
+				if(game.board[i][j].content.name==="Sand" && game.board[i][j].content.attribute.hasOwnProperty("multiknockback") && rowCheck+columnCheck>1) {
+					game.board[i][j].content.attribute.knockback=game.board[i][j].content.attribute.multiknockback
+					delete game.board[i][j].content.attribute.multiknockback
+				}
+				game.board[i][j].destroy(targetMob)
+			}
 			await delay(200)
 			let delayFlag=false
 			defeatedMob=new Array()
@@ -5404,8 +5989,7 @@
 			}
 			await delay(200)
 			for(let i=1;i<=game.height;i++) for(let j=1;j<=game.width;j++) if(isMob(game.board[j][i].content)) game.board[j][i].content.progressed=false
-			let actionOrder=["!Hornet","!Spider","!Cactus","!Scorpion","!Beetle","!Crab"]
-			for(let actionName of actionOrder) {
+			for(let actionName of MobNameList) {
 				actionCheck=false
 				for(let i=1;i<=game.height;i++) for(let j=1;j<=game.width;j++) {
 					if(isMob(game.board[j][i].content) && game.board[j][i].content.name===actionName && !game.board[j][i].content.progressed) {
@@ -5429,8 +6013,7 @@
 				}
 			}
 			for(let i=1;i<=game.height;i++) for(let j=1;j<=game.width;j++) if(isItem(game.board[j][i].content)) game.board[j][i].content.progressed=false
-			actionOrder=["?Vortex"]
-			for(let actionName of actionOrder) {
+			for(let actionName of ItemNameList) {
 				actionCheck=false
 				for(let i=1;i<=game.height;i++) for(let j=1;j<=game.width;j++) {
 					if(isItem(game.board[j][i].content) && game.board[j][i].content.name===actionName && !game.board[j][i].content.progressed) {
@@ -5792,7 +6375,7 @@
 				case "Leaf": return "叶子"
 				case "Web": return "网"
 				case "Iris": return "鸢尾"
-				case "Cotton": return "棉花"
+				case "Sand": return "沙子"
 				case "Coin": return "硬币"
 				case "Jelly": return "果冻"
 				case "Rock": return "岩石"
@@ -5814,6 +6397,7 @@
 				case "Column": return "列"
 				case "Bomb": return "炸弹"
 				case "Kaleidoscope": return "万花筒"
+				case "Variant": return "变化的"
 				case "Training Ground": return "训练场"
 				case "Centralia Field 1": return "花园1"
 				case "South Desert 1": return "沙漠1"
@@ -5846,6 +6430,8 @@
 				case "On": return "启用"
 				case "Low": return "弱化"
 				case "Off": return "禁用"
+				case "Effects": return "效果"
+				case "Icon": return "图标"
 				case "Always<br>scroll<br>before<br>display": return "总在滚动<br>之后展示"
 				case "Enable<br>right<br>click<br>menu": return "右键单击<br>启用菜单"
 				case "Low<br>opacity<br>grid<br>info": return "低可见度<br>格内信息"
@@ -5870,6 +6456,7 @@
 				case "Value Adjustment": return "数值调整"
 				case "Petal Adjustment": return "花瓣调整"
 				case "Mob Adjustment": return "生物调整"
+				case "Item Adjustment": return "物品调整"
 				case "Other Adjustment": return "其它调整"
 				case "Your currency": return "你的货币"
 				case "Your total currency": return "你的总货币"
@@ -5902,14 +6489,14 @@
 		}
 		function translateAll() {
 			if(player.savesettings.language!=="Chinese") return
-			PetalDescriptionListTrans=["基本中的基本。","被这玩意打很疼，但是很脆。","空无一物。","惊人的治疗物。","光合作用以持续治疗。","困住敌人。","有的生物活着...","临时吸收伤害。","有价值的物品。","造成高额击退。"]
+			PetalDescriptionListTrans=["基本中的基本。","被这玩意打很疼，但是很脆。","空无一物。","惊人的治疗物。","光合作用以持续治疗。","困住敌人。","有的生物活着...","合为一体。","有价值的物品。","造成高额击退。"]
 			MobDescriptionListTrans=["什么也不做。","积聚导弹并发射。","被黄蜂召唤。","织网。","损伤周围的花瓣。","它会蜇人。","被蝎子召唤。","吃花瓣。","吸收伤害。","左左右右。","旋转的红色五角星。"]
 			ItemDescriptionListTrans=["真正空无一物。","优雅的传送带。"]
 			bookHTMLTrans["Advanced Crafter Guide"]="<h2>进阶合成指南</h2><span>你是否为特殊实体感到困惑？这是一本对于它们的指南！</span><br><span>你已经发现了，有限的花瓣并不足以应对无尽的生物。生成器可以持续创造新花瓣，它们在特定格上用记号标注，符号是\"=x=\"。你可以在关卡信息（在右下角，<span class='bold'>同时用以离开场景</span>）知道它们会生成什么。</span><br><span>你也发现了，对一个有大量空格的棋盘，你需要传送器传送花瓣。它们也会在特定格上用记号标注，符号是\"x,y\"，这是它传送起始格的坐标。</span><br><span>墙壁会阻止你交换花瓣。墙壁边消除的花瓣会固定对墙壁造成1点伤害。如果墙壁两边的花瓣同时被消除，<span class='bold'>伤害叠加</span>。</span>"
 			bookHTMLTrans["Flower Game Guide"]="<h2>花朵游戏指南</h2><div class='white-bg inner-box'><span style='color: #008000'>#包含&lt;游玩PFLF的工具.h&gt;</span><span><span style='font-weight: bold'>正在使用 命名空间</span> std<span style='color: #ff0000; font-weight: bold'>;</span></span><span><span style='font-weight: bold'>整数</span> 主要<span style='color: #ff0000; font-weight: bold'>()</span></span><span style='color: #ff0000; font-weight: bold'>{</span><span style='margin-left: 2em'>系统<span style='color: #ff0000; font-weight: bold'>(</span><span style='color: #0000ff; font-weight: bold'>\"cls\"</span><span style='color: #ff0000; font-weight: bold'>);</span></span><span style='margin-left: 2em'>缓慢输出<span style='color: #ff0000; font-weight: bold'>(</span><span style='color: #0000ff; font-weight: bold'>\"↓更多 游戏 (点击!)↓\"</span><span style='color: #ff0000; font-weight: bold'>,</span><span style='color: #800080'>50</span><span style='color: #ff0000; font-weight: bold'>);</span></span><span style='margin-left: 2em'>缓慢输出<span style='color: #ff0000; font-weight: bold'>(</span><a href='https://6triple6single.github.io/Florroom' target='_blank' style='color: #0000ff; font-weight: bold; text-decoration: none'>\"花室\"</a><span style='color: #ff0000; font-weight: bold'>,</span><span style='color: #800080'>50</span><span style='color: #ff0000; font-weight: bold'>);</span></span><span style='margin-left: 2em'>缓慢输出<span style='color: #ff0000; font-weight: bold'>(</span><a href='https://6triple6single.github.io/PFLF' target='_blank' style='color: #0000ff; font-weight: bold; text-decoration: none'>\"PFLF\"</a><span style='color: #ff0000; font-weight: bold'>,</span><span style='color: #800080'>50</span><span style='color: #ff0000; font-weight: bold'>);</span></span><span style='margin-left: 2em'>缓慢输出<span style='color: #ff0000; font-weight: bold'>(</span><a href='https://6triple6single.github.io/Virus1' target='_blank' style='color: #0000ff; font-weight: bold; text-decoration: none'>\"病毒 1\"</a><span style='color: #ff0000; font-weight: bold'>,</span><span style='color: #800080'>50</span><span style='color: #ff0000; font-weight: bold'>);</span></span><span style='margin-left: 2em'><span style='font-weight: bold'>返回</span> <span style='color: #800080'>0</span><span style='color: #ff0000; font-weight: bold'>;</span></span><span style='color: #ff0000; font-weight: bold'>}</span></div>"
 			bookHTMLTrans["Petal Crafter Tutorial"]="<h2>花瓣合成教程</h2><span>你将3个花瓣组成一条线，它们随即粉碎，并合成了新的花瓣！你已经见识到它的力量了，石头在瞬间被你摧毁。</span><span>也许你还需要进行一些新尝试，比如合成4个或更多花瓣，合成不同稀有度的花瓣...无论如何，这是一个好的开始，继续下去！</span><br><span>啊，你不知道伤害怎么工作？好吧，当你合成花瓣时，如果有相邻生物，所有花瓣会对同一个随机的相邻生物造成伤害。随后，每个花瓣对所有和它自身相邻的生物造成伤害。所以，事实上<span class='bold'>你对岩石造成了30+10伤害</span>！真是强大的力量！</span><br><span>啊，你还想知道分数是什么？分数随回合数降低，这代表你的表现有多出色，记住拿到尽可能高的分数。</span><br><span>不要在设置中把[资源]日志的显示关掉，这样你就会在有新东西要学习时获得通知！</span>"
 			bookHTMLTrans["Various Petal Collection"]="<h2>花瓣种类收集</h2><span>你可以自己合成特殊种类的特殊花瓣！</span><br><span>行类型：它有横线和两个向外箭头的图标。它在消除时释放冲击波，摧毁一横排的花瓣，并对生物造成伤害。</span><span>列类型：它有竖线和两个向外箭头的图标。它也在消除时释放冲击波，只不过作为替代，影响的是整列的物体。</span><span>炸弹类型：它有两条对角线和四个向外箭头的图标。它在消除时释放冲击波，作为替代，冲击波影响的是<span class='bold'>sqrt(5)</span>距离内的物体。</span><span>万花筒类型：它有一个正五边形图标。消除时，它会收集所有同类花瓣，而不是发射冲击波。<span class='bold'>这不会摧毁可被冲击波摧毁的花瓣</span>。</span><h3>如何获取</h3><span>行类型：在一列组合4个花瓣，只在炸弹和万花筒不能被创造时创造。</span><span>列类型：在一行组合4个花瓣，条件同上。</span><span>炸弹类型：在有任何交叉（即有花瓣同时在行和列上消除），并且万花筒不能被创造时创造。</span><span>万花筒类型：在一行或一列组合5个花瓣，具有最高优先级。</span><br><span>一个区域只能创造一个特殊种类的花瓣。如果区域内只有同一种稀有度，所有花瓣会合成一个稀有度更高的，但这的优先级最低。如果没有地方创造新花瓣，什么也不会发生[[并且]]这和能量流失毫无关联。</span>"
-			versionAnnouncement="<h2>公告</h2><span>在你离开期间，这个游戏已经更新了79次！</span><span>在开始游戏前。你想要进行<span class='bold'>硬重置</span>吗？</span><br><span>上次更新在2026/9/14，</span><span>更新了海洋1。</span><br><span>上上次更新在2026/8/6，</span><span>完成了沙漠1。</span><br><span>上次大更新在2026/3/21，</span><span>完成了花园1。</span><br><button type='button' tabindex='-1' id='version3' onclick='updateVersion(false)'>不，直接更新版本号。</button><br><button type='button' tabindex='-1' id='version4' onclick='updateVersion(true)'>好，先硬重置了再说。</button>"
+			versionAnnouncement=versionAnnouncementCH
 			document.getElementById("pause-title").innerHTML="已暂停"
 			document.getElementById("import-btn").innerHTML="取回记忆"
 			document.getElementById("restart-btn").innerHTML="重启宇宙"
