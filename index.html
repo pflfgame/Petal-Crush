@@ -1145,10 +1145,10 @@
 		}
 		Petal.prototype.print=function(gridX,gridY,type) {
 			let baseGrid=createGrid(0,gridX,gridY,"Petal_"+this.name,1,this.rarity)
-			if(this.attribute.destroyed===true && player.savesettings.effects==="Icon") {
+			if(this.attribute.destroyed===true && player.savesettings.effects!=="Off") {
 				baseGrid.innerHTML+="<svg viewBox='0 0 100 100' class='apos in-svg' style='top: 0px; left: 0px; opacity: 0.8'><path class='white-path' d='M0 0L100 100'/></svg>"
 			}
-			if(this.attribute.rearrange==="None" && player.savesettings.effects==="Icon") {
+			if(this.attribute.rearrange==="None" && player.savesettings.effects!=="Off") {
 				baseGrid.innerHTML+="<svg viewBox='0 0 100 100' class='apos in-svg' style='top: 0px; left: 0px'><path class='red-path fwhite-path wide' d='M50 45A5 5 0 0 0 50 55A5 5 0 0 0 50 45'/></svg>"
 			}
 			if(type==="Row") {
@@ -1248,7 +1248,7 @@
 					editingMob.children[14].classList.replace("fgreen-path","fgreen-path")
 				}
 			}
-			if(this.effect.hasOwnProperty("poison") && player.savesettings.effects==="Icon") {
+			if(this.effect.hasOwnProperty("poison") && player.savesettings.effects!=="Off") {
 				baseGrid.innerHTML+="<svg viewBox='0 0 100 100' class='apos in-svg' style='top: 0px; left: 0px'><path class='purple-path fcyan-path wide' d='M43 46L57 46L50 58Z'/></svg>"
 			}
 			return baseGrid
@@ -1830,7 +1830,7 @@
 						}
 					}
 					this.attribute.state=3
-					game.board[actionX][actionY].print()
+					game.board[resultX][resultY].print()
 					return
 				}
 				if(this.attribute.state===3) {
@@ -2789,6 +2789,64 @@
 			mapArray[7][6]=new Grid(7,6,new Mob("!Starfish",5,800),"Existing")
 			return mapArray
 		}
+		levelList["East Water 1"][5]={x:110,y:70,precondition:[4],height:7,width:7,coefficient:10,exponent:1.2,goal:7976,spawner:[[{weight:10,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Stinger",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:10,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:10,result:(x,y) => new Grid(x,y,new Petal("Rose",2),"Existing")},{weight:30,result:(x,y) => new Grid(x,y,new Petal("Sand",1),"Existing")}]],spawnset:"Default"}
+		levelList["East Water 1"][5].initialmap=function() {
+			let mapArray=generateMap(7,7)
+			mapArray[3][2]=new Grid(3,2,new Mob("!Sponge",3,300),"Existing")
+			mapArray[3][3]=new Grid(3,3,new Mob("!Crab",3,300),"Existing")
+			mapArray[3][4]=new Grid(3,4,new Mob("!Starfish",3,300),"Existing")
+			mapArray[3][5]=new Grid(3,5,new Mob("!Crab",3,300),"Existing")
+			mapArray[3][6]=new Grid(3,6,new Mob("!Sponge",3,300),"Existing")
+			mapArray[4][3]=new Grid(4,3,new Mob("!Starfish",3,300),"Existing")
+			mapArray[4][4]=new Grid(4,4,new Item("?Vortex",9),"Existing")
+			mapArray[4][5]=new Grid(4,5,new Mob("!Starfish",3,300),"Existing")
+			mapArray[5][2]=new Grid(5,2,new Mob("!Sponge",3,300),"Existing")
+			mapArray[5][3]=new Grid(5,3,new Mob("!Crab",3,300),"Existing")
+			mapArray[5][4]=new Grid(5,4,new Mob("!Starfish",3,300),"Existing")
+			mapArray[5][5]=new Grid(5,5,new Mob("!Crab",3,300),"Existing")
+			mapArray[5][6]=new Grid(5,6,new Mob("!Sponge",3,300),"Existing")
+			return mapArray
+		}
+		levelList["East Water 1"][6]={x:110,y:30,precondition:[4],height:8,width:8,coefficient:10,exponent:1.2,goal:9261,spawner:[[{weight:20,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Sand",1),"Existing")}]],spawnset:"Default",wall:[{x:3,y:3,dir:2,stack:25},{x:5,y:3,dir:2,stack:25},{x:3,y:6,dir:2,stack:25},{x:5,y:6,dir:2,stack:25},{x:3,y:3,dir:3,stack:25},{x:6,y:3,dir:3,stack:25},{x:3,y:5,dir:3,stack:25},{x:6,y:5,dir:3,stack:25}],valueset:() => {NewValue.damagemult[2]=4; NewValue.damagemult[3]=16},valuetext:{other:"Buffed [RAR2] Petal damage multiplier: 2->4<br>Buffed [RAR3] Petal damage multiplier: 4->16"},chvaluetext:{other:"增强[RAR2]花瓣伤害乘数：2->4<br>增强[RAR3]花瓣伤害乘数：4->16"}}
+		levelList["East Water 1"][6].initialmap=function() {
+			let mapArray=generateMap(8,8)
+			mapArray[1][1]=new Grid(1,1,new Mob("!Starfish",4,500),"Existing")
+			mapArray[1][8]=new Grid(1,8,new Mob("!Starfish",4,500),"Existing")
+			mapArray[2][2]=new Grid(2,2,new Item("?Vortex",9),"Existing")
+			mapArray[2][5]=new Grid(2,5,new Mob("!Crab",6,{maxhealth:1600,damage:80}),"Existing")
+			mapArray[2][7]=new Grid(2,7,new Item("?Vortex",9),"Existing")
+			mapArray[6][4]=new Grid(6,4,new Mob("!Crab",6,{maxhealth:1600,damage:80}),"Existing")
+			mapArray[7][2]=new Grid(7,2,new Item("?Vortex",9),"Existing")
+			mapArray[7][7]=new Grid(7,7,new Item("?Vortex",9),"Existing")
+			mapArray[8][1]=new Grid(8,1,new Mob("!Starfish",4,500),"Existing")
+			mapArray[8][8]=new Grid(8,8,new Mob("!Starfish",4,500),"Existing")
+			return mapArray
+		}
+		levelList["East Water 1"][7]={x:130,y:50,precondition:[5,6],height:8,width:9,coefficient:15,exponent:1.1,goal:1,spawner:[[{weight:20,result:(x,y) => new Grid(x,y,new Petal("Basic",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Air",1),"Existing")},{weight:10,result:(x,y) => new Grid(x,y,new Petal("Rose",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Leaf",1),"Existing")},{weight:20,result:(x,y) => new Grid(x,y,new Petal("Sand",1),"Existing")},{weight:10,result:(x,y) => new Grid(x,y,new Petal("Sand",2),"Existing")}]],spawnset:"Default",valueset:() => {PetalAttributeList.Sand.knockback=30; MobAttributeList.Starfish.speed=30},valuetext:{petal:"Buffed Sand knockback: 0->30",mob:"Nerfed Starfish speed: 50->30"},chvaluetext:{petal:"增强沙子击退：0->30",mob:"削弱海星速度：50->30"}}
+		levelList["East Water 1"][7].initialmap=function() {
+			let mapArray=generateMap(8,9)
+			mapArray[2][2]=new Grid(2,2,new Item("?Vortex",9),"Existing")
+			mapArray[2][6]=new Grid(2,6,new Item("?Vortex",9),"Existing")
+			mapArray[3][2]=new Grid(3,2,new Mob("!Sponge",1,100),"Existing")
+			mapArray[3][3]=new Grid(3,3,new Item("?Vortex",9),"Existing")
+			mapArray[3][4]=new Grid(3,4,new Mob("!Starfish",5,729),"Existing")
+			mapArray[3][6]=new Grid(3,6,new Mob("!Sponge",1,100),"Existing")
+			mapArray[3][7]=new Grid(3,7,new Item("?Vortex",9),"Existing")
+			mapArray[3][8]=new Grid(3,8,new Mob("!Starfish",5,729),"Existing")
+			mapArray[4][2]=new Grid(4,2,new Item("?Vortex",9),"Existing")
+			mapArray[4][6]=new Grid(4,6,new Item("?Vortex",9),"Existing")
+			mapArray[6][2]=new Grid(6,2,new Item("?Vortex",9),"Existing")
+			mapArray[6][6]=new Grid(6,6,new Item("?Vortex",9),"Existing")
+			mapArray[7][1]=new Grid(7,1,new Mob("!Starfish",5,729),"Existing")
+			mapArray[7][2]=new Grid(7,2,new Mob("!Sponge",1,100),"Existing")
+			mapArray[7][3]=new Grid(7,3,new Item("?Vortex",9),"Existing")
+			mapArray[7][5]=new Grid(7,5,new Mob("!Starfish",5,729),"Existing")
+			mapArray[7][6]=new Grid(7,6,new Mob("!Sponge",1,100),"Existing")
+			mapArray[7][7]=new Grid(7,7,new Item("?Vortex",9),"Existing")
+			mapArray[8][2]=new Grid(8,2,new Item("?Vortex",9),"Existing")
+			mapArray[8][6]=new Grid(8,6,new Item("?Vortex",9),"Existing")
+			return mapArray
+		}
 		let mapList=new Array()
 		mapList[0]={name:"Training Ground",x:50,y:50,color:"#bfbfbf",precondition:[],cost:79}
 		mapList[1]={name:"Centralia Field 1",x:30,y:50,color:"#bfffbf",precondition:[0],cost:27}
@@ -2805,7 +2863,7 @@
 			mouseX=mouse.clientX
 			mouseY=mouse.clientY
 		} )
-		const version=20260917,acceptedVersion=20260321
+		const version=20261004,acceptedVersion=20260806
 		const svgNS="http://www.w3.org/2000/svg"
 		const dx=[0,0,1,0,-1],dy=[0,-1,0,1,0],dx2=[0,1,1,-1,-1],dy2=[0,-1,1,1,-1],dx2i=[0,0,1,1,1,0,-1,-1,-1],dy2i=[0,-1,-1,0,1,1,1,0,-1],dx5=[0,1,2,2,1,-1,-2,-2,-1],dy5=[0,-2,-1,1,2,2,1,-1,-2]
 		let rarityColor=["#000000","#7eef6d","#ffe65d","#4d52e3","#861fde","#de1f1f","#1fdbde","#ff2b75","#2bffa3","#555555"]
@@ -2817,8 +2875,8 @@
 		}
 		if(!userVersion) userVersion=version
 		setVersion()
-		let versionAnnouncement="<h2>Announcement</h2><span>This game was updated again when you left!</span><span>Do you want to perform a <span class='bold'>hard reset</span> before starting the game?</span><br><span>The last update was on 2026/9/17,</span><span>which updated 2 levels.</span><br><span>The last update before was on 2026/9/14,</span><span>which updated Ocean 1.</span><br><span>The last important update before was on 2026/8/6,</span><span>which completed Desert 1.</span><br><button type='button' tabindex='-1' id='version3' onclick='updateVersion(false)'>No, just update the version.</button><br><button type='button' tabindex='-1' id='version4' onclick='updateVersion(true)'>Yes, hard reset before starting.</button>"
-		let versionAnnouncementCH="<h2>公告</h2><span>在你离开期间，这个游戏已经更新了79次！</span><span>在开始游戏前。你想要进行<span class='bold'>硬重置</span>吗？</span><br><span>上次更新在2026/9/17，</span><span>更新了2关。</span><br><span>上上次更新在2026/9/14，</span><span>更新了海洋1。</span><br><span>上次大更新在2026/8/6，</span><span>完成了沙漠1。</span><br><button type='button' tabindex='-1' id='version3' onclick='updateVersion(false)'>不，直接更新版本号。</button><br><button type='button' tabindex='-1' id='version4' onclick='updateVersion(true)'>好，先硬重置了再说。</button>"
+		let versionAnnouncement="<h2>Announcement</h2><span>This game was updated again when you left!</span><span>Do you want to perform a <span class='bold'>hard reset</span> before starting the game?</span><br><span>The last update was on 2026/10/4,</span><span>which completed Ocean 1.</span><br><span>The last update before was on 2026/9/17,</span><span>which updated 2 levels.</span><br><span>The last important update before was on 2026/8/6,</span><span>which completed Desert 1.</span><br><button type='button' tabindex='-1' id='version3' onclick='updateVersion(false)'>No, just update the version.</button><br><button type='button' tabindex='-1' id='version4' onclick='updateVersion(true)'>Yes, hard reset before starting.</button>"
+		let versionAnnouncementCH="<h2>公告</h2><span>在你离开期间，这个游戏已经更新了79次！</span><span>在开始游戏前。你想要进行<span class='bold'>硬重置</span>吗？</span><br><span>上次更新在2026/10/4，</span><span>完成了海洋1。</span><br><span>上上次更新在2026/9/17，</span><span>更新了2关。</span><br><span>上次大更新在2026/8/6，</span><span>完成了沙漠1。</span><br><button type='button' tabindex='-1' id='version3' onclick='updateVersion(false)'>不，直接更新版本号。</button><br><button type='button' tabindex='-1' id='version4' onclick='updateVersion(true)'>好，先硬重置了再说。</button>"
 		let player=JSON.parse(localStorage.getItem("PETALCRUSHplayer"))
 		let game=JSON.parse(localStorage.getItem("PETALCRUSHgame"))
 		function setPlayer() {
